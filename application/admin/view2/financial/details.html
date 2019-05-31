@@ -1,0 +1,100 @@
+<include file="public/layout"/>
+<body style="background-color: #FFF; overflow: auto;">
+
+<style>
+    td {
+        height: 40px;
+        line-height: 40px;
+        padding-left: 20px;
+    }
+
+    .span_1 {
+        float: left;
+        margin-left: 0px;
+        height: 130px;
+        line-height: 130px;
+    }
+
+    .span_1 ul {
+        list-style: none;
+        padding: 0px;
+    }
+
+    .span_1 ul li {
+        border: 1px solid #CCC;
+        height: 40px;
+        padding: 0px 10px;
+        margin-left: -1px;
+        margin-top: -1px;
+        line-height: 40px;
+    }
+</style>
+
+<div id="toolTipLayer" style="position: absolute; z-index: 9999; display: none; visibility: visible; left: 95px; top: 573px;"></div>
+<div id="append_parent"></div>
+<div id="ajaxwaitid"></div>
+
+<div class="page">
+    <div class="fixed-bar">
+        <div class="item-title">
+            <a class="back" href="javascript:history.back();" title="返回列表"><i class="fa fa-arrow-circle-o-left"></i></a>
+            <div class="subject">
+                <h3>理财管理 - 详情</h3>
+                <!--<h5></h5>-->
+            </div>
+        </div>
+    </div>
+    <form class="form-horizontal" id="edit-form">
+        <div class="ncap-form-default">
+            <dl class="row">
+
+                <dt class="tit"><label>ID</label></dt>
+                <dd class="opt">{$item.id}</dd>
+            </dl>
+            <dl class="row">
+
+                <dt class="tit"><label>用户</label></dt>
+                <dd class="opt"><a href="{:U('User/detail', ['id' => $item['user_id']])}">{$item.user.nickname}</a></dd>
+            </dl>
+            <dl class="row">
+
+                <dt class="tit"><label>金额（元）</label></dt>
+                <dd class="opt"><input type="text" class="input-txt valid" name="amount" value="{$item.amount}" step="0.01" min="0" title=""></dd>
+            </dl>
+            <dl class="row">
+
+                <dt class="tit"><label>理财周期</label></dt>
+                <dd class="opt">{$item.regular_text}</dd>
+            </dl>
+            <dl class="row">
+
+                <dt class="tit"><label>状态</label></dt>
+                <dd class="opt">{$item.status_text}</dd>
+
+                <dt class="tit"><label>本金状态</label></dt>
+                <dd class="opt">{$item.amount_status_text}</dd>
+            </dl>
+            <dl class="row">
+
+                <dt class="tit"><label>开始日期</label></dt>
+                <dd class="opt">{$item.start_time}</dd>
+
+                <dt class="tit"><label>结束日期</label></dt>
+                <dd class="opt">{$item.end_time}</dd>
+
+                <dt class="tit"><label>取消日期</label></dt>
+                <dd class="opt">{$item.cancel_time}</dd>
+            </dl>
+            <div class="bot">
+                <a href="JavaScript:void(0);" onclick="checkUserUpdate();" class="ncap-btn-big ncap-btn-green">确认提交</a>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script type="text/javascript">
+
+</script>
+
+</body>
+<include file="public/layout_footer"/>

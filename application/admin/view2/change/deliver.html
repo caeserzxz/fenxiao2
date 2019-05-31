@@ -1,0 +1,137 @@
+<include file="public/layout" />
+
+<style type="text/css">
+    html, body {
+        overflow: visible;
+    }
+
+    a.btn {
+        background: #fff none repeat scroll 0 0;
+        border: 1px solid #f5f5f5;
+        border-radius: 4px;
+        color: #999;
+        cursor: pointer !important;
+        display: inline-block;
+        font-size: 12px;
+        font-weight: normal;
+        height: 20px;
+        letter-spacing: normal;
+        line-height: 20px;
+        margin: 0 5px 0 0;
+        padding: 1px 6px;
+        vertical-align: top;
+    }
+
+    a.red:hover {
+        background-color: #e84c3d;
+        border-color: #c1392b;
+        color: #fff;
+    }
+
+</style>
+<body style="background-color: #FFF; overflow: auto;">
+<div id="toolTipLayer" style="position: absolute; z-index: 9999; display: none; visibility: visible; left: 95px; top: 573px;"></div>
+<div id="append_parent"></div>
+<div id="ajaxwaitid"></div>
+<div class="page">
+    <div class="fixed-bar">
+        <div class="item-title"><a class="back" href="javascript:history.back();" title="返回列表"><i class="fa fa-arrow-circle-o-left"></i></a>
+            <div class="subject">
+                <h3>兑水管理</h3>
+                <h5>兑水订单发货</h5>
+            </div>
+        </div>
+    </div>
+    <form class="form-horizontal" method="post" id="form_data">
+        <div class="ncap-form-default">
+            <dl class="row">
+                <dt class="tit">
+                    <em>*</em>订单号
+                </dt>
+                <dd class="opt">
+                    <span>{$order['order_sn']}</span>
+                </dd>
+            </dl>
+            <dl class="row">
+                <dt class="tit">
+                    <em>*</em>收货人
+                </dt>
+                <dd class="opt">
+                    <span>{$order['consignee']}</span>
+                </dd>
+            </dl>
+            <dl class="row">
+                <dt class="tit">
+                    <em>*</em>手机号码
+                </dt>
+                <dd class="opt">
+                    <span>{$order['mobile']}</span>
+                </dd>
+            </dl>
+            <dl class="row">
+                <dt class="tit">
+                    <em>*</em>配送地址
+                </dt>
+                <dd class="opt">
+                    <span>{$order['fulladdress']}</span>
+                </dd>
+            </dl>
+            <dl class="row">
+                <dt class="tit">
+                    <label for="shipping"><em>*</em>配送物流</label>
+                </dt>
+                <dd class="opt">
+                    <select id="shipping" name="shipping"  >
+                        <volist name="shipping_list" id="shipping">
+                            <option <if condition="$order['shopping_type'] eq $shipping['code']">selected</if> value="{$shipping.code}" >{$shipping.name}</option>
+                        </volist>
+                    </select>
+                </dd>
+            </dl>
+            <dl class="row">
+                <dt class="tit">
+                    <em>*</em>物流单号
+                </dt>
+                <dd class="opt">
+                    <input type="text" name="deliver_sn" value="{$order.deliver_sn?$order.deliver_sn:''}" class="input-txt" id="deliver" placeholder="请输入物流单号"/>
+                </dd>
+            </dl>
+            <input type="hidden" name="order_id" value="{$order.id}">
+            <div class="bot"><a href="JavaScript:void(0);" class="ncap-btn-big ncap-btn-green" id="submitBtn">{$order.is_deliver?'点击修改':'点击发货'}</a></div>
+        </div>
+
+    </form>
+</div>
+<script type="text/javascript">
+
+    $(function () {
+        //点击按钮的时候
+        $('#submitBtn').click(function () {
+            if($('#deliver').val().length == 0){
+                layer.alert('请填写订单号', {icon: 2});
+                return ;
+            }
+
+            //发送ajax请求
+            $.ajax({
+                url: "{:U('Admin/Change/deliver')}",
+                type:'post',
+                data:$('#form_data').serialize(),
+                dataType:'JSON',
+                success: function (data) {
+                    if(data.status){
+                        layer.alert(data.msg, {icon: 1},function () {
+                            window.location.href = "{:U('Admin/Change/index')}";
+                        });
+                    }else{
+                        layer.alert('发货失败', {icon: 2});
+                    }
+                }
+            })
+
+        });
+    });
+
+</script>
+</body>
+</html>

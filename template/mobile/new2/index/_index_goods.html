@@ -1,0 +1,16 @@
+<foreach name="list" item="v" key="k">
+    <li style="margin-bottom: 2%; list-style:none;width: 49%; <if condition=" $k%2==0">margin-right: 2%</if>" >
+        <a href="{:U('Mobile/Goods/goodsInfo',array('id'=>$v[goods_id]))}">
+            <div class="similer-product">
+                <div class="zjj close">
+                    <img src="{$v.goods_id|goods_thum_images=200,200}">
+                </div>
+                <span class="similar-product-text">{$v[goods_name]}</span>
+                <span class="similar-product-price">
+                    ¥<span class="big-price">{$v[shop_price]}元</span>
+                    <span class="fr sg_g_time last_g_time" id="jstimerBox{$v[goods_id]}"></span>
+                </span>
+            </div>
+        </a>
+    </li>
+</foreach>

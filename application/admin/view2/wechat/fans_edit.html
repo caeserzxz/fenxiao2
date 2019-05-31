@@ -1,0 +1,132 @@
+<include file="public/layout" />
+ 
+<style type="text/css">
+html, body {
+	overflow: visible;
+}
+</style>  
+<body style="background-color: #FFF; overflow: auto;">
+<div id="toolTipLayer" style="position: absolute; z-index: 9999; display: none; visibility: visible; left: 95px; top: 573px;"></div>
+<div id="append_parent"></div>
+<div id="ajaxwaitid"></div>
+<div class="page">
+  <div class="fixed-bar">
+    <div class="item-title"><a class="back" href="javascript:history.back();" title="微信公众号配置"><i class="fa fa-arrow-circle-o-left"></i></a>
+      <div class="subject">
+        <h3>编辑粉丝</h3>
+        <h5>编辑粉丝内容</h5>
+      </div>
+    </div>
+  </div>
+  <form class="form-horizontal" method="post" id="handlepost" action="">    
+    <div class="ncap-form-default">
+      <dl class="row">
+        <dt class="tit">
+          <label><em>*</em>ID</label>
+        </dt>
+        <dd class="opt">
+          {$res.user_id}
+        </dd>
+      </dl>
+      <dl class="row">
+        <dt class="tit">
+          <label><em>*</em>昵称</label>
+        </dt>
+        <dd class="opt">
+          <input type="text" name="nickname" id="nickname" value="{$res.nickname}" class="input-txt">
+        </dd>
+      </dl>
+      <dl class="row">
+        <dt class="tit">
+          <label><em>*</em>openid</label>
+        </dt>
+        <dd class="opt">
+          <input type="text" name="openid" id="openid" value="{$res.openid}" class="input-txt">
+        </dd>
+      </dl>
+      <dl class="row">
+        <dt class="tit">
+          <label><em>*</em>Email</label>
+        </dt>
+        <dd class="opt">
+          <input type="text" name="email" id="email" value="{$res.email}" class="input-txt">
+        </dd>
+      </dl>
+      <dl class="row">
+        <dt class="tit">
+          <label><em>*</em>QQ</label>
+        </dt>
+        <dd class="opt">
+          <input type="text" name="qq" id="qq" value="{$res.qq}" class="input-txt">
+        </dd>
+      </dl>
+      <dl class="row">
+        <dt class="tit">
+          <label><em>*</em>手机号</label>
+        </dt>
+        <dd class="opt">
+          <input type="text" name="mobile" id="mobile" value="{$res.mobile}" class="input-txt">
+        </dd>
+      </dl>
+      <dl class="row">
+        <dt class="tit">
+          <label><em>*</em>所在地</label>
+        </dt>
+        <dd class="opt">
+          {$province}-{$city}-{$district}
+        </dd>
+      </dl>
+      <dl class="row">
+        <dt class="tit">
+          <label><em>*</em>上级id</label>
+        </dt>
+        <dd class="opt">
+          <input type="text" name="first_leader" id="first_leader" value="{$res.first_leader}" class="input-txt">
+        </dd>
+      </dl>
+        
+      <input type="hidden" value="1" name="status">
+      <div class="bot"><a href="JavaScript:void(0);" onClick="formSubmit()" class="ncap-btn-big ncap-btn-green" id="submitBtn">确认提交</a></div>
+    </div>
+  </form>
+</div>
+<script type="text/javascript">
+  
+$(document).ready(function(){
+	
+	$("#handlepost").validate({
+		debug: true, //调试模式取消submit的默认提交功能   
+		focusInvalid: false, //当为false时，验证无效时，没有焦点响应  
+        onkeyup: false,   
+        submitHandler: function(form){   //表单提交句柄,为一回调函数，带一个参数：form   
+            form.submit();   //提交表单   
+        },  
+        ignore:":button",	//不验证的元素
+        // rules:{
+        // 	keyword:{
+        // 		required:true
+        // 	},
+        // 	text:{
+        // 		required:true
+        // 	}
+        // },
+        messages:{
+        	keyword:{
+        		required:"请输入关键词"
+        	},
+        	text:{
+        		required:"请填写回复内容"
+        	} 
+        }
+	});
+	
+	 
+});
+
+function formSubmit(){
+	$("#handlepost").submit();
+}
+    
+</script>
+</body>
+</html>

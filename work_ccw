@@ -1,0 +1,86 @@
+项目数据库：huanglijian
+
+
+
+
+----------------------------------------------------
+1.表tp_n_goods_config 新添加 一条记录
+INSERT INTO `tp_n_goods_config` VALUES ('25', 'tixian_num', 0, '每月提现次数', null, '1', '1', '0');
+
+2.表tp_config 新添加 一条记录
+INSERT INTO `tp_config` VALUES ('124', 'withdraw_num', 0, 'basic', '每月提现次数');
+
+3.创建积分流水表
+-- ----------------------------
+-- Table structure for `tp_n_integral_log`
+-- ----------------------------
+DROP TABLE IF EXISTS `tp_n_integral_log`;
+CREATE TABLE `tp_n_integral_log` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '表id',
+  `user_id` int(11) NOT NULL COMMENT '用户id',
+  `money` decimal(12,2) DEFAULT NULL COMMENT '积分(正数收入，负数支出)',
+  `number` varbinary(200) DEFAULT NULL COMMENT '流水号',
+  `desc` varchar(255) DEFAULT NULL COMMENT '描述',
+  `obj` text COMMENT '附加数据，json记录',
+  `create_time` int(11) DEFAULT '0' COMMENT '创建时间',
+  PRIMARY KEY (`id`) USING BTREE,
+  KEY `user_id` (`user_id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='积分流水表';
+
+-- ----------------------------
+-- Records of tp_n_integral_log
+-- ----------------------------
+
+4.表tp_n_express 新添加 一个字段
+ALTER TABLE tp_n_express ADD code2 varchar(50) NULL COMMENT='快递鸟编号';
+
+
+5.表tp_n_goods_config 新添加 一条记录
+INSERT INTO `tp_n_goods_config` VALUES ('55', 'vip_diamond', 0, '直推（）个高级会员，晋升为钻石会员', null, '2', '1', '0');
+
+
+6.test
+
+
+---------------------------------------------------
+
+
+
+
+
+
+1.【zzj_20190507】
+    表tp_user_level 新增
+    distribution_one_especial
+    distribution_two_especial
+    distribution_one_ordinary
+    distribution_two_ordinary
+    same_level
+    team_prize
+    push_num
+
+    表tp_users 新增
+    wait_money
+    total_wait_money
+
+
+    新增tp_n_wait_commission，用于记录待返现佣金（脚本将待返现佣金设为）
+
+
+
+
+
+
+------------------------------------------------------
+
+数据库清空
+
+        TRUNCATE tp_users;
+        TRUNCATE tp_n_management;
+        TRUNCATE tp_n_amount_log;
+
+
+
+
+
+

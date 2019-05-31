@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,viewport-fit=cover">
+    <link rel="stylesheet" href="__STATIC__/n_assets/css/zpui.css"/>
+    <link rel="stylesheet" href="__STATIC__/n_assets/css/all.css"/>
+    <script src="__STATIC__/n_assets/js/page.js"></script>
+    <link href="__STATIC__/n_assets/js/Swiper-4.0.7/swiper.min.css">
+    <link href="__PUBLIC__/static/css/page.css" rel="stylesheet" type="text/css">
+
+    <title>购买身份</title>
+</head>
+<style>
+    .btnn{
+        width: 2rem;
+        height: 0.426667rem;
+        margin: 0.333333rem 0 0.133333rem;
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: flex;
+        -webkit-box-align: center;
+        -webkit-align-items: center;
+        align-items: center;
+        -webkit-box-pack: center;
+        -webkit-justify-content: center;
+        justify-content: center;
+        background-color: #ff3a30;
+        border-radius: 0.226667rem;
+        color:#fff2e4;
+        margin: 0 auto;
+    }
+
+
+</style>
+<body>
+<body>
+<div class="page">
+    <div class="page-hd">
+        <div class="header bor-1px-b">
+            <div class="header-left">
+                <a href="{:U('User/index')}" class="left-arrow"></a>
+            </div>
+        </div>
+    </div>
+
+    <form action="{:U('mobile/Order/creatVipOrder')}" method="post" name="cart4_form" id="cart4_form">
+        <div class="page-bd">
+            <!-- 页面内容-->
+            <input type="hidden" name="goods_type" value="1"/>
+            <input type="hidden" name="pay_radio" value="pay_code=appWeixinPay"/>
+
+            <div class="weui-cells" style="text-align: center;">
+
+                <img src="{$pic}">
+
+                <div class="header-title btnn" onclick="buy()">成为VIP</div>
+            </div>
+        </div>
+</form>
+
+
+</div>
+
+<script src="__STATIC__/n_assets/js/lib/jquery-2.1.4.js"></script>
+<script src="__STATIC__/n_assets/js/jquery-weui.min.js"></script>
+<script src="__STATIC__/n_assets/js/lib/fastclick.js"></script>
+<script>
+    $(function() {
+        FastClick.attach(document.body);
+    });
+
+    //签到
+    function buy(){
+        $.ajax({
+            type: "POST",
+            url: "{:U('Mobile/Cart/cart5')}",//+tab,
+            data: $('#cart4_form').serialize(),// 你的formid
+            dataType: "json",
+            success: function (data) {
+                if(data.status == 1){
+
+                }else {
+                    location.href = "/Mobile/Order/creatVipOrder";
+                }
+            }
+        });
+    }
+
+
+
+
+
+
+</script>

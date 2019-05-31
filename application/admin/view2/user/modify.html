@@ -1,0 +1,120 @@
+<include file="public/layout" />
+<style>
+    td{height:40px;line-height:40px; padding-left:20px;}
+    .span_1{
+        float:left;
+        margin-left:0px;
+        height:130px;
+        line-height:130px;
+    }
+    .span_1 ul{list-style:none;padding:0px;}
+    .span_1 ul li{
+        border:1px solid #CCC;
+        height:40px;
+        padding:0px 10px;
+        margin-left:-1px;
+        margin-top:-1px;
+        line-height:40px;
+    }
+</style>
+<body style="background-color: #FFF; overflow: auto;">
+<div id="toolTipLayer" style="position: absolute; z-index: 9999; display: none; visibility: visible; left: 95px; top: 573px;"></div>
+<div id="append_parent"></div>
+<div id="ajaxwaitid"></div>
+<div class="page">
+    <div class="fixed-bar">
+        <div class="item-title"><a class="back" href="javascript:history.back();" title="返回列表"><i class="fa fa-arrow-circle-o-left"></i></a>
+            <div class="subject">
+                <h3>会员管理 - 会员信息</h3>
+                <h5>网站系统会员管理会员信息</h5>
+            </div>
+        </div>
+    </div>
+    <form class="form-horizontal" id="user_form" method="post">
+        <div class="ncap-form-default">
+            <dl class="row">
+                <dt class="tit">
+                    <label>会员昵称</label>
+                </dt>
+                <dd class="opt">
+                    <input class="input-txt valid" name="nickname" value="{$user.nickname}" readonly="" type="text">
+                    <p class="notic">会员昵称不可修改。</p>
+                </dd>
+            </dl>
+
+
+            <dl class="row">
+                <dt class="tit">
+                    <label for="management_id"><em>*</em>上级管理者ID</label>
+                </dt>
+                <!-- <dd class="opt">
+                    <input id="first_leader"  name="first_leader" value="{$user.first_leader}" class="input-txt" type="text">
+                    <span class="err"></span>
+                    <p class="notic"></p>
+                </dd> -->
+                <dd class="opt">
+                    <input hidden id="user_id"  name="user_id" value="{$user.user_id}" class="input-txt" >
+                    <input type="text" id="management_id" readonly name="management_id" value="{$management_id}" class="input-txt">
+
+                    <span class="err" id="err_goods_name"></span>
+                    <p class="notic">
+                        <a onclick="selectUser()" class="ncap-btn" id="select_goods_button"><i class="fa fa-search"></i>选择用户</a>
+                    </p>
+                </dd>
+            </dl>
+
+
+            <div class="bot"><a href="JavaScript:void(0);" onclick="checkUserUpdate();" class="ncap-btn-big ncap-btn-green">确认提交</a></div>
+        </div>
+    </form>
+</div>
+<script type="text/javascript">
+    function checkUserUpdate(){
+
+
+
+        $('#user_form').submit();
+    }
+
+
+    function selectUser(){
+        var url = "{:U('user/search_users1',array('tpl'=>'select_goods','prom_type'=>1,'prom_id'=>$info[id]))}";
+        layer.open({
+            type: 2,
+            title: '选择上级ID',
+            shadeClose: true,
+            shade: 0.2,
+            area: ['61%', '75%'],
+            content: url,
+        });
+    }
+
+
+    function call_back(goodsItem){
+        $('#goods_id').val(goodsItem.user_id);
+        console.log(goodsItem);
+        var html = '';
+        if(goodsItem.spec != null){
+            //有规格
+            html = '<div style="float: left;margin: 10px auto;" class="selected-group-goods"><div class="goods-thumb">' +
+                    '<img style="width: 162px;height: 162px" src="'+goodsItem.spec.spec_img+'"/></div> <div class="goods-name"> ' +
+                    '<a target="_blank" href="/index.php?m=Home&c=Goods&a=goodsInfo&id='+goodsItem.goods_id+'">'+goodsItem.goods_name+goodsItem.spec.key_name+'</a> </div>' ;
+                 ;
+            $('input[name=management_id]').val(goodsItem.spec.item_id)
+            $('input[name=management_id]').val(goodsItem.user_id );
+        }else{
+            html = '<div style="float: left;margin: 10px auto;" class="selected-group-goods"><div class="goods-thumb">' +
+                    '<img style="width: 162px;height: 162px" src="'+goodsItem.goods_image+'"/></div> <div class="goods-name"> ' +
+                    ' <div class="goods-price">用户名：'+goodsItem.nickname+'</div> </div>';
+                    '</div>';
+                console.log(11)
+            $('input[name=management_id]').val(goodsItem.user_id);
+        }
+        $('#select_goods_button').attr('data-goods-id',goodsItem.user_id);
+        $('#selected_group_goods').empty().html(html);
+        $('.selected-group-goods').show();
+        layer.closeAll('iframe');
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,viewport-fit=cover">
+	<link rel="stylesheet" href="/public/assets/css/zpui.css"/>
+	<link rel="stylesheet" href="/public/assets/css/all.css"/>
+	<script src="/public/assets/js/page.js"></script>
+	<script src="__STATIC__/js/layer.js"  type="text/javascript" ></script>
+
+
+
+
+
+	<title> 收货地址 </title>
+</head>
+<body>
+<div class="page">
+	<div class="page-hd">
+		<div class="header bor-1px-b">
+			<div class="header-left">
+				<a href="javascript:history.go(-1)" class="left-arrow"></a>
+			</div>
+			<div class="header-title">收货地址</div>
+			<div class="header-right">
+				<a href="#"></a>
+			</div>
+		</div>
+	</div>
+	<div class="page-bd add">
+		<!-- 页面内容-->
+		<!--<volist name="lists" id="list">
+			<div class="weui-cells card-cells address_cells">
+				<if condition="$Request.param.source eq 'cart2'">
+					<a href="{:U('/Mobile/Cart/cart2',array('address_id'=>$list['address_id'],'action'=>buy_now,'goods_num'=>$Request.param.goods_num,'goods_id'=>$Request.param.goods_id,'item_id'=>$Request.param.item_id))}">
+						<div class="weui-cell address_cell">
+							<div class="weui-cell__bd">
+								<div class="address_name">
+									<span class="mr30">{$list[consignee]}</span>
+									<span>{$list[mobile]}</span>
+								</div>
+								<div class="fs24 text-gray mt10">{$region_list[$list['province']]} {$region_list[$list['city']]} {$region_list[$list['district']]} {$region_list[$list['twon']]} {$list['address']}</div>
+							</div>
+						</div>
+					</a>
+					<elseif condition="$Request.param.source eq 'pre_sell_cart'"/>
+					<a href="{:U('/Mobile/Cart/pre_sell_cart',array('address_id'=>$list['address_id'],'act_id'=>$Request.param.act_id,'goods_num'=>$Request.param.goods_num))}">
+						<div class="weui-cell address_cell">
+							<div class="weui-cell__bd">
+								<div class="address_name">
+									<span class="mr30">{$list[consignee]}</span>
+									<span>{$list[mobile]}</span>
+								</div>
+								<div class="fs24 text-gray mt10">{$region_list[$list['province']]} {$region_list[$list['city']]} {$region_list[$list['district']]} {$region_list[$list['twon']]} {$list['address']}</div>
+							</div>
+						</div>
+					</a>
+					<elseif condition="$Request.param.source eq 'integral'"/>
+					<a href="{:U('/Mobile/Cart/integral',array('address_id'=>$list['address_id'],'goods_id'=>$Request.param.goods_id,'goods_num'=>$Request.param.goods_num,'item_id'=>$Request.param.item_id))}">
+						<div class="weui-cell address_cell">
+							<div class="weui-cell__bd">
+								<div class="address_name">
+									<span class="mr30">{$list[consignee]}</span>
+									<span>{$list[mobile]}</span>
+								</div>
+								<div class="fs24 text-gray mt10">{$region_list[$list['province']]} {$region_list[$list['city']]} {$region_list[$list['district']]} {$region_list[$list['twon']]} {$list['address']}</div>
+							</div>
+						</div>
+					</a>
+					<elseif condition="$Request.param.source eq 'team'"/>
+					<a href="{:U('/Mobile/Team/order',array('address_id'=>$list['address_id'],'order_id'=>$Request.param.order_id))}">
+						<div class="weui-cell address_cell">
+							<div class="weui-cell__bd">
+								<div class="address_name">
+									<span class="mr30">{$list[consignee]}</span>
+									<span>{$list[mobile]}</span>
+								</div>
+								<div class="fs24 text-gray mt10">{$region_list[$list['province']]} {$region_list[$list['city']]} {$region_list[$list['district']]} {$region_list[$list['twon']]} {$list['address']}</div>
+							</div>
+						</div>
+					</a>
+					<else/>
+					<a href="{:U('/Mobile/Exchange/order',array('address_id'=>$list['address_id'],'order_id'=>$Request.param.order_id))}">
+						<div class="weui-cell address_cell">
+							<div class="weui-cell__bd">
+								<div class="address_name">
+									<span class="mr30">{$list[consignee]}</span>
+									<span>{$list[mobile]}</span>
+								</div>
+								<div class="fs24 text-gray mt10">{$region_list[$list['province']]} {$region_list[$list['city']]} {$region_list[$list['district']]} {$region_list[$list['twon']]} {$list['address']}</div>
+							</div>
+						</div>
+					</a>
+				</if>
+
+				<div class="weui-cell">
+					<div class="weui-cells_checkbox address_checkbox">
+						<label class="weui-check__label" for="x{$list['address_id']}">
+							&lt;!&ndash; <input type="radio" checked="" class="weui-check" name="radio1" id="x11"> &ndash;&gt;
+							<input type="radio" class="weui-check" name="radio1" id="x{$list['address_id']}" data-value="{$list[address_id]}" <if condition="$list[is_default] eq 1">checked="true" </if> class="weui-check" name="radio1" id="x{$list['address_id']}">
+							<span class="weui-icon-checked"></span>
+							<span class="text-gray fs22">默认地址</span>
+						</label>
+					</div>
+					<div class="weui-cell__bd tr">
+						<div class="action_group address_group">
+							&lt;!&ndash; <a href="编辑地址.html" class="action_edit"><i class="icon_edit"></i><span>编辑</span></a>
+                            <a href="javascript:;" class="action_del js_del"><i class="icon_del"></i><span>删除</span></a> &ndash;&gt;
+							<if condition="$Request.param.source eq 'integral'">
+								<a href="{:U('/Mobile/User/edit_address',array('id'=>$list[address_id],'source'=>$Request.param.source,'goods_id'=>$Request.param.goods_id,'goods_num'=>$Request.param.goods_num,'item_id'=>$Request.param.item_id))}" class="action_edit">
+									<i class="icon_edit"></i><span>编辑</span></a>
+								<else/>
+								<a href="{:U('/Mobile/User/edit_address',array('id'=>$list[address_id],'source'=>$Request.param.source,'act_id'=>$Request.param.act_id,'goods_num'=>$Request.param.goods_num,'order_id'=>$Request.param.order_id,'goods_id'=>$Request.param.goods_id,'item_id'=>$Request.param.item_id))}" class="action_edit">
+									<i class="icon_edit"></i><span>编辑</span></a>
+							</if>
+							<a href="javascript:;" class="action_del js_del" data-value="{$list[address_id]}"><i class="icon_del"></i><span>删除</span>
+							</a>
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</volist>-->
+
+       <volist name="lists" id="list" key="k">
+		 <div class="weui-cells card-cells address_cells">
+            <div class="weui-cell address_cell">
+                <div class="weui-cell__bd">
+                    <div class="address_name">
+                        <span class="mr30">{$list.consignee}</span>
+                        <span>{$list.mobile}</span>
+                    </div>
+                    <div class="fs24 text-gray mt10">{$region_list[$list['province']]} {$region_list[$list['city']]} {$region_list[$list['district']]} {$region_list[$list['twon']]} {$list['address']}</div>
+                </div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cells_checkbox address_checkbox">
+                    <label class="weui-check__label" for="x{$list['address_id']}">
+                        <input type="radio" class="weui-check" name="radio1" id="x{$list['address_id']}" data-value="{$list[address_id]}" <if condition="$list[is_default] eq 1">checked="true" </if> class="weui-check" name="radio1" id="x{$list['address_id']}">
+                        <span class="weui-icon-checked"></span>
+                        <span class="text-gray fs22">默认地址</span>
+                    </label>
+                </div>
+                <div class="weui-cell__bd tr">
+                    <div class="action_group address_group">
+                        <a href="{:U('/Mobile/User/edit_address',array('id'=>$list[address_id]))}" class="action_edit"><i class="icon_edit"></i><span>编辑</span></a>
+                        <a href="javascript:;" class="action_del js_del" data-value="{$list[address_id]}"><i class="icon_del"></i><span>删除</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+       </volist>
+
+	</div>
+	<div class="add_btn" style="background-image: -webkit-linear-gradient(45deg, #FF7074 0%, #FF7074 50%, #FD536D 100%), -webkit-linear-gradient(#FF7074, #FD536D)"><a href="{:U('/Mobile/User/add_address')}">新增地址</a></div>
+	<!--<div class="add_btn">
+		<if condition="$Request.param.source eq 'integral'">
+			<a href="{:U('/Mobile/User/add_address',array('source'=>$Request.param.source,'order_id'=>$Request.param.order_id,'goods_id'=>$Request.param.goods_id,'goods_num'=>$Request.param.goods_num,'item_id'=>$Request.param.item_id))}" >
+				<div class="weui-cell__bd">新增地址</div>
+				<div class="weui-cell__ft"></div>
+			</a>
+			<elseif condition="$Request.param.source eq 'cart2'">
+			<a href="{:U('/Mobile/User/add_address',array('source'=>$Request.param.source,'act_id'=>$Request.param.act_id,'action'=>buy_now,'goods_num'=>$Request.param.goods_num,'goods_id'=>$Request.param.goods_id,'item_id'=>$Request.param.item_id))}" >
+				<div class="weui-cell__bd">新增地址</div>
+				<div class="weui-cell__ft"></div>
+
+			<elseif condition="$Request.param.source eq 'exchange'">
+			<a href="{:U('/Mobile/User/add_address',array('source'=>$Request.param.source))}" >
+				<div class="weui-cell__bd">新增地址</div>
+				<div class="weui-cell__ft"></div>
+			<else/>
+			<a href="{:U('/Mobile/User/add_address',array('source'=>$Request.param.source,'act_id'=>$Request.param.act_id,'goods_num'=>$Request.param.goods_num,'order_id'=>$Request.param.order_id))}" >
+				<div class="weui-cell__bd">新增地址</div>
+				<div class="weui-cell__ft"></div>
+			</a>
+			</if>
+	</div>-->
+</div>
+
+<script src="/public/assets/js/lib/jquery-2.1.4.js"></script>
+<script src="/public/assets/js/jquery-weui.min.js"></script>
+
+<script>
+
+    $(function () {
+        $('.js_del').on('click', function () {
+            var del = $(this);
+            $.confirm({
+                title: '确认删除',
+                text: '您真的要删除该收货地址吗？',
+                onOK: function () {
+                    //点击确认
+                    //alert(2222);
+                    $.ajax({
+                        url:"{:url('del_address')}",
+                        data:{
+                            id:del.attr('data-value')
+                        },
+                        type:'get',
+
+                        success:function(res){
+                            //layer.open({content:data.msg,time:2});
+                            $.toast(res['msg'],2000);
+                            if(res.code == 1)
+                            {
+                                window.location.reload();
+                                //del.parents('.weui-cells').html('');
+                            }
+                        },
+                    });
+                },
+                onCancel: function () {
+                }
+            });
+        });
+
+    });
+    //删除按钮
+    // $('.js_del').click(function(){
+    //     var del = $(this);
+
+    //     layer.open({
+    //         content:'确认要删除吗?',
+    //         btn:['确认','取消'],
+    //         yes:function(index)
+    //         {
+    //             $.get("{:url('del_address')}",{id:del.attr('data-value')},function(data){
+    //                 layer.open({content:data.msg,time:2});
+    //                 if(data.code == 1)
+    //                 {
+    //                     del.parents('.weui-cells').html('');
+    //                 }
+    //             },'json');
+    //             layer.close(index);
+    //         }
+    //     });
+
+    // });
+
+    $('input[name=radio1]').change(function(){
+        $.get("{:url('set_default1')}",{id:$(this).attr('data-value')},function(data){
+            //alert(data['msg']);
+            $.toast(data['msg'],1000);
+
+        },'json');
+    });
+</script>
+
+</body>
+</html>

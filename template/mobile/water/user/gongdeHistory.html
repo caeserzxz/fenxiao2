@@ -1,0 +1,53 @@
+<layout name="common/n_layout_nav"/>
+<title> 功德列表 </title>
+</head>
+<body>
+<div class="page">
+    <div class="page-hd">
+        <div class="header bor-1px-b">
+            <div class="header-left">
+                <a href="javascript:history.go(-1)" class="left-arrow"></a>
+            </div>
+            <div class="header-title">功德列表</div>
+            <div class="header-right">
+                <a href="#"></a>
+            </div>
+        </div>
+    </div>
+    <div class="page-bd">
+        <!-- 页面内容-->
+        <div class="weui-cells mt0">
+            <div class="weui-cell">
+              <!--  <div class="weui-cell__hd fenlei">
+                    <img src="__STATIC__/n_assets/images/fenlei.png">
+                </div>-->
+                <div class="weui-cell__bd fs30 ">
+                    <p>全部</p>
+                </div>
+                <div class="weui-cell__ft fs30 text-default">总人数：{$count}</div>
+            </div>
+        </div>
+        <table>
+            <tr>
+                <th>健康大使</th>
+                <th>查看资料</th>
+                <th>提现时间</th>
+                <th>可发佣金</th>
+            </tr>
+            <volist name="gdList" id="vo">
+                <tr>
+                    <td>{$vo.name}</td>
+                    <td><a href="{:U('Mobile/User/fanDetail',array('user_id'=>$vo[user_id]))}">查看资料</a></td>
+                    <td>{$vo.time}</td>
+                    <td>
+                        ￥{$vo.total_money}
+                        <if condition="$vo['status'] eq 0"><a href="{:U('Mobile/User/sentGd',array('gd_id'=>$vo[id]))}" style="color: red;float: right;margin-right: 0.1rem">&nbsp;&nbsp;发放</a></if>
+                        <if condition="$vo['status'] eq 1"><span style="color: rgba(66, 62, 64, 0.48);float: right;margin-right: 0.1rem">&nbsp;&nbsp;已结</span></if>
+                        <if condition="$vo['status'] eq 2"><span style="color: rgba(66, 62, 64, 0.48);float: right;margin-right: 0.1rem">&nbsp;&nbsp;已发放</span></if>
+
+                    </td>
+                </tr>
+            </volist>
+
+        </table>
+    </div>

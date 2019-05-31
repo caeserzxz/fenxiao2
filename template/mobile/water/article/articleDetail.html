@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,viewport-fit=cover">
+    <link rel="stylesheet" href="__STATIC__/n_assets/css/zpui.css"/>
+    <link rel="stylesheet" href="__STATIC__/n_assets/css/all.css"/>
+    <script src="__STATIC__/n_assets/js/page.js"></script>
+    <link href="__STATIC__/n_assets/js/Swiper-4.0.7/swiper.min.css">
+
+    <title>文章详情</title>
+</head>
+<body>
+<div class="page">
+    <div class="page-hd">
+        <div class="header bor-1px-b">
+            <div class="header-left">
+                <a href="javascript:history.go(-1)" class="left-arrow"></a>
+            </div>
+            <div class="header-title">文章详情</div>
+            <div class="header-right">
+                <a href="#"></a>
+            </div>
+        </div>
+    </div>
+    <div class="page-bd">
+        <!-- 页面内容-->
+        <div class="wen_detail">
+           <!-- <h1>{$article.title}</h1>-->
+        <!--    <div class="tr">
+               &lt;!&ndash; <span class="text-muted fs24">李丽 产科副主任医师</span>&ndash;&gt;
+                <span class="text-muted fs24">{$article.add_time|date="Y-m-d
+                                    H:i",###}</span>
+            </div>-->
+            <!--<div style="height: 1px; margin: 15px 0;" class="bor-1px-t"></div>-->
+            <div class="detail_content">
+                {$article.content}
+            </div>
+        </div>
+
+
+
+        <div class="weui-panel index_panel">
+            <div class="weui-panel__hd">
+                <span class="panel_title"><img style="width:0.2rem;height:0.2rem" class="title_icon" src="__STATIC__/n_assets/images/tit_icon_04.png"/> 专业推荐</span>
+            </div>
+            <div style="height: 1px;" class="bor-1px-t"></div>
+            <div class="weui-panel__bd">
+                <div class="goods-list wen_detail_goods">
+                    <ul>
+                        <volist name="recommend" id="vo">
+                        <li class="goods-list_item">
+                            <div class="pro_box">
+                                <a href="{:U('Mobile/Goods/goodsInfo',array('id'=>$vo[goods_id]))}" class="pro_img" style="width:100%;background-image: url({$vo.tui_original_img})"></a>
+                                <div class="pro_text" style="text-align: center">
+                                    <h4 class="pro_title">{$vo.goods_name} </h4>
+                                    <p class="pro_price">
+                                        <span class="price">¥<b>{$vo.shop_price}</b></span>
+                                      <!--  <span class="price2">¥{$vo.market_price}</span>-->
+                                    </p>
+                                </div>
+                            </div>
+                        </li>
+                        </volist>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="weui-panel index_panel">
+            <div class="weui-panel__hd">
+                <div style="text-align: center; width: 100%;"><span class="panel_title"><img class="title_icon" src="__STATIC__/n_assets/images/tit_icon_03.png"/> 精品推荐</span></div>
+            </div>
+            <div class="bor-1px-t" style="height: 1px;"></div>
+            <div class="weui-panel__bd">
+                <div class="goods-list">
+                    <ul>
+                        <volist name="fineRecommend" id="vo">
+                        <li class="goods-list_item">
+                            <div class="pro_box">
+                                <a href="{:U('Mobile/Goods/goodsInfo',array('id'=>$vo[goods_id]))}" class="pro_img" style="background-image: url({$vo.original_img})"></a>
+                                <div class="pro_text">
+                                    <h4 class="pro_title">{$vo.goods_name} </h4>
+                                    <p class="pro_price">
+                                        <span class="price">¥<b>{$vo.shop_price} </b></span>
+                                       <!-- <span class="addcart"></span>-->
+                                    </p>
+                                </div>
+                            </div>
+                        </li>
+                        </volist>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

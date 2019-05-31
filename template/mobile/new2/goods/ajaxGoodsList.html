@@ -1,0 +1,14 @@
+<foreach name="goods_list" item="vo" key="k"  >
+    <li>
+        <a href="{:U('Goods/goodsInfo',array('id'=>$vo[goods_id]))}" class="goods-link">
+            <div class="goods-img"><img src="{$vo.goods_id|goods_thum_images=400,400}" alt=""></div>
+            <div class="goods-info">
+                <div class="goods-num">
+                    <div class="goods-price"><span>￥</span>{$vo[shop_price]} <span><!--+38佣金--></span></div>
+                    <div class="goods-sales">已售{$vo[sales_sum]}</div>
+                </div>
+                <h3 class="goods-title">{$vo.goods_name|getSubstr=0,20}</h3>
+            </div>
+        </a>
+    </li>
+</foreach>

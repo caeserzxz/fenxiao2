@@ -1,0 +1,32 @@
+<div class="bottom-tabbar">
+    <a  <if condition="CONTROLLER_NAME eq 'Index'">class="bottom-tabbar__item @@item1 active " <else/>class="bottom-tabbar__item @@item1" </if> href="{:U('Index/index')}" >
+        <span class="icon">
+            <img src="__STATIC__/assets/images/tabbar_icon01.png"/>
+            <img class="lhimg" src="__STATIC__/assets/images/tabbar_icon01_lh.png"/>
+        </span>
+        <p class="label">首页</p>
+    </a>
+    <a href="{:U('Cart/index')}"  <if condition="CONTROLLER_NAME eq 'Cart'">class="bottom-tabbar__item @@item2 active " <else/>class="bottom-tabbar__item @@item2"</if>>
+        <span class="icon">
+            <img src="__STATIC__/assets/images/tabbar_icon02.png"/>
+            <img class="lhimg" src="__STATIC__/assets/images/tabbar_icon02_lh.png"/>
+        </span>
+        <p class="label">购物车</p>
+    </a>
+    <a href="{:U('Order/order_list')}" class="bottom-tabbar__item @@item3">
+        <span class="icon">
+            <img src="__STATIC__/assets/images/tabbar_icon03.png"/>
+            <img class="lhimg" src="__STATIC__/assets/images/tabbar_icon03_lh.png"/>
+        </span>
+        <p class="label">订单</p>
+    </a>
+    <a href="{:U('User/index')}" <if condition="CONTROLLER_NAME eq 'User'">class="bottom-tabbar__item @@item4 active"<else/>class="bottom-tabbar__item @@item4"</if> >
+        <span class="icon">
+            <img src="__STATIC__/assets/images/tabbar_icon04.png"/>
+            <img class="lhimg" src="__STATIC__/assets/images/tabbar_icon04_lh.png"/>
+        </span>
+        <p class="label">我的</p>
+    </a>
+</div>
+</body>
+</html>

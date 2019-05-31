@@ -1,0 +1,176 @@
+<include file="common/header" />
+<style>
+        .h60 {
+            height:1.6rem;
+        }
+
+        .icon_share img{
+            width: 0.8rem;
+        }
+        .weui-media-box__ft {
+            text-align: right;
+        }
+        .icon_menu img{
+            width: 0.9rem;
+        }
+        .pop1_flex {
+            text-align: center;
+            padding: 0.75rem 1rem;
+            font-size: 0.55rem;
+            color: #6f6f6f;
+        }
+        .pop1_flex img{
+            width: 1.75rem;
+        }
+    </style>
+
+<div class="page">
+    <div class="page-hd">
+    <div class="header">
+        <div class="header-left">
+            <a href="javascript:history.go(-1)" class="left-arrow"></a>
+        </div>
+        <div class="header-title">我的收藏</div>
+        <div class="header-right"><a href="#"></a> </div>
+    </div>
+</div>
+    <div class="page-bd" style="bottom: 40px;">
+        <div class="vux-1px-t" style="margin-top: -9px;">
+
+          <volist name="goods_list" id="goods">
+            <div class="weui-cells weui-cells_checkbox"  >
+                <div class="weui-media-box weui-media-box_appmsg">
+                    <div class="weui-media-box__hd">
+                        <a href="{:U('Goods/goodsInfo',array('id'=>$goods['goods_id']))}"><img class="weui-media-box__thumb" src="{$goods['original_img']}" alt=""></a>
+                    </div>
+                    <div class="weui-media-box__bd">
+                        <a href="{:U('Goods/goodsInfo',array('id'=>$goods['goods_id']))}">
+                            <h4 class="weui-media-box__title  h60">{$goods['goods_name']}</h4>
+                            <div class="mt5"><span>￥</span><b class="fs12">{$goods['shop_price']}&nbsp;</b></div>
+                        </a>
+                    </div>
+                    <div class="weui-media-box__ft">
+                        <!--<div class="icon_share h60" onclick="share_goods(this)" data-id="{$goods['goods_id']}" data-name="{$goods['goods_name']}" data-img="{$goods['original_img']}">-->
+                             <!--<img src="__STATIC__/assets/images/icon_share.png" alt="">-->
+                        <!--</div>-->
+                        <!--<div class="icon_menu js_open_pop1   collect_id1" onClick="cutover(this)" data-index="{$goods['collect_id']}">-->
+                            <!--<img src="__STATIC__/assets/images/icon_ddd.png" alt="">-->
+                        <!--</div>-->
+                        <div class="weui-flex__item" data-index="2" onClick="b(this)" style="text-align: center;line-height: 25px;" data-id="{$goods['collect_id']}">
+                            <p><img src="__STATIC__/assets/images/icon_trash3.png" width="25px"> </p>
+                            <!--<span><a href="#">取消收藏</a></span>-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+          </volist>
+
+        </div>
+        <div class="clear_msg">
+            <img src="__STATIC__/assets/images/icon_trash2.png" alt=""><span>清空所有信息</span>
+        </div>
+    </div>
+</div>
+
+<div class="popup" id="pop1" style="display: none;">
+    <div class="weui-mask"></div>
+    <div class="popuo-conent" style="background-color: #fff;">
+        <div class="weui-flex pop1_flex">
+            <input type="hidden" class="a">
+            <!-- <div class="weui-flex__item" data-index="1" onClick="b(this)">
+                <p><img src="__STATIC__/assets/images/icon_cart2.png"> </p>
+                <span>加入购物车</span>
+            </div> -->
+            <div class="weui-flex__item" data-index="2" onClick="b(this)">
+                <p><img src="__STATIC__/assets/images/icon_trash3.png"> </p>
+                <span><a href="#">取消收藏</a></span>
+            </div>
+        </div>
+        <div class="tc vux-1px-t js_close_pop1" style="height: 40px; line-height: 40px;font-size: 14px;" ><span class="text-red">取消</span></div>
+    </div>
+</div>
+
+
+<script src="__STATIC__/assets/js/zepto.min.js"></script>
+<script src="__STATIC__/assets/js/lib/weui.min.js"></script>
+<script src="__STATIC__/assets/js/comm.js"></script>
+<script src="__STATIC__/js/layer.js"  type="text/javascript" ></script>
+<script>
+    // var url =  "{:url('Cart/ajaxAddCart')}";//购物车
+    var delurl = "{:url('User/cancel_collect')}";//取消收藏
+    var emptyurl =  "{:url('User/cart_empty')}";//清空收藏
+
+    $(".js_open_pop1").on('click', function () {
+        // var collect_id = $('.collect_id').attr('data-index');
+        // alert(collect_id);
+        $("#pop1").show();
+    });
+
+    $(".js_close_pop1").on('click', function () {
+        $("#pop1").hide();
+    });
+
+    $(".clear_msg").on('click', function () {
+        layer.open({
+            anim: 'up'
+            ,content: '确定要清空所以信息吗？'
+            ,btn: ['确认', '取消'],
+            yes:function(index){
+                // layer.close(index)
+                $.ajax({
+                    url: emptyurl,
+                    type: 'POST',
+
+                    dataType:'json',
+                    success: function (data) {
+                        console.log(data)
+                        if(data.status == 'error'){
+                            layer.open({content:data.error,time:2})
+                            setTimeout("location.reload()",1000)
+                            // alert(1)
+                        }else{
+                            layer.open({content:data.message,time:2})
+                            setTimeout("location.reload()",1000)
+                        }
+                    }
+                })
+            }
+        });
+    });
+
+    function cutover(obj){
+        var collect_id = $(obj).attr('data-index');
+        // alert(collect_id);
+        $(".a").val(collect_id);
+    }
+
+    function b(obj){
+        var collect_id = $(obj).attr('data-id');
+        var id = collect_id;
+        var types = $(obj).attr('data-index');
+        if(types == 1){
+            submiturl = url
+        }else{
+            submiturl = delurl
+        }
+        $.ajax({
+            url: submiturl,
+            type: 'POST',
+            data:{goods_id:id},
+            dataType:'json',
+            success: function (data) {
+//                console.log(data)
+                if(data.status == 'error'){
+                    layer.open({content:data.error,time:2})
+                    setTimeout("location.reload()",1000)
+                    // alert(1)
+                }else{
+                    layer.open({content:data.message,time:2})
+                    setTimeout("location.reload()",1000)
+                }
+            }
+        })
+    }
+
+
+</script>

@@ -1,0 +1,86 @@
+<include file="common/header" title="支付成功" body="g4"/>
+
+<style>
+    .weui-cell__hd span{
+        display: inline-block;
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        margin-right: 5px;
+    }
+    .weui-cell__hd span.dot_red{
+        background-color: #fef5f4;
+        border: 1px solid #f86057;
+    }
+    .weui-cell__hd span.dot_yellow{
+        background-color: #fffcfa;
+        border: 1px solid #f3a07c;
+    }
+    .weui-cell__hd span.dot_blue{
+        background-color: #eff5ff;
+        border: 1px solid #5394f5;
+    }
+    .weui-cell__hd span.dot_green{
+        background-color: #f0fff6;
+        border: 1px solid #23dc3d;
+    }
+</style>
+
+<include file="common/header_nav" title="支付成功"  href="javascript:history.back(-1)"/>
+
+<div class="page-bd">
+    <div class="weui-cells tbornone bbornone mt0">
+        <div class="weui-cell" style="padding-bottom: 1rem;">
+            <div class="weui-cell__bd tc">
+                <!--<div><img style="width: 4.4rem;" src="__STATIC__/assets/images/zfok.png" alt=""></div>-->
+                <div class="fs14">支付成功</div>
+                <div class="fs11 text-muted mt5">您本次成功支付{$order['order_amount']}元</div>
+
+                <div class="mt10">
+                    <a href="{:url('order/order_detail',array('id'=>$order['order_id']))}" class="weui-btn weui-btn_plain-primary weui-btn_mini">查看订单</a>
+                    <a href="{:url('index/index')}" class="weui-btn weui-btn_primary weui-btn_mini" style="margin-top: 0px">继续购物</a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="weui-panel weui-panel_access">
+        <div class="weui-panel__hd">
+            <div class="fs11">订单交易后可获得</div>
+        </div>
+        <div class="weui-panel__bd fs10">
+            <div class="weui-cell">
+                <div class="weui-cell__hd">
+                    <span class="dot_red"></span>
+                </div>
+                <div class="weui-cell__bd">积分奖励</div>
+                <div class="weui-cell__ft"><span class="text-muted">+{$point}</span></div>
+            </div>
+            <!--<div class="weui-cell">
+                <div class="weui-cell__hd">
+                    <span class="dot_yellow"></span>
+                </div>
+                <div class="weui-cell__bd">佣金奖励</div>
+                <div class="weui-cell__ft"><span class="text-muted">+20</span></div>
+            </div>
+            <div class="weui-cell weui-cell_access">
+                <div class="weui-cell__hd">
+                    <span class="dot_blue"></span>
+                </div>
+                <div class="weui-cell__bd">复购优惠资格</div>
+                <div class="weui-cell__ft"></div>
+            </div>
+            <div class="weui-cell weui-cell_access">
+                <div class="weui-cell__hd">
+                    <span class="dot_green"></span>
+                </div>
+                <div class="weui-cell__bd">分享获得返利资格</div>
+                <div class="weui-cell__ft"></div>
+            </div>-->
+        </div>
+    </div>
+
+</div>
+</div>
+
+

@@ -1,0 +1,183 @@
+<include file="public/layout" />
+<body style="background-color: rgb(255, 255, 255); overflow: auto; cursor: default; -moz-user-select: inherit;">
+<div id="append_parent"></div>
+<div id="ajaxwaitid"></div>
+<div class="page">
+    <div class="fixed-bar">
+        <div class="item-title">
+            <div class="subject">
+                <h3>水币明细列表</h3>
+                <h5>网站系统会员水币明细列表</h5>
+            </div>
+            <ul class="tab-base nc-row">
+                <li><a href="javascript:void(0);" data-index='1' class="tab current"><span>返币记录</span></a></li>
+                <li><a href="javascript:void(0);" data-index='2' class="tab"><span>消费记录</span></a></li>
+            </ul>
+        </div>
+    </div>
+    <!-- 操作说明 -->
+    <div id="explanation" class="explanation" style="color: rgb(44, 188, 163); background-color: rgb(237, 251, 248); width: 99%; height: 100%;">
+        <div id="checkZoom" class="title"><i class="fa fa-lightbulb-o"></i>
+            <h4 title="提示相关设置操作时应注意的要点">操作提示</h4>
+            <span title="收起提示" id="explanationZoom" style="display: block;"></span>
+        </div>
+        <ul>
+            <li>水币明细列表, 由平台设置管理.</li>
+        </ul>
+    </div>
+    <div class="flexigrid">
+        <div class="ncap-form-default tab_div_1">
+            <div class="mDiv">
+                <div class="ftitle">
+                    <h3>返币记录列表</h3>
+                    <h5>(共{$lists|count}条记录)</h5>
+                </div>
+                <div title="刷新数据" class="pReload"><i class="fa fa-refresh"></i></div>
+            </div>
+            <div class="hDiv">
+                <div class="hDivBox">
+                    <table cellspacing="0" cellpadding="0">
+                        <thead>
+                        <tr>
+                            <th class="sign" axis="col0">
+                                <div style="width: 24px;"><i class="ico-check"></i></div>
+                            </th>
+                            <th align="left" axis="col3" class="">
+                                <div style="text-align: center; width: 27rem;" class="">返的水币</div>
+                            </th>
+                            <th align="left" axis="col4" class="">
+                                <div style="text-align: center; width: 55rem;" class="">时间</div>
+                            </th>
+                        </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+            <div class="tDiv">
+                <div class="tDiv2">
+                    <div class="fbutton">
+                        <a href="{:U('Admin/User/index')}">
+                            <div class="up" title="返回会员列表">
+                                <span><i class="fa fa-level-up"></i>返回会员列表</span>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div style="clear:both"></div>
+            </div>
+            <div class="bDiv" style="height: auto;">
+                <div id="flexigrid" cellpadding="0" cellspacing="0" border="0">
+                    <table>
+                        <tbody>
+                        <volist name="lists" id="list">
+                            <tr>
+                                <td class="sign">
+                                    <div style="width: 24px;"><i class="ico-check"></i></div>
+                                </td>
+                                <td align="left" class="">
+                                    <div style="text-align: center; width: 120px;">{$list.water_coin}</div>
+                                </td>
+                                <td align="left" class="">
+                                    <div style="text-align: center; width: 150px;">{$list.create_time}</div>
+                                </td>
+                            </tr>
+                        </volist>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="iDiv" style="display: none;"></div>
+            </div>
+        </div>
+        <div class="ncap-form-default tab_div_2" style="display:none;">
+            <div class="mDiv">
+                <div class="ftitle">
+                    <h3>消费记录列表</h3>
+                    <h5>(共{$lists_order|count}条记录)</h5>
+                </div>
+                <div title="刷新数据" class="pReload"><i class="fa fa-refresh"></i></div>
+            </div>
+            <div class="hDiv">
+                <div class="hDivBox">
+                    <table cellspacing="0" cellpadding="0">
+                        <thead>
+                        <tr>
+                            <th class="sign" axis="col0">
+                                <div style="width: 24px;"><i class="ico-check"></i></div>
+                            </th>
+                            <th align="left" axis="col3" class="">
+                                <div style="text-align: center; width: 27rem;" class="">消费的水币</div>
+                            </th>
+                            <th align="left" axis="col4" class="">
+                                <div style="text-align: center; width: 55rem;" class="">时间</div>
+                            </th>
+                        </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+            <div class="tDiv">
+                <div class="tDiv2">
+                    <div class="fbutton">
+                        <a href="{:U('Admin/User/index')}">
+                            <div class="up" title="返回会员列表">
+                                <span><i class="fa fa-level-up"></i>返回会员列表</span>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div style="clear:both"></div>
+            </div>
+            <div class="bDiv" style="height: auto;">
+                <div id="flexigrid" cellpadding="0" cellspacing="0" border="0">
+                    <table>
+                        <tbody>
+                        <volist name="lists_order" id="lists">
+                            <tr>
+                                <td class="sign">
+                                    <div style="width: 24px;"><i class="ico-check"></i></div>
+                                </td>
+                                <td align="left" class="">
+                                    <div style="text-align: center; width: 120px;">{$lists.water_coin}</div>
+                                </td>
+                                <td align="left" class="">
+                                    <div style="text-align: center; width: 150px;">{$lists.create_time}</div>
+                                </td>
+                            </tr>
+                        </volist>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="iDiv" style="display: none;"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function(){
+        // 表格行点击选中切换
+        $('#flexigrid > table>tbody >tr').click(function(){
+            $(this).toggleClass('trSelected');
+        });
+        // 点击刷新数据
+        $('.fa-refresh').click(function(){
+            location.href = location.href;
+        });
+    });
+
+    $(document).ready(function(){
+        //插件切换列表
+        $('.tab-base').find('.tab').click(function(){
+            $('.tab-base').find('.tab').each(function(){
+                $(this).removeClass('current');
+            });
+            $(this).addClass('current');
+            var tab_index = $(this).data('index');
+            $(".tab_div_1, .tab_div_2").hide();
+            $(".tab_div_"+tab_index).show();
+        });
+
+    });
+
+</script>
+</body>
+</html>

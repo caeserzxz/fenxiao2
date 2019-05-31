@@ -1,0 +1,208 @@
+<extend name="layout/page"/>
+<block name="pageBody">
+
+    <include file="components/list"/>
+
+    <style>
+        .cardbox {
+            position: relative;
+            margin-top: 15px;
+            margin-left: 10px;
+            margin-right: 10px;
+            margin-bottom: 15px;
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+            overflow: visible;
+        }
+
+        .cardbox:before {
+            content: "";
+            position: absolute;
+            width: 1.35rem;
+            height: 1.15rem;
+            background: url(__STATIC__/images/kouzi.png) no-repeat;
+            background-size: 100%;
+            right: 1rem;
+            top: -0.37rem;
+        }
+
+        .cardbox:after {
+            content: "";
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: -10px;
+            height: 10px;
+            background: url(__STATIC__/images/cardbottom.png) no-repeat;
+            background-size: 100%;
+        }
+
+        .card-top:after, .card-top:before {
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background-color: #f8f8f8;
+            content: "";
+            z-index: 9;
+            bottom: -8px;
+        }
+
+        .card-top:after {
+            right: -8px;
+        }
+
+        .card-top:before {
+            left: -8px;
+        }
+
+        .weui-cells_checkbox .weui-icon-checked:before {
+            border: 0px;
+        }
+
+        .weui-btn-area {
+            margin-bottom: 0;
+            padding-bottom: 0.173333rem;
+        }
+    </style>
+
+    <div class="weui-cells weui-cells_checkbox cardbox" id="app">
+        <div class="weui-cell" style="padding: 0.2rem 0; border-bottom: 1px dashed #e0e0e0;">
+            <div class="weui-cell__bd tc card-top">
+                <div>付款金额</div>
+                <div class="text-red mt5"><span class="fs12">￥</span><b class="fs20">{$amount}</b></div>
+            </div>
+        </div>
+        <div class="weui-panel weui-panel_access">
+
+            <div class="weui-panel__bd fs10">
+                <div class="weui-cells mt0 weui-cells_radio">
+
+                    <div is="list" ref="paymentList" :get-list="getPaymentList" primary-key="code" no-infinity>
+
+                        <div slot="listItem" slot-scope="item" is="item" :data="item.data" v-model="selectedPayment"></div>
+
+                        <div slot="endedTip"></div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="weui-btn-area">
+            <button type="submit" class="weui-btn weui-btn_primary" href="javascript:" @click="pay">立即支付</button>
+        </div>
+    </div>
+
+    <script type="text/x-template" id="item-template">
+
+        <label class="weui-cell weui-cell_access weui-check__label">
+            <div class="weui-cell__hd">
+                <input type="radio" class="weui-check" name="payment" ref="radio" @click="select">
+                <span class="weui-icon-checked"></span>
+            </div>
+            <div class="weui-cell__bd">
+                <div class="fs11" v-text="name"></div>
+            </div>
+            <div class="weui-cell__ft">
+                <img :src="'/plugins/payment/' + code + '/' + icon" style="width: 0.8rem;"/>
+            </div>
+        </label>
+    </script>
+
+    <script>
+        'use strict';
+
+        // 支付方式项目
+        var paymentItem = {
+            props: {
+                data: {
+                    type: Object,
+                    required: true,
+                },
+                value: {
+                    type: Object,
+                },
+            },
+
+            template: '#item-template',
+
+            data: function () {
+                var data = this.$props.data;
+
+                return data;
+            },
+            watch: {
+                value: function (value) {
+                    if (!value || !value.code) {
+                        return;
+                    }
+                    if (value.code === this.$data.code && !this.$refs.radio.checked) {
+                        // 自身被外部选择 而且 input没有选中
+                        this.$refs.radio.checked = true;
+                    }
+                }
+            },
+
+            methods: {
+                select: function (event) {
+                    if (event.target.checked) {
+                        this.$emit('input', this.$data);
+                    }
+                },
+            },
+        };
+
+        new Vue({
+            el: '#app',
+            data: {
+                selectedPayment: {},
+            },
+            components: {
+                item: paymentItem,
+            },
+
+            mounted: function () {
+
+                this.update();
+
+                this.$refs.paymentList.loadMore({
+                    init: true,
+                });
+            },
+
+            methods: {
+
+                update: function () {
+                },
+
+                getPaymentList: function (options) {
+                    var list = $.parseJSON('{$payment_type_list_json}');
+
+                    if (Array.isArray(list)) {
+                        options.finish({
+                            newList: list,
+                            ended: true,
+                        });
+                    }
+                },
+
+                pay: function () {
+
+                    if (!this.selectedPayment.code) {
+                        $.alert('请选择支付方式');
+                        return;
+                    }
+
+                    // 跳转到支付
+                    var uri = new URI("{:url('pay')}");
+                    uri.search({pid: '{$pid}', payment_code: this.selectedPayment.code});
+                    location.assign(uri);
+                },
+            },
+        });
+    </script>
+
+</block>

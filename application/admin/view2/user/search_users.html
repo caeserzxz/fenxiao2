@@ -1,0 +1,218 @@
+<include file="public/layout"/>
+<style>
+    .te_le .dataTables_paginate{float: left;}
+    .bot{float: right;padding: 15px 0}
+</style>
+<body style="background-color: rgb(255, 255, 255); overflow: auto; cursor: default; -moz-user-select: inherit;">
+<div class="page" style="padding: 0px 1% 0 1%; min-width: auto;">
+    <!-- 操作说明 -->
+    <div class="flexigrid">
+        <div class="mDiv">
+            <div class="ftitle">
+                <h3>用户列表</h3>
+                <h5>(共{$page->totalRows}条记录)</h5>
+            </div>
+            <!-- <div title="刷新数据" class="pReload"><i class="fa fa-refresh"></i></div> -->
+            <form class="navbar-form form-inline" id="search-form2" action="{:U('User/search_users',array('tpl'=>'sousuo'))}" method="get">
+                <input name="prom_id" type="hidden" value="{$Request.param.prom_id}">
+                <input name="prom_type" type="hidden" value="{$Request.param.prom_type}">
+                <div class="sDiv">
+
+                    <div class="sDiv2">
+                        <!-- <select name="status" class="select">
+                            <option value="">活动状态</option>
+                        </select> -->
+                        <input size="30" name="keywords" value="{$Request.param.keywords}" class="qsbox" placeholder="用户ID" type="text">
+                        <input class="btn" value="搜索" type="submit">
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="hDiv">
+            <div class="hDivBox">
+                <table cellspacing="0" cellpadding="0">
+                    <thead>
+                    <tr>
+                    	<th abbr="article_title" axis="col3" class="" align="left">
+                            <div style="text-align: left; width: 50px;" class=""><input type="checkbox" class="checkAll"></div>
+                        </th>
+                        <th abbr="article_title" axis="col3" class="" align="left">
+                            <div style="text-align: center; width: 150px;" class="">ID</div>
+                        </th>
+                        <th abbr="article_title" axis="col3" class="" align="left">
+                            <div style="text-align: center; width: 150px;" class="">头像</div>
+                        </th>
+                        <th abbr="article_time" axis="col6" class="" align="left">
+                            <div style="text-align: center; width: 250px;" class="">昵称</div>
+                        </th>
+                        <th abbr="article_time" axis="col6" class="" align="left">
+                            <div style="text-align: center; width: 250px;" class="">等级</div>
+                        </th>
+                        
+                        <th style="width:100%" axis="col7">
+                            <div></div>
+                        </th>
+                    </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+        <div class="bDiv" style="height: auto;">
+            <div id="flexigrid" cellpadding="0" cellspacing="0" border="0">
+                <table>
+                    <tbody>
+
+                    <volist name="userList" id="list">
+                        <tr>
+                            <td class="" align="left">
+                                <div style="text-align: left; width: 50px;">
+                                    <!-- <input type="radio" name="user_id" data-img="{$list.user_id|goods_thum_images=160,160}"
+                                           data-id="{$list.user_id}" data-name="{$list.nickname}" data-count="{$list.store_count}"
+                                           data-price="{$list.shop_price}" <if condition="$list['user_id'] eq $Request.param.user_id">checked='checked'</if>/> -->
+                                    <input type="radio" name="user_id" data-img="{$list.head_pic}"
+                                           data-id="{$list.user_id}" data-name="{$list.nickname}" 
+                                            <if condition="$list['user_id'] eq $Request.param.user_id">checked='checked'</if>/>       
+                                </div>
+                            </td>
+                            
+                            <td class="" align="left">
+                                <div style="text-align: center; width: 150px;">{$list.user_id}</div>
+                            </td>
+                            <td class="" align="center">
+                                <div style="text-align: center; width: 150px;">
+                                    <a href="{$list.head_pic}" target="_blank"><img onMouseOver="$(this).attr('width','80').attr('height','45');" onMouseOut="$(this).attr('width','40').attr('height','30');" width="40" height="30" src="{$list.head_pic}"/></a>
+                                </div>
+                            </td>
+                            <td class="" align="left">
+                                <div style="text-align: center; width: 250px;">{$list.nickname}</div>
+                            </td>
+                            <td class="" align="left">
+                                <div style="text-align: center; width: 250px;">
+
+                                    <if condition="($list.user_type eq 1) "> 健康大使
+                                        <elseif condition="$list.user_type eq 2"/>总代
+                                        <elseif condition="$list.user_type eq 3"/>大区经理
+                                        <else /> 会员
+                                    </if>
+                                </div>
+                            </td>
+                            <td class="" style="width: 100%;" align="">
+                                <div>&nbsp;</div>
+                            </td>
+                        </tr>
+                        <notempty name="list[specGoodsPrice]">
+                            <tr style="display: none" id="spec_user_id_{$list.user_id}">
+                                <td></td>
+                                <td class="tl" colspan="5">
+                                    <div style="height: auto;white-space:normal;">
+                                        <volist name="list[specGoodsPrice]" id="spec">
+                                            <a class="<if condition='$spec[prom_id] eq 0'>ncap-btn specBtn<else>ncap-btn-dis</if>" data-item-id="{$spec.item_id}"
+                                               data-key-name="{$spec.key_name}" data-store-count="{$spec.store_count}" data-price="{$spec.price}" data-spec-img="{$spec.spec_img}"
+                                               title="{$spec.key_name}" >{$spec.key_name}</a>
+                                        </volist>
+                                    </div>
+                                </td>
+                            </tr>
+                        </notempty>
+                    </volist>
+                    </tbody>
+                </table>
+            </div>
+            <div class="iDiv" style="display: none;"></div>
+        </div>
+        <!--分页位置-->
+        <div class="te_le">
+           {$page}
+        </div>
+        <div class="bot"><a onclick="select_users();" class="ncap-btn-big ncap-btn-green">确认提交</a></div>
+    </div>
+</div>
+<script>
+    $(document).ready(function(){
+        $("input[type='radio']:checked").each(function(i,o){
+            var user_id = $(this).data('id');
+            $('#spec_user_id_'+user_id).show();
+        })
+    });
+
+    //用户对象
+    function GoodsItem(user_id, nickname, goods_image) {
+        this.user_id = user_id;
+        this.nickname = nickname;
+        //没有头像默认给一个头像
+        if(goods_image)
+        {
+        	this.goods_image = goods_image;
+        }
+        else
+        {
+        	var goods_image='/public/assets/images/swiper_img01.jpg';
+        	this.goods_image = goods_image;
+
+        }
+        
+        
+       
+    }
+    //商品对象
+    function GoodsSpecItem(item_id, key_name, store_count, price ,spec_img) {
+        this.item_id = item_id;
+        this.key_name = key_name;
+        this.store_count = store_count;
+        this.price = price;
+        this.spec_img = spec_img;
+    }
+    //单选框选中事件
+    $(function () {
+        $(document).on("click", '#flexigrid input', function (e) {
+            var user_id = $(this).data('id');
+            if($(this).is(':checked')){
+                $('#spec_user_id_'+user_id).show();
+            }else{
+                $('#spec_user_id_'+user_id).hide();
+            }
+        })
+    })
+    //规格按钮点击事件
+    $(function () {
+        $(document).on("click", '.specBtn', function (e) {
+            $(this).parent().find('a').css("color","#777").removeClass('ncap-btn-green');
+            $(this).css("color","#FFF").addClass('ncap-btn-green');
+        })
+    })
+
+    function select_users()
+    {
+        var input = $("input[type='radio']:checked");
+        if (input.length == 0) {
+            layer.alert('请选择上级用户', {icon: 2}); //alert('请选择商品');
+            return false;
+        }
+        var user_id = input.data('id');
+        var name=input.data('name');
+        var img=input.data('img');
+        var spec = $('#spec_user_id_'+user_id);
+
+        
+
+        var goodsItem = null;
+        if(spec.length == 0){
+        	
+            goodsItem = new GoodsItem(input.data('id'), input.data('name'), input.data('img'), null);
+            //goodsArr.push(goodsItem);
+        	//alert(goodsItem);
+
+        }else{
+            var spec_a = spec.find('.ncap-btn-green');
+            if(spec_a.length == 0){
+                layer.alert('请选择上级用户', {icon: 2}); //alert('请选择商品');
+            }else{
+                var goodsSpecItem = new GoodsSpecItem(spec_a.data('item-id'),spec_a.data('key-name'),spec_a.data('store-count'),spec_a.data('price'),spec_a.data('spec-img'));
+                goodsItem = new GoodsItem(input.data('id'), input.data('name'), input.data('count'),input.data('price'), input.data('img'), goodsSpecItem);
+            }
+        }
+        window.parent.call_back(goodsItem);
+    }
+</script>
+</body>
+</html>

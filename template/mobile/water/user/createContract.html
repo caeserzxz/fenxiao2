@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,viewport-fit=cover">
+    <link rel="stylesheet" href="__STATIC__/n_assets/css/zpui.css"/>
+    <link rel="stylesheet" href="__STATIC__/n_assets/css/all.css"/>
+    <script src="__STATIC__/n_assets/js/page.js"></script>
+    <link href="__STATIC__/n_assets/js/Swiper-4.0.7/swiper.min.css">
+
+    <title>合同</title>
+    <style>
+        .canvas{
+            display: block;
+            opacity: 0;
+            pointer-events: none;
+        }
+        .canvas_show{
+            opacity: 1;
+            pointer-events: auto;
+        }
+        #canvasBox{
+            background-color: #fff;
+        }
+    </style>
+</head>
+<body>
+<div class="page">
+    <div class="page-hd">
+        <div class="header bor-1px-b">
+            <div class="header-left">
+                <a href="{:U('User/userinfo')}" class="left-arrow"></a>
+            </div>
+            <div class="header-title">创建合同</div>
+            <div class="header-right">
+                <a href="#"></a>
+            </div>
+        </div>
+    </div>
+    <div class="page-bd" style="background-color: #fff;">
+        <!-- 页面内容-->
+
+        <form action="{:U('User/saveContract')}" method="post">
+            <div class="cjht_box">
+                <input type="text" style="border:none;float:right" class="tr text-muted" name="number" value="{$number}H">
+                <input type="hidden" name="jia_name" value="中国儿童健康发展中心有限公司" >
+                <input type="hidden" name="yi_name" value="{$applyIdentity.name}" >
+                <input type="hidden" name="id_card" value="{$applyIdentity.id_card}" >
+                <input type="hidden" name="phone" value="{$applyIdentity.phone}" >
+                <input type="hidden" name="dai_province" value="{$address.id}" >
+                <input type="hidden" name="dai_city" value="{$city.id}" >
+                <input type="hidden" name="dai_area" value="{$area.id}" >
+                <div style="clear: both"></div>
+                <div class="fs28 tc">区域总代理合同</div>
+                <div class="mt20">甲方：中国儿童健康发展中心有限公司</div>
+                <div>乙方：{$applyIdentity.name}</div>
+                <div class="htnr">
+                    <p>"甲乙双方经协商确定，就乙方承接甲方特定区域销售总代理/合伙人(平台中确认区域和角色)事宜，在互利互惠，优势互补的基础上，经好友协商，达成共识，签订本区域销售代理合同书。具体条款如下：</p>
+                    <p>一、甲方权利与义务<br>
+                        1.甲方全面负责平台运营，策划与宣传。<br>
+                        2.晃方向乙方提供产品包装完好无损，品质优良的产品。<br>
+                        3.甲方负责网络平台的客户服务及消购买指导，统一负责订单处理，承担快递送货及退货处理工作。<br>
+                        4.甲方推出新产品、调整市场价格必须提前通知乙方。<br>
+                        5.甲方要按时每月给乙方支付分销佣金，管理佣金。</p>
+                    <p>
+                        二、乙方权利与义务<br>
+                        1.乙方需在销售区域内尽力拓展客户，并积极宣传甲方的产品性能和品牌优势。<br>
+                        2.乙方尽力维护甲方在当地的公司形象及产品的品牌形象。<br>
+                        3.乙方应维护好客户关系，指导并管理好渠道分销商的推广工作，确保区域业绩稳定健康增长。<br>
+                        4.根据平台规则和销售业绩，乙方拥有获得分销佣金和管理佣金的权利。<br>
+                        5.乙方有代收渠道分销商佣金的权利和及时代发分销商佣金的义务。
+                    </p>
+                    <p>三、本代理协议双方各执一份，有效期两年。<br>
+                    <p>四、代理区域：{$address.name}{$city.name}{$area.name}<br>
+
+                    </p>甲方：中国儿童健康发展中心有限公司<br>
+                        地址：香港湾仔押道18号海德中心16楼D室</p>
+                    <!--<div class="weui-flex mt30">-->
+                    <!--<div>签名：</div>-->
+                    <!--&lt;!&ndash;<div class="weui-flex__item">&ndash;&gt;-->
+                    <!--&lt;!&ndash;<img style="width: 200px;" src="__STATIC__/n_assets/images/img0001.jpg" alt="">&ndash;&gt;-->
+                    <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                    <!--<span class="sign_img">-->
+                    <!--<img src="/" alt="">-->
+                    <!--</span>-->
+
+
+                    <!--<div  class="weui-flex__item"><img class="icon_sign" src="__STATIC__/n_assets/images/icon_sign.png" alt=""></div>-->
+
+                    <!--</div>-->
+
+                    <div class="sign">
+                        <div>已方签名：</div>
+                        <div class="weui-flex__item">
+                        <span class="sign_img">
+                          <img src="/" alt="">
+                            <input type="hidden" id="imgval" name="img" value="">
+                        </span>
+                        </div>
+                        <div  class="weui-flex__item"><img class="icon_sign" src="__STATIC__/n_assets/images/icon_sign.png" alt=""></div>
+                    </div>
+                    <div class="tc text-muted">
+                        点击上方图标签写真实姓名，完成后点击确定按钮
+                    </div>
+                    <div class="canvas" id="canvas">
+                        <div class="canvas_box">
+                            <div id="canvasBox"></div>
+                        </div>
+                        <p class="clearCanvas" id="clearCanvas">清除</p>
+                        <p class="saveCanvas" id="saveCanvas">完成</p>
+                    </div>
+                    <div>
+                        <p>身份证号码：{$applyIdentity.id_card}</p>
+                        <p>电话：{$applyIdentity.phone}</p>
+                    </div>
+                    <div class="tr text-muted">签约日期：{$nowDate}</div>
+                </div>
+            </div>
+            <div class="weui-btn-area" style="margin-top: 0.6rem;">
+                <!--<a href="###" class="weui-btn weui-btn_primary mt20">确认</a>-->
+                <input type="submit" class="weui-btn weui-btn_primary mt20"></input>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="__STATIC__/n_assets/js/lib/jquery-2.1.4.js"></script>
+<script src="__STATIC__/n_assets/js/jquery-weui.min.js"></script>
+<script src="__STATIC__/n_assets/js/lib/fastclick.js"></script>
+<script>
+    $(function() {
+        FastClick.attach(document.body);
+    });
+</script>
+<script>
+
+    $(function () {
+        new lineCanvas({
+            el: document.getElementById("canvasBox"),//绘制canvas的父级div
+            clearEl: document.getElementById("clearCanvas"),//清除按钮
+            saveEl: document.getElementById("saveCanvas"),//保存按钮
+        });
+
+        $(".icon_sign").on('click', function () {
+            $(".canvas").addClass('canvas_show');
+        });
+    });
+
+    var imgBase64 ="";
+    function lineCanvas(obj) {
+        this.linewidth = 1;
+        this.color = "#000000";
+        this.background = "#ffffff";
+        for (var i in obj) {
+            this[i] = obj[i];
+        };
+        this.canvas = document.createElement("canvas");
+        this.el.appendChild(this.canvas);
+        this.cxt = this.canvas.getContext("2d");
+        this.canvas.width = this.el.clientWidth;
+        this.canvas.height = this.el.clientWidth/2;
+        this.cxt.fillStyle = this.background;
+        this.cxt.fillRect(0, 0, this.canvas.width, this.canvas.width);
+        this.cxt.strokeStyle = this.color;
+        this.cxt.lineWidth = this.linewidth;
+        this.cxt.lineCap = "round";
+        //开始绘制
+        this.canvas.addEventListener("touchstart", function(e) {
+            this.cxt.beginPath();
+            this.cxt.moveTo(e.changedTouches[0].pageX, e.changedTouches[0].pageY);
+        }.bind(this), false);
+        //绘制中
+        this.canvas.addEventListener("touchmove", function(e) {
+            this.cxt.lineTo(e.changedTouches[0].pageX, e.changedTouches[0].pageY);
+            this.cxt.stroke();
+        }.bind(this), false);
+        //结束绘制
+        this.canvas.addEventListener("touchend", function() {
+            this.cxt.closePath();
+        }.bind(this), false);
+        //清除画布
+        this.clearEl.addEventListener("click", function() {
+            this.cxt.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        }.bind(this), false);
+        //保存图片，直接转base64
+        this.saveEl.addEventListener("click", function() {
+            var imgBase64 = this.canvas.toDataURL();
+            console.log(imgBase64);
+            $(".canvas").removeClass('canvas_show');
+            $(".sign_img img").attr('src',imgBase64);
+            $("#imgval").attr('value',imgBase64);
+        }.bind(this), false);
+    };
+
+</script>
+</body>

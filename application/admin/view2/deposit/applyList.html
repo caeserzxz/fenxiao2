@@ -1,0 +1,219 @@
+<include file="public/layout" />
+<body style="background-color: rgb(255, 255, 255); overflow: auto; cursor: default; -moz-user-select: inherit;">
+<div id="append_parent"></div>
+<div id="ajaxwaitid"></div>
+<div class="page">
+  <div class="fixed-bar">
+    <div class="item-title">
+      <div class="subject">
+        <h3>退押管理</h3>
+        <h5>网站退押申请索引与管理</h5>
+      </div>
+    </div>
+  </div>
+   操作说明
+  <div id="explanation" class="explanation" style="color: rgb(44, 188, 163); background-color: rgb(237, 251, 248); width: 99%; height: 100%;">
+    <div id="checkZoom" class="title"><i class="fa fa-lightbulb-o"></i>
+      <h4 title="提示相关设置操作时应注意的要点">操作提示</h4>
+      <span title="收起提示" id="explanationZoom" style="display: block;"></span>
+    </div>
+    <ul>
+      <li>打款操作不要多次快速连点确定.</li>
+      <li>比如打款和批量打款，以避免操作失误造成资金流失</li>
+    </ul>
+  </div>
+  <div class="flexigrid">
+    <div class="mDiv">
+      <div class="ftitle">
+        <h3>退押申请列表</h3>
+        <h5>(共{$pager->totalRows}条记录)</h5>
+      </div>
+      <a href=""><div title="刷新数据" class="pReload"><i class="fa fa-refresh"></i></div></a>
+        <form id="search-form2" class="navbar-form form-inline"  method="post" action="{:U('Admin/Deposit/applyList')}">
+            <div class="sDiv">
+                <div class="sDiv2">
+                    <input type="text" class="qsbox" id="input-order-id" placeholder="搜索词" name="key_word">
+                    <input type="submit" class="btn" value="搜索">
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="hDiv">
+      <div class="hDivBox">
+        <table cellspacing="0" cellpadding="0">
+          <thead>
+            <tr>
+              <th class="sign" axis="col0" onclick="checkAllSign(this)">
+                <div style="width: 24px;"><i class="ico-check"></i></div>
+              </th>
+                <th align="left" abbr="article_title" axis="col3" class="">
+                    <div style="text-align: center; width: 50px;" class="">ID</div>
+                </th>
+              <th align="left" abbr="article_title" axis="col3" class="">
+                <div style="text-align: center; width: 200px;" class="">用户名</div>
+              </th>
+              <th align="left" abbr="ac_id" axis="col4" class="">
+                <div style="text-align: center; width: 100px;" class="">用户头像</div>
+              </th>
+              <th align="left" abbr="ac_id" axis="col4" class="">
+                <div style="text-align: center; width: 100px;" class="">退还押金</div>
+              </th>
+              <th align="center" abbr="article_show" axis="col5" class="">
+                <div style="text-align: center; width: 100px;" class="">状态</div>
+              </th>
+              <th align="center" abbr="article_time" axis="col6" class="">
+                <div style="text-align: center; width: 200px;" class="">申请时间</div>
+              </th>
+              <th align="center" axis="col1" class="handle">
+                <div style="text-align: center; width: 250px;">操作</div>
+              </th>
+              <th style="width:100%" axis="col7">
+                <div></div>
+              </th>
+            </tr>
+          </thead>
+        </table>
+      </div>
+    </div>
+    <div class="tDiv">
+      <div class="tDiv2">
+          <div class="fbutton">
+              <a href="javascript:;" onclick="publicHandleAll('del')">
+                  <div class="add" title="批量删除">
+                      <span>批量删除</span>
+                  </div>
+              </a>
+          </div>
+      </div>
+      <div class="tDiv2">
+        <div class="fbutton">
+          <a href="javascript:;" onclick="payAll('pay')">
+            <div class="add" title="批量打款">
+              <span>批量打款</span>
+            </div>
+          </a>
+        </div>
+      </div>
+      <div style="clear:both"></div>
+    </div>
+    <div class="bDiv" style="height: auto;">
+      <div id="flexigrid" cellpadding="0" cellspacing="0" border="0" data-url="{:U('Admin/Deposit/delApply')}">
+        <table>
+          <tbody>
+            <volist name="applyList" id="list">
+              <tr data-id="{$list[id]}">
+                <td class="sign">
+                  <div style="width: 24px;"><i class="ico-check"></i></div>
+                </td>
+                  <td align="left" class="">
+                      <div style="text-align: center; width: 50px;">{$list.id}</div>
+                  </td>
+                <td align="left" class="">
+                  <div style="text-align: center; width: 200px;">{$list.nickname}</div>
+                </td>
+                <td align="left" class="">
+                  <div style="text-align: center; width: 100px;">
+	                  <a href="{$list.head_pic}" target="_blank"><img onMouseOver="$(this).attr('width','80').attr('height','45');" onMouseOut="$(this).attr('width','40').attr('height','30');" width="40" height="30" src="{$list.head_pic}"/></a>
+                  </div>
+                </td>
+                <td align="left" class="">
+                  <div style="text-align: center; width: 100px;">{$list.apply_deposit}</div>
+                </td>
+                <td align="left" class="">
+                  <div style="text-align: center; width: 100px;">
+                    <if condition="$list['status'] eq 0">未审核
+                        <elseif condition="$list['status'] eq 1">审核通过
+                        <elseif condition="$list['status'] eq 2">拒绝
+                        <elseif condition="$list['status'] eq 3">打款成功
+                        <else /><span style="color: red">打款失败</span>
+                    </if>
+                  </div>
+                </td>
+                <td align="left" class="">
+                  <div style="text-align: center; width: 200px;">{$list.create_time}</div>
+                </td>
+                <td align="center" class="handle">
+                  <div style="text-align: left; width: 250px;">
+                    <a class="btn red"  href="javascript:void(0)"  onclick="publicHandle('{$list[id]}','del')" ><i class="fa fa-trash-o"></i>删除</a>
+                    <a class="btn green" href="{:U('Admin/Deposit/detail',array('id'=>$list['id']))}"><i class="fa fa-list-alt"></i>查看</a>
+                    <if condition="$list['status'] eq 1">
+                    <a class="btn blue" id="pay" data-url="{:U('Admin/Deposit/payment',array('id'=>$list['id']))}" onclick="payment('{$list[id]}','pay')"></i>打款</a>
+                    </if>
+                    <if condition="$list['status'] eq 4">
+                      <a class="btn blue" id="pay" data-url="{:U('Admin/Deposit/payment',array('id'=>$list['id']))}" onclick="payment('{$list[id]}','pay')"><i class="fa fa-money"></i>再次打款</a>
+                    </if>
+                  </div>
+                </td>
+                <td align="" class="" style="width: 100%;">
+                  <div>&nbsp;</div>
+                </td>
+              </tr>
+            </volist>
+          </tbody>
+        </table>
+	 <!--分页位置--> {$show}</div>        
+      </div>       
+    </div>    
+</div>
+<script>
+
+    $(document).ready(function(){
+
+        // 表格行点击选中切换
+        $(document).on('click','#flexigrid > table>tbody >tr',function(){
+            $(this).toggleClass('trSelected');
+            var checked = $(this).hasClass('trSelected');
+            $(this).find('input[type="checkbox"]').attr('checked',checked);
+        });
+    });
+
+    function payment(ids, handle_type) {
+        layer.confirm('确认当前操作？', {
+                btn: ['确定', '取消'] //按钮
+            }, function () {
+                layer.closeAll('dialog');
+                // 确定
+                $.ajax({
+                    url: $('#pay').data('url'),
+                    type: 'post',
+                    data: {ids: ids, type: handle_type},
+                    dataType: 'JSON',
+                    beforeSend:function(){
+                        index = layer.load(2, {
+                            shade: [0.3,'#393D49']
+                        });
+                    },
+                    success: function (data) {
+                        if (data.status == 1) {
+                            layer.msg(data.message, {icon: 1, time: 2000}, function () {
+                                location.href = window.location;
+                            });
+                        } else {
+                            layer.msg(data.message, {icon: 2, time: 2000}, function () {
+                                location.href = window.location;
+                            });
+                        }
+                    }
+                });
+            }, function (index) {
+                layer.close(index);
+            }
+        );
+    }
+
+    function payAll(type) {
+        var ids = '';
+        $('#flexigrid .trSelected').each(function (i, o) {
+//            ids.push($(o).data('id'));
+            ids += $(o).data('id') + ',';
+        });
+        if (ids == '') {
+            layer.msg('至少选择一项', {icon: 2, time: 2000});
+            return false;
+        }
+        payment(ids, type); //调用删除函数
+    }
+
+</script>
+</body>
+</html>

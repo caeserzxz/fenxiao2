@@ -1,0 +1,92 @@
+<include file="public/header" title="签到" body=""/>
+<link href="__PUBLIC__/static/css/page.css" rel="stylesheet" type="text/css">
+
+<div class="panel1-sign">
+    <div class="page-hd">
+        <div class="header bor-1px-b">
+            <div class="header-left">
+                <a href="javascript:history.go(-1)" class="left-arrow"></a>
+            </div>
+            <div class="header-title"><a href="{:U('user/index')}" class="left-arrow" style="color: inherit">返回</a></div>
+        </div>
+    </div>
+
+    <div class="user-sign">
+        <i><img src="__STATIC__/images/user-photo3.png" alt=""/></i>
+        <span>{$user['nickname']}</span>
+    </div>
+    <div class="integral-sign">
+        <span>本月已获：<span id="benyue"><notempty name="$monthMoney">{$monthMoney}
+            <else/>
+            0
+        </notempty></span>积分</span>
+        <span>累计总金额：<span id="cumtrapz"><notempty name="$countMoney">{$countMoney}
+            <else/>
+            {$cumtrapz|default="0 "}
+        </notempty></span>积分</span>
+    </div>
+    <div>
+    <if condition="$checkToday lt $configNum">
+        <!--未签到-->
+        <div class="click-sign "  onclick="getSign()">
+        </div>
+        <else/>
+        <!--已签到-->
+        <div class="click-sign clicked-sign">
+    </if>
+    </div>
+    <!--<div>-->
+    <!--<p class="continuity-sign">-->
+        <!--本月已签到 <i>-->
+        <!--<span id="lianxuday">-->
+            <!--<notempty name="$countMonth">-->
+                <!--{$countMonth}-->
+                <!--<else/>-->
+                <!--0-->
+            <!--</notempty>-->
+    <!--</i> </span>-->
+        <!--天-->
+    <!--</p>-->
+    <!--</div>-->
+</div>
+</div>
+<div class="rule-sign">
+
+    <h5>签到历史记录：</h5>
+    <volist name="signInfo" id="data">
+        <h5>时间：{:date('Y-m-d H:i:s',$data.create_time)}，获得 {$data.money} 积分奖励</h5>
+    </volist>
+</div>
+
+{$page}
+
+<div class="rule-sign">
+    <h5>签到规则：</h5>
+
+    <p>1.用户每日签到可获取奖励；</p>
+
+    <p>2.签到送积分活动长期有效；</p>
+
+    <p>3.本活动最终解释权归商家所有。</p>
+</div>
+<script type="text/javascript">
+    function getSign(){
+        console.log(123);
+        $.ajax({
+            url: '/mobile/User/userSign',
+            type: 'POST',
+            cache: false,
+            success: function (data) {
+//                return false;
+                layer.open({content: data.msg, time: 3});
+                sleep(2);
+                window.location.reload();//页面刷新
+            },
+            error: function (data) {
+                //tipTopShow("上传失败");
+            }
+        });
+    }
+</script>
+</body>
+</html>

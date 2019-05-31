@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,viewport-fit=cover">
+    <link rel="stylesheet" href="__STATIC__/n_assets/css/zpui.css"/>
+    <link rel="stylesheet" href="__STATIC__/n_assets/css/all.css"/>
+    <script src="__STATIC__/n_assets/js/page.js"></script>
+    <link href="__STATIC__/n_assets/js/Swiper-4.0.7/swiper.min.css">
+    <link href="__PUBLIC__/static/css/page.css" rel="stylesheet" type="text/css">
+
+    <title>待返佣金流水记录</title>
+</head>
+<body>
+<body>
+<div class="page">
+    <div class="page-hd">
+        <div class="header bor-1px-b">
+            <div class="header-left">
+                <a href="{:U('User/index')}" class="left-arrow"></a>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-bd">
+        <!-- 页面内容-->
+
+        <div class="weui-cells">
+            <div class="weui-cell">
+                <div class="weui-cell__bd hit_title hit_title1 fs28 fw600">
+                    待返佣金流水记录
+                </div>
+            </div>
+
+            <volist name="lists" id="vo">
+            <div class="weui-cell">
+                <div class="weui-cell__bd">
+                    <div class="fs26">
+                        <if $vo[commission_type] eq '0'>
+                            身份产品获得直推奖
+                        <elseif $vo[commission_type] eq '1'/>
+                            身份产品获得团队奖
+                        <elseif $vo[commission_type] eq '2'/>
+                            身份产品获得团队管理奖
+                        <elseif $vo[commission_type] eq '3'/>
+                            身份产品获得评级奖金
+                        <elseif $vo[commission_type] eq '4'/>
+                            身份产品获得区域奖
+                        </if>
+                    </div>
+                    <div class="fs22 text-muted mt10">{$vo.create_time|date="Y-m-d
+                        H:i",###}</div>
+                </div>
+                <div class="weui-cell__ft fs26 text-gray">
+                    <if $vo[money] gt '0'>
+                    +{$vo.money}
+                    <else />
+                    {$vo.money}
+                    </if>
+
+                </div>
+            </div>
+            </volist>
+
+        </div>
+
+        {$page}
+    </div>
+
+</div>

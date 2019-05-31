@@ -1,0 +1,158 @@
+
+<layout name="common/layout_nav" title="设置银行卡" />
+<body>
+<div class="page">
+    <div class="page-hd">
+        <div class="header">
+            <div class="header-left">
+                <a href="{:U('userinfo')}" class="left-arrow"></a>
+            </div>
+            <div class="header-title">设置银行卡</div>
+            <div class="header-right"><a href="#"></a> </div>
+        </div>
+    </div>
+    <div class="page-bd">
+
+
+        <div class="weui-cells mt0 vux-1px-t">
+            <div class="weui-cell"  style="padding-top: 1rem; padding-bottom: 2rem;">
+                <div class="weui-cell__bd">
+
+                    <select class="small form-control" id="card" style="width:100%;height:40px;border:1px">
+                        <volist name="cardType" id="vo">
+                            <option value="{$vo.id}" <if $vo[id] == $userBank.bank_id>selected</if>>{$vo.name}</option>
+
+                        </volist>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="weui-cells mt0 vux-1px-t">
+            <div class="weui-cell"  style="padding-top: 1rem;">
+                <div class="weui-cell__bd">
+                    <div class="weui-flex jgflex">
+                        <div class="weui-flex__item"><input id="number" value="{$userBank.card_number}" class="weui-input" style="font-size: 0.8rem; font-weight: normal;" type="tel" placeholder="请输入您的银行卡号"></div>
+                    </div>
+                    <div class="fs10 text-muted mt10">请输入银行卡号</div>
+                </div>
+            </div>
+        </div>
+        <div class="weui-cells mt0 vux-1px-t">
+            <div class="weui-cell"  style="padding-top: 1rem; ">
+                <div class="weui-cell__bd">
+                    <div class="weui-flex jgflex">
+                        <div class="weui-flex__item"><input id="real_name" value="{$userBank.name}" class="weui-input" style="font-size: 0.8rem; font-weight: normal;" type="tel" placeholder="请输入持卡人姓名 "></div>
+                    </div>
+                    <div class="fs10 text-muted mt10">请输入持卡人姓名</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="weui-cells mt0 vux-1px-t">
+            <div class="weui-cell"  style="padding-top: 1rem;">
+                <div class="weui-cell__bd">
+                    <div class="weui-flex jgflex">
+                        <div class="weui-flex__item"><input id="branch_name" value="{$userBank.branch_name}" class="weui-input" style="font-size: 0.8rem; font-weight: normal;" type="tel" placeholder="请输入支行名称 "></div>
+                    </div>
+                    <div class="fs10 text-muted mt10">请输入支行名称</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="weui-cells mt0 vux-1px-t">
+            <div class="weui-cell"  style="padding-top: 1rem;">
+                <div class="weui-cell__bd">
+                    <div class="weui-flex jgflex">
+                        <div class="weui-flex__item"><input id="address" value="{$userBank.address}" class="weui-input" style="font-size: 0.8rem; font-weight: normal;" type="tel" placeholder="请输入地址"></div>
+                    </div>
+                    <div class="fs10 text-muted mt10">请输入地址</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="weui-btn-area layermcont" style="margin-bottom: 3rem">
+            <a  class="weui-btn weui-btn_primary"  onclick="sendcode(this)">完成</a>
+        </div>
+    </div>
+</div>
+
+
+</div>
+<script>
+    $(function () {
+        $('#number').on('input propertychange',function () {
+            console.log($(this).val().length);
+            if($(this).val().length>10){
+                $('.weui-btn').css('background-color','')
+            }else{
+                $('.weui-btn').css('background-color','#c7c7c7')
+            }
+
+        })
+    });
+</script>
+<script>
+    //提交
+    function sendcode(obj){
+        var tel = $.trim($('#number').val());
+        var card_type = $('#card').val();
+        var user_name = $('#real_name').val();
+        var branch_name=$('#branch_name').val();
+        var address=$('#address').val();
+        if(tel == ''){
+            showErrorMsg('请输入您的银行卡号！');
+            return false;
+        }
+
+        if(card_type == ''){
+            showErrorMsg('请选择银行！');
+            return false;
+        }
+
+        if(branch_name == ''){
+            showErrorMsg('请输入您的支行名称！');
+            return false;
+        }
+
+        if(address == ''){
+            showErrorMsg('请输入你的电话地址！');
+            return false;
+        }
+
+        $.ajax({
+//            url:'/index.php?m=Mobile&c=User&a=send_validate_code&t='+Math.random(), //原获取短信验证码方法
+            url : "{:U('Mobile/User/bankCard')}",
+            type:'post',
+            dataType:'json',
+            data:{
+                card_num:tel,
+                card_type:card_type,
+                user_name:user_name,
+                branch_name:branch_name,
+                address:address,
+            },
+            success:function(res){
+                if(res.code==1){
+                    //成功
+                    showErrorMsg(res.msg);
+                    window.location.href="{:U('User/userinfo')}";
+                    //countdown(obj);
+                }else{
+                    //失败
+                    showErrorMsg(res.msg);
+                }
+            }
+        })
+    }
+
+    /**
+     * 提示弹窗
+     * @param msg
+     */
+    function showErrorMsg(msg){
+        layer.open({content:msg,time:11002});
+    }
+</script>
+</body>
+</html>

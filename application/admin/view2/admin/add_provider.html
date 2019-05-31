@@ -1,0 +1,113 @@
+<include file="public/layout" />
+<body style="background-color: #FFF; overflow: auto;">
+<div id="toolTipLayer" style="position: absolute; z-index: 9999; display: none; visibility: visible; left: 95px; top: 573px;"></div>
+<div id="append_parent"></div>
+<div id="ajaxwaitid"></div>
+<div class="page">
+	<div class="fixed-bar">
+		<div class="item-title"><a class="back" href="javascript:history.back();" title="返回列表"><i class="fa fa-arrow-circle-o-left"></i></a>
+			<div class="subject">
+				<h3>编辑供应商</h3>
+				<h5>系统供应商管理</h5>
+			</div>
+		</div>
+	</div>
+	<form class="form-horizontal" action="{:U('Admin/Admin/save_provider')}" id="roleform" method="post">
+		<div class="ncap-form-default">
+			<dl class="row">
+				<dt class="tit">
+					<label for="role_name"><em>*</em>供应商名称</label>
+				</dt>
+				<dd class="opt">
+					<input type="text" name="data[name]" id="name" value="{$providerInfo.name}" class="input-txt">
+					<span class="err" id="name_err" style="display: none">导航名称不能为空!!</span>
+					<p class="notic"></p>
+				</dd>
+			</dl>
+			<!--<dl class="row">-->
+				<!--<dt class="tit">-->
+					<!--<label for="username"><em>*</em>供应商账户</label>-->
+				<!--</dt>-->
+				<!--<dd class="opt">-->
+					<!--<input type="text" name="data[username]" id="username" value="{$providerInfo.username}" class="input-txt">-->
+					<!--<span class="err" id="username_err" style="display: none">导航名称不能为空!!</span>-->
+					<!--<p class="notic"></p>-->
+				<!--</dd>-->
+			<!--</dl>-->
+			<!--<dl class="row">-->
+				<!--<dt class="tit">-->
+					<!--<label for="password"><em>*</em>密码</label>-->
+				<!--</dt>-->
+				<!--<dd class="opt">-->
+					<!--<input type="text" name="data[password]" id="password"  class="input-txt">-->
+					<!--<span class="err" id="password_err" style="display: none">导航名称不能为空!!</span>-->
+					<!--<p class="notic"></p>-->
+				<!--</dd>-->
+			<!--</dl>-->
+
+			<!--<dl class="row">-->
+				<!--<dt class="tit">-->
+					<!--<label for="password2"><em>*</em>密码确认</label>-->
+				<!--</dt>-->
+				<!--<dd class="opt">-->
+					<!--<input type="text" name="data[password2]" id="password2"  class="input-txt">-->
+					<!--<span class="err" id="password2_err" style="display: none">导航名称不能为空!!</span>-->
+					<!--<p class="notic"></p>-->
+				<!--</dd>-->
+			<!--</dl>-->
+
+
+			<div class="bot"><a href="JavaScript:void(0);" onclick="roleSubmit();" class="ncap-btn-big ncap-btn-green" id="submitBtn">确认提交</a></div>
+		</div>
+		<input type="hidden" name="id" value="{$providerInfo.id}">
+	</form>
+</div>
+<script type="text/javascript">
+	$(document).ready(function(){
+		$(":checkbox[cka]").click(function(){
+			var $cks = $(":checkbox[ck='"+$(this).attr("cka")+"']");
+			if($(this).is(':checked')){
+				$cks.each(function(){$(this).prop("checked",true);});
+			}else{
+				$cks.each(function(){$(this).removeAttr('checked');});
+			}
+		});
+	});
+
+	function choosebox(o){
+		var vt = $(o).is(':checked');
+		if(vt){
+			$('input[type=checkbox]').prop('checked',vt);
+		}else{
+			$('input[type=checkbox]').removeAttr('checked');
+		}
+	}
+
+	function roleSubmit(){
+		var password = $('#password').val();
+		var password2 = $('#password2').val();
+		if($('#role_name').val() == '' ){
+			layer.alert('供应商名称不能为空', {icon: 2});
+			return false;
+		}
+//		if($('#username').val() == '' ){
+//			layer.alert('供应商账户不能为空', {icon: 2});
+//			return false;
+//		}
+//		if(password == '' ){
+//			layer.alert('供应商密码不能为空', {icon: 2});
+//			return false;
+//		}
+//		if(password2 == '' ){
+//			layer.alert('确认密码不能为空', {icon: 2});
+//			return false;
+//		}
+//		if(password!== password2){
+//			layer.alert('确认密码不一致', {icon: 2});
+//			return false;
+//		}
+		$('#roleform').submit();
+	}
+</script>
+</body>
+</html>

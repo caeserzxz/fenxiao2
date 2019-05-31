@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,viewport-fit=cover">
+    <link rel="stylesheet" href="__STATIC__/n_assets/css/zpui.css"/>
+    <link rel="stylesheet" href="__STATIC__/n_assets/css/all.css"/>
+    <script src="__STATIC__/n_assets/js/page.js"></script>
+
+    <title> 示例页面 </title>
+</head>
+<body>
+<div class="page">
+    <div class="page-hd">
+        <div class="header bor-1px-b">
+            <div class="header-left">
+                <a href="javascript:history.go(-1)" class="left-arrow"></a>
+            </div>
+            <div class="header-title">登录页</div>
+            <div class="header-right">
+                <a href="#"></a>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-bd c-flex1">
+        <!-- 页面内容-->
+        <div class="weui-cell c-flex1 pt100 bgc-fff" style="flex: 1;">
+            <div class="weui-cell__bd" style="flex: 1;">
+                <div class="logo tc">
+                    <img src="__STATIC__/n_assets/images/logo.png" alt="">
+                </div>
+            </div>
+            <div class="weui-cell__ft pb70">
+                <a href="{:url('mobile/user/mobile_login')}" class="weui-btn weui-btn_plain-default c-flex2 mb50">
+                    <img src="__STATIC__/n_assets/images/icon_3.png" alt="" class="img50">&nbsp;
+                    <span class="fs30 fw500">手机登录</span>
+                </a>
+                <a href="#" class="weui-btn weui-btn_plain-default c-flex2" onclick=wxlogin()>
+                    <img src="__STATIC__/n_assets/images/icon_4.png" alt="" class="img50">&nbsp;&nbsp;
+                    <span class="fs30 fw500">微信登录</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="__STATIC__/n_assets/js/lib/jquery-2.1.4.js"></script>
+<script src="__STATIC__/n_assets/js/jquery-weui.min.js"></script>
+<script src="__STATIC__/n_assets/js/lib/fastclick.js"></script>
+<script>
+    $(function() {
+        FastClick.attach(document.body);
+    });
+</script>
+<script>
+    $("#city-picker").cityPicker({
+        title: "请选择地区"
+    });
+
+    function wxlogin(){
+        window.app.wxLogin();
+    }
+
+    function wxLoginCallback(code) {
+        //传code去里面授权那用户数据
+        $.ajax({
+            url: '/mobile/MobileBase/notWXBrowserError',
+            type: 'POST',
+            data: {
+                code:code,
+            },
+            // success: function (data) {
+            //     console.log(data)
+            //     //没有信息
+            //     if(data)
+            //     {
+            //
+            //     }
+            //
+            // },
+            error: function (data) {
+                layer.msg('用户信息获取失败', {
+                    icon: 6,
+                    time: 2500 //2秒关闭（如果不配置，默认是3秒）
+                }, function(){
+                    window.location.href = "{:url('/mobile/User/login')}";
+                });
+            }
+        });
+    }
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

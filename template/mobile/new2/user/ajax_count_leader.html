@@ -1,0 +1,17 @@
+<volist name="count_leader" id="c">
+<div class="weui-grids" style="float: left; width: 33.3%">
+    <div class="weui-grid" style="text-align: center;width: 100%;" onclick="subordinate(this)" u_id = "{$c['user_id']}">
+        <div class="grid_avatar"><img src="{$c['head_pic']}" alt="">
+            <span class="have">
+                <if condition="$c['memberorder'] eq 1 ">
+                    已购
+                <else />
+                    未购
+                </if>
+            </span>
+        </div>
+        <div class="grid_text" style="width: 100%; text-align: center;">{$c['user_id']}</div>
+    </div>
+</div>
+
+</volist>

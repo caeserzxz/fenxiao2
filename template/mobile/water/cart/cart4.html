@@ -1,0 +1,339 @@
+<include file="common/header" title="订单提交" body="g4" xmlns="http://www.w3.org/1999/html"/>
+<!--<script src="__STATIC__/js/reset.js"></script>-->
+<script type="text/javascript" src="__STATIC__/js/screenShare.js"></script>
+<style>
+    .cardbox {
+        position: relative;
+        margin-top: 15px;
+        margin-left: 10px;
+        margin-right: 10px;
+        margin-bottom: 15px;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+        overflow: visible;
+    }
+
+    .cardbox:before {
+        content: "";
+        position: absolute;
+        width: 1.35rem;
+        height: 1.15rem;
+        background: url(__STATIC__/images/kouzi.png) no-repeat;
+        background-size: 100%;
+        right: 1rem;
+        top: -0.37rem;
+    }
+
+    .cardbox:after {
+        content: "";
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: -10px;
+        height: 10px;
+        background: url(__STATIC__/images/cardbottom.png) no-repeat;
+        background-size: 100%;
+    }
+
+    .card-top:after, .card-top:before {
+        position: absolute;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background-color: #f8f8f8;
+        content: "";
+        z-index: 9;
+        bottom: -8px;
+    }
+
+    .card-top:after {
+        right: -8px;
+    }
+
+    .card-top:before {
+        left: -8px;
+    }
+    .weui-cells_checkbox .weui-check:checked + .weui-icon-checked:before {
+        border-radius: 100%;
+    }
+    .weui-cells_checkbox .weui-icon-checked:before {
+        border: 0px;
+    }
+</style>
+
+<include file="common/header_nav" title="订单提交" href="{:U('Mobile/Order/order_list')}"/>
+
+<div class="page-bd">
+    <div class="weui-cells weui-cells_checkbox cardbox">
+        <div class="weui-cell" style="padding: 1rem 0; border-bottom: 1px dashed #e0e0e0;">
+            <div class="weui-cell__bd tc card-top">
+                <if condition="$order[order_type] eq 4">
+                    <div>付款金额</div>
+                    <div class="text-red mt5"><span class="fs12">￥</span><b class="fs20">{$order[order_amount]}</b></div>
+                    <div>&nbsp;</div>
+                    <div>&nbsp;</div>
+                    <div>积分抵扣</div>
+                    <div class="text-red mt5"><span class="fs12"></span><b class="fs20">{$order[integral]}</b></div>
+                    <else/>
+                    <div>付款金额</div>
+                    <div class="text-red mt5"><span class="fs12">￥</span><b class="fs20">{$order[order_amount]}</b></div>
+                </if>
+            </div>
+        </div>
+        <!-- <label class="weui-cell tbornone after-left__0 weui-check__label" for="s11">
+             <div class="weui-cell__hd">
+                 <input type="checkbox" class="weui-check" name="checkbox1" id="s11" checked="checked">
+                 <i class="weui-icon-checked"></i>
+             </div>
+             <div class="weui-cell__bd">
+                 <div class="fs11">可用余额支付</div>
+                 <div class="fs9 text-muted">当前可用余额￥365</div>
+             </div>
+             <div><span>￥</span><b>365.00</b></div>
+         </label>
+         <label class="weui-cell after-left__0 weui-check__label" for="s12">
+             <div class="weui-cell__hd">
+                 <input type="checkbox" class="weui-check" name="checkbox1" id="s12" checked="checked">
+                 <i class="weui-icon-checked"></i>
+             </div>
+             <div class="weui-cell__bd">
+                 <div class="fs11">可用佣金支付</div>
+                 <div class="fs9 text-muted">当前可用佣金￥125</div>
+             </div>
+             <div><span>￥</span><b>56.00</b></div>
+         </label>
+         <label class="weui-cell after-left__0 weui-check__label" for="s13">
+             <div class="weui-cell__hd">
+                 <input type="checkbox" class="weui-check" name="checkbox1" id="s13" checked="checked">
+                 <i class="weui-icon-checked"></i>
+             </div>
+             <div class="weui-cell__bd">
+                 <div class="fs11">可用积分抵扣</div>
+                 <div class="fs9 text-muted">可用积分抵扣</div>
+             </div>
+             <div><span>￥</span><b>32.56</b></div>
+         </label>
+     </div>--><!--{:U('mobile/payment/getCode')}-->
+        <form action="{:U('mobile/order/testGetCode')}" method="post" name="cart4_form" id="cart4_form">
+
+            <div class="weui-panel weui-panel_access">
+                <!-- <div class="weui-panel__hd">
+                     <div class="text-red fr" style="line-height: 1.4em;"><span class="fs12">￥</span><b
+                             class="fs15">832.56</b></div>
+                     <div class="fs11">还需支付</div>
+                 </div>-->
+
+                <div class="weui-panel__bd fs10">
+                    <div class="weui-cells mt0 weui-cells_radio">
+                        <if condition="$order[order_type] eq 4">
+                            <div class="weui-cell__bd">
+                                <div class="fs11"> 积分兑换</div>
+                                <input type="hidden" name="pay_radio" value="jifen">
+                            </div>
+                            <else/>
+                            <foreach name="paymentList" key="k" item="v">
+                                <label class="weui-cell weui-cell_access weui-check__label" for="x{$k}">
+                                    <div class="weui-cell__hd">
+                                        <input type="radio" class="weui-check" value="pay_code={$v['code']}"
+                                               name="pay_radio" id="x{$k}">
+                                        <span class="weui-icon-checked"></span></div>
+                                    <div class="weui-cell__bd">
+                                        <div class="fs11"> {$v[name]}</div>
+                                    </div>
+                                    <div class="weui-cell__ft">
+                                        <img style="height: 24px;" src="/plugins/{$v['type']}/{$v['code']}/{$v['icon']}"
+                                             alt="">
+                                    </div>
+                                </label>
+                                <!--  <li  onClick="changepay(this);">
+                                      <label>
+                                          <div class="radio fl">
+                                      <span class="che {$k}">
+                                          <i>
+                                              <input type="radio"   value="pay_code={$v['code']}" class="c_checkbox_t" name="pay_radio" style="display:none;"/>
+                                          </i>
+                                      </span>
+                                          </div>
+                                          <div class="pay-list-img fl">
+                                              <img src="/plugins/{$v['type']}/{$v['code']}/{$v['icon']}"/>
+                                          </div>
+                                          <div class="pay-list-font fl">
+                                              {$v[name]}
+                                          </div>
+                                      </label>
+                                  </li>-->
+                            </foreach>
+                        </if>
+                        <!--  <label class="weui-cell weui-cell_access weui-check__label" for="x11">
+                              <div class="weui-cell__hd"><input type="radio" checked class="weui-check" name="radio1"
+                                                                id="x11">
+                                  <span class="weui-icon-checked"></span></div>
+                              <div class="weui-cell__bd">
+                                  <div class="fs11">在线支付</div>
+                              </div>
+                              <div class="weui-cell__ft">
+                                  <img style="width: 0.8rem;" src="__STATIC__/images/pay_icon01.png" alt=""> <span>微信支付</span>
+                              </div>
+                          </label>
+                          <label class="weui-cell weui-check__label" for="x12">
+                              <div class="weui-cell__hd"><input type="radio" class="weui-check" name="radio1" id="x12">
+                                  <span class="weui-icon-checked"></span></div>
+                              <div class="weui-cell__bd">
+                                  <div class="fs11">货到付款</div>
+                              </div>
+                          </label>-->
+                        <input type="hidden" name="order_id" value="{$order['order_id']}"/>
+                        <input type="hidden" name="goods_type" value="0"/>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div class="weui-btn-area">
+
+            <if $payFunction=="weChat">
+                <a href="javascript:void(0);" onClick="pay()" class="weui-btn weui-btn_primary">去付款</a>
+            </if>
+            <if $payFunction=="weChatApp">
+                <a href="javascript:void(0);" onClick="pay2()" class="weui-btn weui-btn_primary">去付款</a>
+                <a href="javascript:void(0);" onClick="pay_test()" class="weui-btn weui-btn_primary">测试时点击支付</a>
+            </if>
+
+        </div>
+    </div>
+
+</div>
+<script src="__STATIC__/js/ios.js"  type="text/javascript" ></script>
+<script>
+    //微信公众号直接走JSapi
+    function pay() {
+        // $('#cart4_form').submit();
+        // return;
+        //微信JS支付
+        callpay();
+    }
+
+    //app先走jsApi,再根据统一支付得到的prepayid组装JS报文
+    function pay2() {
+        var radio = $('input:radio:checked').val();
+
+        var u = navigator.userAgent;
+        var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1;//判断是否为安卓终端
+
+        if(radio == "pay_code=alipayMobile"){    //支付宝支付
+            $.ajax({
+                type: "POST",
+                url: "{:U('Mobile/Payment/getCode')}",//+tab,
+                data: $('#cart4_form').serialize(),// 你的formid
+                dataType: "json",
+                fail: function(res) {
+                    alert("网络错误");
+                },
+                success: function (data) {
+                    if(data.status=1){
+                        if (isAndroid) {    //app,安卓调起支付宝支付
+                            window.auc.AliPay(data.data);
+                        }else {     //app，ios调起支付宝支付
+
+                            window.app.AliPay(data.data,callback_url);
+                        }
+                    }
+                }
+            });
+
+        }else {         //微信支付
+
+            $.ajax({
+                type: "POST",
+                url: "{:U('Mobile/Payment/getCode')}",//+tab,
+                data: $('#cart4_form').serialize(),// 你的formid
+                dataType: "json",
+                success: function (data) {
+                    if (isAndroid) {     //app,安卓调起微信支付
+                        wxApp(data.js,data.url);
+
+                    }else {         //app,ios调起微信支付
+                        window.app.wxPay(data.js,data.url);
+                    }
+                }
+            });
+
+        }
+
+
+    }
+
+    function wxApp(js,url){
+
+        window.auc.wxPay(js,url);
+    };
+
+    function aliPayCallback(){
+        window.location.href = "{:U('Mobile/User/index')}";
+    }
+
+    function pay_test() {
+
+        $.ajax({
+            type: "POST",
+            url: "{:U('Mobile/Cart/testPay')}",//+tab,
+            data: $('#cart4_form').serialize(),// 你的formid
+            dataType: "json",
+            fail: function(res) {
+                alert("网络错误");
+            },
+            success: function (data) {
+                console.log(data);
+                return false;
+                window.location.href = "{:U('Mobile/Order/order_list',array('type'=>'wait_delivery'))}";
+            }
+        });
+    }
+
+
+
+</script>
+<script type="text/javascript">
+    //调用微信JS api 支付
+    function jsApiCall()
+    {
+        WeixinJSBridge.invoke(
+            'getBrandWCPayRequest', {
+                "appId":"{$wxPay['appId']}",     //公众号名称，由商户传入
+                "timeStamp":"{$wxPay['timeStamp']}",         //时间戳，自1970年以来的秒数
+                "nonceStr":"{$wxPay['nonceStr']}", //随机串
+                "package":"{$wxPay['package']}",
+                "signType":"MD5",         //微信签名方式：
+                "paySign":"{$wxPay['paySign']}" //微信签名
+            },
+            function(res){
+                console.log(res);
+                // return  false;
+                // alert(JSON.stringify(res));return false;
+                if(res.err_msg == "get_brand_wcpay_request:ok" ) {
+                    // window.location.href = "__HOST__/Pdd/Goods/index?shuaxin=1";
+                    window.location.href = "{:U('Mobile/User/index')}";
+                }else if(res.err_msg == "get_brand_wcpay_request:cancel" ){
+                    alert('支付过程中用户取消');
+                }else{
+                    alert('	支付失败');
+                }
+            }
+        );
+    }
+
+    function callpay()
+    {
+        if (typeof WeixinJSBridge == "undefined"){
+            if( document.addEventListener ){
+                document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);
+            }else if (document.attachEvent){
+                document.attachEvent('WeixinJSBridgeReady', jsApiCall);
+                document.attachEvent('onWeixinJSBridgeReady', jsApiCall);
+            }
+        }else{
+            jsApiCall();
+        }
+    }
+</script>
+

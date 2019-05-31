@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,viewport-fit=cover">
+    <link rel="stylesheet" href="__STATIC__/n_assets/css/zpui.css"/>
+    <link rel="stylesheet" href="__STATIC__/n_assets/css/all.css"/>
+    <script src="__STATIC__/n_assets/js/page.js"></script>
+    <link href="__STATIC__/n_assets/js/Swiper-4.0.7/swiper.min.css">
+
+    <title>我的合同</title>
+</head>
+<body>
+<div class="page">
+    <div class="page-hd">
+        <div class="header bor-1px-b">
+            <div class="header-left">
+                <a href="javascript:history.go(-1)" class="left-arrow"></a>
+            </div>
+            <div class="header-title">我的合同</div>
+            <div class="header-right">
+                <a href="#"></a>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-bd" style="background-color: #ffffff;">
+        <!-- 页面内容-->
+        <div class="agreement">
+            <img src="__STATIC__/n_assets/images/img02.jpg" alt="">
+            <p>我要签署</p>
+            <p>区域销售总代理/合伙人合同</p>
+        </div>
+
+        <div class="weui-btn-area">
+            <if condition="$applyIdentity['status'] eq 1">
+            <a class="weui-btn weui-btn_primary mt20" href="{:U('User/createContract')}">签约合同</a>
+            </if>
+            <if condition="$applyIdentity['status'] neq 1">
+            <a class="weui-btn weui-btn_primary mt20" href="javascript:void(0)">申请总代/大区尚未通过</a>
+            </if>
+        </div>
+    </div>
+
+</div>
+
+<script src="__STATIC__/n_assets/js/lib/jquery-2.1.4.js"></script>
+<script src="__STATIC__/n_assets/js/jquery-weui.min.js"></script>
+<script src="__STATIC__/n_assets/js/lib/fastclick.js"></script>
+<script>
+    $(function() {
+        FastClick.attach(document.body);
+    });
+</script>
+
+</body>

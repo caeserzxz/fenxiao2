@@ -1,0 +1,154 @@
+<include file="public/layout"/>
+<body style="background-color: #FFF; overflow: auto;">
+
+<style>
+    td {
+        height: 40px;
+        line-height: 40px;
+        padding-left: 20px;
+    }
+
+    .span_1 {
+        float: left;
+        margin-left: 0px;
+        height: 130px;
+        line-height: 130px;
+    }
+
+    .span_1 ul {
+        list-style: none;
+        padding: 0px;
+    }
+
+    .span_1 ul li {
+        border: 1px solid #CCC;
+        height: 40px;
+        padding: 0px 10px;
+        margin-left: -1px;
+        margin-top: -1px;
+        line-height: 40px;
+    }
+</style>
+
+<div id="toolTipLayer" style="position: absolute; z-index: 9999; display: none; visibility: visible; left: 95px; top: 573px;"></div>
+<div id="append_parent"></div>
+<div id="ajaxwaitid"></div>
+
+<div class="page">
+    <div class="fixed-bar">
+        <div class="item-title">
+            <a class="back" href="javascript:history.back();" title="返回列表"><i class="fa fa-arrow-circle-o-left"></i></a>
+            <div class="subject">
+                <h3>本金待返还 - 详情</h3>
+                <!--<h5></h5>-->
+            </div>
+        </div>
+    </div>
+    <form  id="handlepost" action="">
+        <div class="ncap-form-default">
+            <dl class="row">
+
+                <dt class="tit"><label>ID</label></dt>
+                <dd class="opt">{$item.id}</dd>
+            </dl>
+            <dl class="row">
+
+                <dt class="tit"><label>用户</label></dt>
+                <dd class="opt">{$item.user_name}</dd>
+            </dl>
+            <dl class="row">
+
+                <dt class="tit"><label>金额（元）</label></dt>
+                <dd class="opt"><input type="text" class="input-txt valid" name="amount" value="{$item.amount}" step="0.01" min="0" title="">
+                </dd>
+            </dl>
+            <dl class="row">
+
+                <dt class="tit"><label>理财周期</label></dt>
+                <dd class="opt" >{$item.regular_month}</dd>
+            </dl>
+            <dl class="row">
+
+                <dt class="tit"><label>理财状态</label></dt>
+                <dd class="opt">
+					<if condition="$item.status eq 1 ">
+                      未开始
+                    <elseif  condition="$item.status eq 2 " /> 
+                      理财中
+                    <elseif  condition="$item.status eq 3 " /> 
+                      已取消
+                    <elseif  condition="$item.status eq 4 " /> 
+                      已完成
+                    </if>  
+                </dd>
+
+                <dt class="tit"><label>本金状态</label></dt>
+                <dd class="opt">
+                	<if condition="$item.amount_status eq 1 ">
+                      未支付
+                    <elseif  condition="$item.amount_status eq 2 " /> 
+                      已支付
+                    <elseif  condition="$item.amount_status eq 3 " /> 
+                      申请返还中
+                    <elseif  condition="$item.amount_status eq 4 " /> 
+                      已返还
+                    </if>
+                </dd>
+            </dl>
+            <dl class="row">
+
+                <dt class="tit"><label>开始日期</label></dt>
+                <dd class="opt">{$item.start_time}</dd>
+
+                <dt class="tit"><label>结束日期</label></dt>
+                <dd class="opt">{$item.end_time}</dd>
+
+                <dt class="tit"><label>取消日期</label></dt>
+                <dd class="opt">{$item.cancel_time}</dd>
+            </dl>
+            <div class="bot"  >
+                <dd ><a  href="JavaScript:void(0);"  onclick="formSubmit();" class="ncap-btn-big ncap-btn-green">确认返还本金</a></dd>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script type="text/javascript">
+$(document).ready(function(){
+	
+	$("#handlepost").validate({
+		// debug: true, //调试模式取消submit的默认提交功能   
+		// focusInvalid: false, //当为false时，验证无效时，没有焦点响应  
+  //       onkeyup: false,   
+        submitHandler: function(form){   //表单提交句柄,为一回调函数，带一个参数：form   
+            form.submit();   //提交表单   
+        },  
+        //gnore:":button",	//不验证的元素
+        // rules:{
+        // 	keyword:{
+        // 		required:true
+        // 	},
+        // 	text:{
+        // 		required:true
+        // 	}
+        // },
+        // messages:{
+        // 	keyword:{
+        // 		required:"请输入关键词"
+        // 	},
+        // 	text:{
+        // 		required:"请填写回复内容"
+        // 	} 
+        // }
+	});
+	
+	 
+});
+
+function formSubmit(){
+	$("#handlepost").submit();
+}
+</script>
+
+</body>
+<include file="public/layout_footer"/>

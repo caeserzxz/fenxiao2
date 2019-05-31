@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+    <link rel="stylesheet" type="text/css" href="__STATIC__/assets/weui/weui.css">
+    <link rel="stylesheet" type="text/css" href="__STATIC__/assets/css/comm.css">
+    <title>账户与安全</title>
+</head>
+<body>
+<div class="page">
+    <div class="page-hd">
+    <div class="header">
+        <div class="header-left">
+            <a href="{:U('user/index')}" class="left-arrow"></a>
+        </div>
+        <div class="header-title">账户与安全</div>
+        <div class="header-right"><a href="#"></a> </div>
+    </div>
+</div>
+    <div class="page-bd">
+        <div class="weui-cells mt0 vux-1px-t">
+            <div class="weui-cell weui-cell_access">
+                <div class="weui-cell__bd">
+                    登录帐号
+                </div>
+                <div class="weui-cell__ft">{$user.mobile}</div>
+            </div>
+            <a href="{:U('setMobile')}" class="weui-cell weui-cell_access">
+                <div class="weui-cell__bd">
+                    绑定手机
+                </div>
+                <div class="weui-cell__ft">
+
+                <if condition="!$user.mobile">
+                   未绑定
+                    <else/>
+                    已绑定
+                </if>
+
+                </div>
+            </a>
+        </div>
+        <div class="weui-cells">
+            <a href="{:U('User/password')}" class="weui-cell weui-cell_access">
+                <div class="weui-cell__bd">修改登录密码</div>
+                <div class="weui-cell__ft"></div>
+            </a>
+        </div>
+    </div>
+</div>
+
+
+<script src="__STATIC__/assets/js/lib/jquery.min.2.1.3.js"></script>
+<script src="__STATIC__/assets/js/lib/weui.min.js"></script>
+<script src="__STATIC__/assets/js/comm.js"></script>
+</body>
+</html>

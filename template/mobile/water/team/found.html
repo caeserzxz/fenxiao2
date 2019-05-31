@@ -1,0 +1,372 @@
+<include file="public/header" title="拼单详情"/>
+<style>
+	.no_more{
+		font-size:.32rem;text-align: center;color:#888;padding:.25rem .24rem .4rem; clear:both;
+	}
+</style>
+<div class="he_sustain">
+	<div class="classreturn loginsignup detail">
+		<div class="content">
+			<div class="ds-in-bl return">
+				<a href="javascript:history.back(-1)"><img src="__STATIC__/images/return.png" alt="返回"></a>
+			</div>
+			<div class="page-title1">拼单详情</div>
+			<a class="btn-share-ico" id="share_button" href="javascript:;"></a>
+		</div>
+	</div>
+</div>
+<div class="goods-info-p p">
+	<div class="goods-pic-p"><img src="{$team.goods_id|goods_thum_images=257,257}" /></div>
+	<div class="goods-mes-p">
+		<div class="goods-name-p">{$team[goods_name]}</div>
+		<div class="use-num-p">{$teamFound[join]}人拼单·已拼{$team[virtual_sale_num]}件</div>
+		<div class="goods-price-p"><span>￥{$teamFound[price]}</span>拼单省{$teamFound[cut_price]}元</div>
+	</div>
+</div>
+<ul class="service-list-q">
+
+	<li>
+		<img src="__STATIC__/images/ico-check-red1.png" alt="" />
+		<span>7天退货</span>
+	</li>
+	<li>
+		<img src="__STATIC__/images/ico-check-red1.png" alt="" />
+		<span>2小时内发货</span>
+	</li>
+	<li>
+		<img src="__STATIC__/images/ico-check-red1.png" alt="" />
+		<span>正品保障</span>
+	</li>
+	<!--<li>-->
+		<!--<img src="__STATIC__/images/ico-check-red1.png" alt=""/>-->
+		<!--<span>全场包邮</span>-->
+	<!--</li>-->
+</ul>
+<div class="groups-users-q">
+	<ul class="users-list-p">
+		<li class="master-p">
+			<span class="tips-p">拼主</span>
+			<div class="pic-wrap">
+				<img src="{$teamFound[head_pic]}" alt="" />
+			</div>
+		</li>
+		<volist name="teamFollow" id="follow">
+			<li>
+				<img src="{$follow[follow_user_head_pic]}" alt="会员">
+			</li>
+		</volist>
+		<for start="0" end="$teamFound[surplus]">
+			<li>
+				<img src="__STATIC__/images/pic-member1.png" alt="">
+			</li>
+		</for>
+	</ul>
+
+	<if condition="$teamFound[status] eq 0">
+		<div class="groupsed"><img src="__STATIC__/images/ico-groupsed.png" alt="">待开团</div>
+		<a class="join-groups-p choise_num team" href="javascript:;">一键发起拼单</a>
+	<elseif condition="$teamFound[status] eq 1"/>
+		<div class="groupsing">仅剩<span>{$teamFound[surplus]}</span>个名额，<i id="rest_time" data-end-time="{$teamFound[found_time] + $team[time_limit]}">00:00:00</i>后结束</div>
+		<a class="join-groups-p choise_num found" data-id="{$teamFound[found_id]}"  href="javascript:;">一键参团</a>
+	<elseif condition="$teamFound[status] eq 2"/>
+		<div class="groupsed"><img src="__STATIC__/images/ico-groupsed.png" alt="">拼单已满</div>
+		<a class="join-groups-p choise_num team" href="javascript:;">一键发起拼单</a>
+	<else/>
+		<div class="groupsed"><img src="__STATIC__/images/ico-groupsed.png" alt="">拼单失败</div>
+		<a class="join-groups-p choise_num team" href="javascript:;">一键发起拼单</a>
+	</if>
+</div>
+<div class="buy-notes-p">
+	<div class="notes-wrap">
+		<div class="notes-title">拼单须知</div>
+		<div class="notes-cont">· 好友拼单 · 人满发货 · 人不满退货</div>
+	</div>
+</div>
+<div class="nav-list-p">
+	<a href="{:U('Mobile/Index/index')}">
+		<div class="ico-wrap"><img src="__STATIC__/images/pic-sy.png" alt="" /></div>
+		<span>首页逛逛</span>
+	</a>
+	<a href="{:U('Mobile/Activity/flash_sale_list')}">
+		<div class="ico-wrap"><img src="__STATIC__/images/pic-ms.png" alt="" /></div>
+		<span>秒杀</span>
+	</a>
+	<a href="{:U('Mobile/Activity/promote_goods')}">
+		<div class="ico-wrap"><img src="__STATIC__/images/pic-qc.png" alt="" /></div>
+		<span>促销</span>
+	</a>
+	<a href="{:U('Mobile/Activity/group_list')}">
+		<div class="ico-wrap"><img src="__STATIC__/images/pic-tg.png" alt="" /></div>
+		<span>团购</span>
+	</a>
+</div>
+<div>
+	<div class="goods-list-p p" id="team_list"></div>
+	<div class="loadbefore">
+		<img class="ajaxloading" src="__STATIC__/images/category/loader.gif" alt="loading...">
+	</div>
+</div>
+<!--底部-start-->
+<include file="public/footer"/>
+<!--底部-end-->
+<!--所选弹窗-s-->
+<form name="buy_goods_form" method="post" id="buy_goods_form">
+	<input type="hidden" name="goods_id" value="{$team.goods_id}"/>
+	<input type="hidden" name="team_id" value="{$team.team_id}"/>
+	<div class="choose_shop_aready p" id="choose_spec">
+		<div class="shop-top-under p">
+			<div class="maleri30">
+				<div class="shopprice">
+					<div class="img_or fl"><img src="../images/ind_61.jpg"></div>
+					<div class="fon_or fl">
+						<h2 class="similar-product-text">{$team[goods_name]}</h2>
+
+						<div class="price_or"><span>￥</span><span>{$team[team_price]}</span></div>
+						<div class="dqkc_or"><span>当前库存：</span><span><empty name="team[spec_goods_price]">{$team[goods][store_count]}<else/>{$team[spec_goods_price][store_count]}</empty></span></div>
+					</div>
+					<div class="price_or fr">
+						<i class="xxgro" id="choose_spec_close"></i>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="shop-top-under p">
+			<div class="maleri30">
+				<div class="shulges p">
+					<p>数量</p>
+
+					<div class="plus">
+						<span class="mp_minous">-</span>
+						<span class="mp_mp"><input type="tel" id="goods_num" name="goods_num" value="1"></span>
+						<span class="mp_plus">+</span>
+					</div>
+				</div>
+				<!--
+                <div class="shulges p">
+                    <p>颜色</p>
+                    <div class="plus choic-sel">
+                        <a href="javascript:void(0);">白色</a>
+                    </div>
+                </div>
+                -->
+			</div>
+		</div>
+		<div class="plusshopcar-buy p">
+			<a class="pb_buy" href="javascript:void(0);" onClick="addTeamOrder();">立即购买</a>
+		</div>
+	</div>
+</form>
+<!--所选弹窗-e-->
+<!--分享弹窗-s-->
+<div class="choose_shop_aready p" id="share_bottom">
+	<div class="shop-top-under p">
+		<div class="maleri30">
+			<div class="shopprice">
+				<!-- 百度分享 Button BEGIN -->
+				<div class="bdsharebuttonbox" data-tag="share_1">
+					<a class="bds_weixin" data-cmd="weixin"></a>
+					<a class="bds_sqq" data-cmd="sqq"></a>
+					<a class="bds_qzone" data-cmd="qzone" href="#"></a>
+					<a class="bds_tsina" data-cmd="tsina"></a>
+				</div>
+				<script>
+					window._bd_share_config = {
+						common : {
+							//此处放置通用设置
+							bdText : '{$team[share_title]}',
+							bdDesc : '{$team[share_desc]}',
+							bdUrl : "{:U('Mobile/Team/found',['id'=>$teamFound[found_id]],'',true)}",
+							bdPic : 'http://{$Think.server.SERVER_NAME}{$team[share_img]}'
+						},
+						share : [{
+							"bdSize" : 32
+						}],
+						image : [{
+							viewType : 'list',
+							viewPos : 'top',
+							viewColor : 'black',
+							viewSize : '16',
+							viewList : ['weixin','sqq','qzone','tsina']
+						}],
+						selectShare : [{
+							"bdselectMiniList" : ['weixin','sqq','qzone','tsina']
+						}]
+					}
+					with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?cdnversion='+~(-new Date()/36e5)];
+				</script>
+				<!-- 百度分享 Button END -->
+			</div>
+		</div>
+	</div>
+	<div class="shop-top-under p">
+		<div class="maleri30">
+			<div class="shopprice">
+				<div style="">
+					<i class="xxgro" id="share_bottom_close"></i>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!--分享弹窗-e-->
+<div class="mask-filter-div" style="display: none;"></div>
+<script type="text/javascript" src="__STATIC__/js/sourch_submit.js"></script>
+<script>
+	// 倒计时
+	setInterval(activityTime, 1000);
+	function activityTime() {
+		var end_time = parseInt($("#rest_time").data('end-time'));
+		var timestamp = Date.parse(new Date());
+		var now = timestamp/1000;
+		var end_time_date = formatDate(end_time*1000);
+		var text = GetRTime(end_time_date);
+		//活动时间到了就刷新页面重新载入
+		if(now > end_time){
+			layer.msg('该商品活动已结束',function(){
+				location.reload();
+			});
+		}
+		$("#rest_time").text(text);
+	}
+	/**
+	 * 继续加载猜您喜欢
+	 * */
+
+	var before_request = 1; // 上一次请求是否已经有返回来, 有才可以进行下一次请求
+	var page = 0;
+	function ajax_sourch_submit(){
+		// 上一次请求没回来 不进行下一次请求
+		if(before_request == 0){
+			return false;
+		}
+		before_request = 0;
+		++page;
+		$('.loadbefore').show();
+		$.ajax({
+			type : "post",
+			data:{p:page},
+			dataType:'json',
+			url:"{:U('Mobile/Team/ajaxGetMore')}",
+			success: function(data)
+			{
+				if(data.status == 1){
+					var teams = data.result;
+					var html = '',url;
+					for(var i = 0;i < teams.length;i++){
+						url = "/index.php?m=Mobile&c=Team&a=info&team_id=" + teams[i].team_id + "&goods_id=" + teams[i].goods_id;
+						html = '<a class="goods-item-p" href="'+url+'">' +
+								' <div class="item-pic-p"><img src="'+teams[i].goods.original_img+'"/></div> ' +
+								'<div class="item-name">'+teams[i].act_name+'</div> ' +
+								'<div class="item-cont-p"> <span class="items-price">￥'+teams[i].team_price+'</span> ' +
+								'<span class="items-num">已拼'+teams[i].virtual_sale_num+'件</span> </div> </a>';
+					}
+					$('#team_list').append(html);
+					before_request = 1;
+				}else{
+					$('#team_list').append('<div class="no_more"><a >已显示完所有记录</a></div>');
+					$('.get_more').hide();
+				}
+				$('.loadbefore').hide();
+			}
+		});
+	}
+	//所选
+	$(function () {
+		$('.choise_num').click(function () {
+			$("input[name=found_id]").remove();
+			if($(this).hasClass('found')){
+				//拼单
+				var input = document.createElement('input');  //创建input节点
+				input.setAttribute('type', 'hidden');  //定义类型是文本输入
+				input.setAttribute('value', $(this).data('id'));
+				input.setAttribute('name', "found_id");
+				document.getElementById('buy_goods_form').appendChild(input); //添加到form中显示
+			}
+			cover();
+			$('#choose_spec').show();
+			$('.podee').hide();
+		})
+		$('#choose_spec_close').click(function () {
+			undercover();
+			$('#choose_spec').hide();
+			$('.podee').show();
+		})
+	});
+	//分享
+	$(function () {
+		$('#share_button').click(function () {
+			cover();
+			$('#share_bottom').show();
+			$('.podee').hide();
+		})
+		$('#share_bottom_close').click(function () {
+			undercover();
+			$('#share_bottom').hide();
+			$('.podee').show();
+		})
+	});
+	//添加评团订单
+	function addTeamOrder(){
+		var goods_num = $("input[name='goods_num']").val();
+		if (goods_num <= 0) {
+			layer.open({content:'请至少购买一份~',time: 2});
+			return false;
+		}
+		$.ajax({
+			type : "POST",
+			url:"{:U('Mobile/Team/addOrder')}",
+			dataType:'json',
+			data: $('#buy_goods_form').serialize(),
+			success: function(data){
+				if(data.status == 1){
+					location.href = "/index.php?m=Mobile&c=Team&a=order&order_id=" + data.result.order_id; // 跳转到结算页
+				}else{
+					layer.open({content:data.msg,time: 2});
+				}
+			}
+		});
+	}
+	//加减数量
+	$(function () {
+		$('.mp_minous').click(function () {
+			var inputs = $(this).siblings('.mp_mp').find('input');
+			var val = inputs.val();
+			if (val > 1) {
+				val--;
+				inputs.val(val);
+			}else if(val == 1){
+				$(this).parent().find('.mp_minous').addClass('disable');
+				inputs.val(val);
+			}else{
+				layer.open({content:'请至少购买一份~',time: 2});
+			}
+		})
+		$('.mp_plus').click(function () {
+			var inputs = $(this).siblings('.mp_mp').find('input');
+			var val = inputs.val();
+			val++;
+			inputs.val(val);
+			if(val > 1){
+				$(this).parent().find('.mp_minous').removeClass('disable');
+			}
+		})
+
+		$(document).on("blur", '#goods_num', function (e) {
+			initDecrement();
+		})
+	});
+	function initDecrement(){
+		var goods_num = $("input[name='goods_num']");
+		var goods_num_val = parseInt(goods_num.val());
+		if(goods_num_val <= 0){
+			layer.open({content:'请至少购买一份~',time: 2});
+			$(this).val($(this).attr('value'));
+		}else if(goods_num_val == 1){
+			$(this).parent().find('.mp_minous').addClass('disable');
+		}else{
+			$(this).parent().find('.mp_minous').removeClass('disable');
+		}
+	}
+</script>
+</body>
+</html>

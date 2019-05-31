@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,viewport-fit=cover">
+    <link rel="stylesheet" href="__STATIC__/tixian/css/zpui.css"/>
+    <link rel="stylesheet" href="__STATIC__/tixian/css/all.css"/>
+    <script src="__STATIC__/tixian/js/page.js"></script>
+
+    <title> 提现 </title>
+</head>
+<style>
+    .input_stye{
+        /*清除select默认样式*/
+        appearance:none;
+        -moz-appearance:none;
+        -webkit-appearance:none;
+        -ms-appearance:none;
+        border:1px solid #CCC;
+        width:330px;
+        height:44px;
+        /*background:url("../img/select.png") no-repeat scroll right center #fff;*/
+        background:#fff\9;
+        color:#666;
+        padding:8px;
+        outline:none;
+        margin-left: 0.1rem;
+        margin: 0.05rem;
+    }
+    .input_2{
+        width: 4.4rem;
+        height: 0.4rem;
+        margin: 0.1rem;
+    }
+    .select_bank{
+        width: 2rem;
+        margin: 0.1rem;
+        height: 0.3rem;
+    }
+</style>
+<body>
+<div class="page extract-main">
+        <div class="page-bd">
+            <div style="position: fixed;top: 0.4rem;left: 0.1rem;">
+                <a href="javascript:history.go(-1)" class="left-arrow"></a>
+            </div>
+            <div class="cell1">
+                <img src="{$userInfo.head_pic}" alt="">
+                <p>{$userInfo.nickname}</p>
+            </div>
+            <form action="{:url('User/takeCashWithdrawal')}">
+
+            <div class="cellx3" id="select_type">
+                <a class="weui-cell weui-cell_access" href="javascript:;" style="padding: 0px;">
+                    <div class="weui-cell__bd">
+                        <select id="select" class="input_stye">
+                            <option value="">选择</option>
+                            <volist name="withdrawType" id="vo">
+                            <option value="{$vo.id}" >
+                                {$vo.type}
+                            </option>
+                            </volist>
+                        </select>
+                    </div>
+                    <input type="hidden" name="withdraw_type_id" id="withdraw_type_id" value="4">
+                    <div class="weui-cell__ft" id=""></div>
+                </a>
+            </div>
+            <div class="cellx"  id="zfb_div">
+                <div class="weui-cell__bd">
+                    <input class="weui-input input_2" name="zhifubao" id="zhifubao" value="" type="number" placeholder="请输入支付宝账号">
+                    <input class="weui-input input_2" name="name" id="zhifuname" value="" type="text" placeholder="姓名">
+                </div>
+            </div>
+            <div class="cellx" style="display: none;padding: 0.05rem;" id="bank_div">
+                <div class="weui-cell__bd">
+                    <div class="weui-cell__bd" id="select_bank">
+                        <select id="bank_get" name="bank_id" class=" select_bank">
+                            <option value="" selected>选择</option>
+                            <volist name="bank" id="vo1">
+                            <option value="{$vo1.id}">
+                                {$vo1.name}
+                            </option>
+                            </volist>
+                        </select>
+                    </div>
+                    <input class="weui-input input_2" name="card_number" id="card_number" value="" type="number" placeholder="请输入银行卡号码">
+                    <input class="weui-input input_2" name="real_name" id="real_name" value="" type="text" placeholder="请输入银行卡对应的真实姓名">
+                </div>
+            </div>
+            <div class="cellx">
+                <p>提现额度</p>
+                <div class="weui-cell">
+                    <div class="weui-cell__hd"><label class="weui-label">¥</label></div>
+                    <div class="weui-cell__bd">
+                        <input class="weui-input" name="money" id="money" pattern="[0-9]*" placeholder="请输入金额">
+                    </div>
+                </div>
+                <section>
+                    <span class="span1">当前可提余额<span id="total_money">{$userInfo.user_money}</span> <span class="span2" id="all">全部提现</span>
+                </section>
+            </div>
+            <div class="cell4">
+                <p class="p1">温馨提示</p>
+                <p>1.提现需收取{$percent}%手续费,例如：提100元到账<?php echo 100-$percent ?>元</p>
+                <p>2.付款请校对自己输入的“收款方”的银行账号，为了避免上当受骗请确认</p>
+                <p>3.付款请确认进行过真实消费，切勿进行“刷单、套现、中奖”付款</p>
+
+            </div>
+            <div class="btnbox" style="    margin-bottom: 1rem;">
+                <button id="submit" onclick="submitAjax()">提交</button>
+            </div>
+        </div>
+    </form>
+</div>
+<script src="__STATIC__/tixian/js/lib/jquery-2.1.4.js"></script>
+<script src="__STATIC__/tixian/js/jquery-weui.min.js"></script>
+<script src="__STATIC__/tixian/js/lib/fastclick.js"></script>
+<script>
+    $(function() {
+        FastClick.attach(document.body);
+    });
+    //全部提现
+    var money = $("#total_money").html()
+    $("#all").one('click',function(){
+        $("#jindou").val(money)
+    })
+
+    //选择支付类型显示不同填充选项
+    $("#select").change(function(){
+        $("#type_append").remove();
+        var p1=$(this).children('option:selected').val();
+        $("#withdraw_type_id").val(p1);
+        //银行卡
+        if(p1==1){
+            $("#bank_div").show()
+        }else {
+            $("#bank_div").hide()
+        }
+        //支付宝
+        if(p1==4){
+            $("#zfb_div").show()
+        }else {
+            $("#zfb_div").hide()
+        }
+
+    });
+
+    //选择银行
+    $("#bank_get").change(function(){
+        $("span[name='bank_append']").remove();
+    })
+    $("#card_number").change(function(){
+        $("span[name='bank_append']").remove();
+    })
+    $("#real_name").change(function(){
+        $("span[name='bank_append']").remove();
+    })
+    $("#zhifubao").change(function(){
+        $("span[name='bank_append']").remove();
+    })
+
+    //判断
+    $("#submit").click(function(){
+        var bank_get = $("#bank_get").children('option:selected').val();
+        var card_number = $("#card_number").val();
+        var real_name = $("input[name='real_name']").val();
+        var zhifubao = $("#zhifubao").val();
+        var select = $("#select").children('option:selected').val();//支付类型
+        
+        //选择类型为空
+        var type = $("#withdraw_type_id").val();
+        if(type==""){
+            $("#select_type").after("<div id='type_append' style='color: red; margin: 0.2rem 0rem 0rem 0.2rem;'>请选择支付类型！</span></div>");
+            return false;
+        }
+
+        if(select==1){
+            //选择银行
+            if(bank_get==""){
+                $('span[name=bank_append]').remove();
+                $("#select_bank").append("<span name='bank_append' style='color: red; margin: 0.2rem 0rem 0rem 0.2rem;'>请选择银行！</span>");
+                return false;
+            }else {
+                if(card_number==""){
+                    $('span[name=bank_append]').remove();
+                    $("#card_number").after("<span name='bank_append' style='color: red; margin: 0.1rem 0.1rem 0.1rem 0.1rem;'>请输入银行卡号！</span>");
+                    return false;
+                }
+                if(real_name==""){
+                    $('span[name=bank_append]').remove();
+                    $("#real_name").after("<span name='bank_append' style='color: red; margin: 0.1rem 0.1rem 0.1rem 0.1rem;'>请输入真实姓名！</span>");
+                    return false;
+                }
+            }
+        }
+
+        if(select==4){
+            //选择支付宝
+            if(zhifubao==""){
+                $('span[name=bank_append]').remove();
+                $("#zhifubao").after("<span name='bank_append' style='color: red; margin: 0.1rem 0.1rem 0.1rem 0.1rem;'>请输入支付宝账户！</span>");
+                return false;
+            }
+        }
+
+
+    })
+
+</script>
+</body>
+</html>

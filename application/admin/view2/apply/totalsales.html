@@ -1,0 +1,183 @@
+<include file="public/layout"/>
+<script src="__ROOT__/public/static/js/layer/laydate/laydate.js"></script>
+<body style="background-color: rgb(255, 255, 255); overflow: auto; cursor: default; -moz-user-select: inherit;">
+<div id="append_parent"></div>
+<div id="ajaxwaitid"></div>
+<div class="page">
+    <div class="fixed-bar">
+        <div class="item-title">
+            <div class="subject">
+                <h3>销售总额列表</h3>
+            </div>
+        </div>
+    </div>
+    <!-- 操作说明 -->
+    <div id="explanation" class="explanation"
+         style="color: rgb(44, 188, 163); background-color: rgb(237, 251, 248); width: 99%; height: 100%;">
+        <div id="checkZoom" class="title"><i class="fa fa-lightbulb-o"></i>
+            <h4 title="提示相关设置操作时应注意的要点">操作提示</h4>
+            <span title="收起提示" id="explanationZoom" style="display: block;"></span>
+        </div>
+        <ul>
+            <li>查看销售总额</li>
+        </ul>
+    </div>
+    <div class="flexigrid">
+        <div class="ftitle">
+            <h1 style="font-size: 20px">
+                销售总额：
+                <span style="font-size: 17px; color: red">{$order_total_money}</span>&nbsp元
+                &nbsp&nbsp&nbsp&nbsp&nbsp
+                商城实际收入：
+                <span style="font-size: 17px; color: red">{$actual_money}</span>&nbsp元
+            </h1>
+        </div>
+        <div>
+            &nbsp&nbsp&nbsp
+        </div>
+        <div class="mDiv">
+            <div class="ftitle">
+                <h3>销售总额列表</h3>
+
+
+            </div>
+            <div title="刷新数据" class="pReload"><i class="fa fa-refresh"></i></div>
+            <form class="navbar-form form-inline" id="search-form" action="" method="post"
+                  onsubmit="return check_form();">
+                <input type="hidden" name="id" value="1">
+
+                <div class="sDiv">
+                    <input type="text" size="30" name="name" value="" placeholder="姓名" class="qsbox">
+                    <input type="text" size="15" name="user_id" value="" placeholder="用户id" class="qsbox">
+                    <!--<input type="text" size="15" name="agent_province_id" value="" placeholder="省" class="qsbox">-->
+                    <input type="text" size="15" name="agent_city_id" value="" placeholder="区域" class="qsbox">
+                    <!--<input type="text" size="15" name="agent_area_id" value="" placeholder="区" class="qsbox">-->
+                    <div class="sDiv2" style="margin-right: 10px;">
+                        <input type="text" size="30" id="start_time" name="start_time" value="{$start_time}"
+                               placeholder="起始时间" class="qsbox">
+                        <input type="button" class="btn" value="申请起始月份">
+                    </div>
+                    <div class="sDiv2" style="margin-right: 10px;">
+                        <input type="text" size="30" id="end_time" name="end_time" value="{$end_time}"
+                               placeholder="截止时间" class="qsbox">
+                        <input type="button" class="btn" value="申请截止月份">
+                    </div>
+
+                    <div class="sDiv2">
+                        <!--<input type="text" size="30" name="name" value="" placeholder="姓名模糊查询" class="qsbox">-->
+                        <input type="submit" class="btn" value="搜索">
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="bDiv" style="height: auto;">
+            <div id="flexigrid" cellpadding="0" cellspacing="0" border="0">
+                <div class="content-container">
+                    <table cellpadding="0" cellspacing="0">
+                        <thead class="well">
+                        <tr>
+                            <th width="5%"  style="font-weight:bold;font-size:19px; text-align: center">用户ID</th>
+                            <th width="5%"  style="font-weight:bold;font-size:19px;text-align: center">昵称</th>
+                            <th width="5%"  style="font-weight:bold;font-size:19px;text-align: center">姓名</th>
+                            <th width="5%"  style="font-weight:bold;font-size:19px;text-align: center">区域</th>
+                            <th width="5%" style="font-weight:bold;font-size:19px;text-align: center">等级</th>
+                            <th width="8%" style="font-weight:bold;font-size:19px;text-align: center">自己销售总额</th>
+                            <!--<th width="8%" style="font-weight:bold;font-size:19px;text-align: center">自己实收总额</th>-->
+                            <th width="8%"  style="font-weight:bold;font-size:19px;text-align: center">管理下级销售总额</th>
+                            <th width="8%"  style="font-weight:bold;font-size:19px;text-align: center">团队销售总额</th>
+                            <th width="8%" style="font-weight:bold;font-size:19px;text-align: center">团队实收总额</th>
+                            <th width="5%"  style="font-weight:bold;font-size:19px;text-align: center">时间</th>
+
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        <volist name="list" id="vo">
+                            <tr>
+                                <td style="padding-top:20px;text-align: center">{$vo.user_id}</td>
+                                <td style="padding-top:20px;text-align: center">{$vo.nickname}</td>
+                                <td style="padding-top:20px;text-align: center">{$vo.real_name}</td>
+                                <td style="padding-top:20px;text-align: center">{$vo.c_name}-{$vo.d_name}-{$vo.e_name}</td>
+                                <td style="padding-top:20px;text-align: center">
+                                    <if condition="$vo['user_type'] == 2">
+                                       总代
+                                    <else/>
+                                       大区
+                                    </if>
+                                </td>
+                                <td style="padding-top:20px;text-align: center">{$vo.sum_money1 ? $vo.sum_money1 : 0}</td>
+                                <!--<td style="padding-top:20px;text-align: center">{$vo.sum_money_ziji ? $vo.sum_money_ziji : 0}</td>-->
+
+                                <td style="padding-top:20px;text-align: center">{$vo.sum_money ? $vo.sum_money : 0}</td>
+                                <td style="padding-top:20px;text-align: center">{$vo.sum_money1+$vo.sum_money}</td>
+                                <td style="padding-top:20px;text-align: center">{$vo.sum_money4 ? ($vo.sum_money4+$vo.sum_money_ziji) : 0}</td>
+                                <td style="padding-top:20px;text-align: center">{$start_month}月-{$end_month }月</td>
+
+
+                            </tr>
+                        </volist>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="iDiv" style="display: none;"></div>
+        </div>
+        <!--分页位置-->
+        {$page}
+    </div>
+</div>
+<script>
+
+
+    $(document).ready(function () {
+        // 表格行点击选中切换
+        $('#flexigrid > table>tbody >tr').click(function () {
+            $(this).toggleClass('trSelected');
+        });
+
+        // 点击刷新数据
+        $('.fa-refresh').click(function () {
+            location.href = location.href;
+        });
+        $('#start_time').layDate();
+        $('#end_time').layDate();
+    });
+
+    function delfun(obj) {
+        // 删除按钮
+        layer.confirm('确认删除？', {
+            btn: ['确定', '取消'] //按钮
+        }, function () {
+            $.ajax({
+                type: 'post',
+                url: $(obj).attr('data-url'),
+                data: {act: 'del', level_id: $(obj).attr('data-id')},
+                dataType: 'json',
+                success: function (data) {
+                    layer.closeAll();
+                    if (data) {
+                        $(obj).parent().parent().parent().remove();
+                    } else {
+                        layer.alert('删除失败', {icon: 2});  //alert('删除失败');
+                    }
+                }
+            })
+        }, function () {
+            layer.closeAll();
+        });
+    }
+
+    function check_form() {
+        var start_time = $.trim($('#start_time').val());
+        var end_time = $.trim($('#end_time').val());
+        if (start_time == '' ^ end_time == '') {
+            layer.alert('请选择完整的时间间隔', {icon: 2});
+            return false;
+        }
+
+        return true;
+    }
+</script>
+</body>
+</html>

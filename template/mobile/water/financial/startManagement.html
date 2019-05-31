@@ -1,0 +1,75 @@
+<extend name="layout/common"/>
+<block name="pageBody">
+
+    <script src="__STATIC__/Swiper-4.0.7/swiper.min.js"></script>
+    <link rel="stylesheet" href="__STATIC__/Swiper-4.0.7/swiper.min.css"/>
+
+    <style>
+        .aa {
+            -webkit-flex-shrink: 0;
+        }
+    </style>
+
+    <include file="components/financial_modal"/>
+
+    <div id="app">
+        <div class="swiper-box">
+            <div class="swiper-container licai_swiper">
+                <div class="swiper-wrapper">
+                    <adv pid="51325" limit="5" item="v">
+                        <div class="swiper-slide"><a href="{$v['ad_link']}"><img src="{$v['ad_code']}"/></a></div>
+                    </adv>
+                </div>
+                <!--<div class="swiper-pagination licia"></div>-->
+            </div>
+        </div>
+        <div class="licia_content">
+            <h3>{$article['title']}</h3>
+            {$article.content|htmlspecialchars_decode}
+        </div>
+        <div class="licia_bg1"></div>
+        <div class="licia_bg2"></div>
+
+        <div class="licia_btn" @click="popup"><a href="javascript:">马上理财</a></div>
+
+        <div class="licia_call">
+            <div class="aa">
+                <img src="__STATIC__/images/icon_call.png">
+            </div>
+            <div class="licai_wz">
+                <span class="call01">如有疑问可直接在公众号会话咨询平台客服或拨打客服电话</span>
+                <span class="call02">{$tpshop_config['shop_info_phone']}</span>
+            </div>
+        </div>
+
+        <div is="financial_modal" ref="financial_modal"></div>
+    </div>
+    <script>
+        'use strict';
+
+        new Swiper('.swiper-container', {
+            // pagination: {
+            //     el: '.swiper-pagination',
+            // },
+        });
+
+        new Vue({
+            el: '#app',
+            data: {
+
+            },
+
+            mounted: function() {
+
+            },
+
+            methods: {
+                popup: function() {
+                    this.$refs.financial_modal.popup();
+                },
+            },
+        });
+
+    </script>
+
+</block>

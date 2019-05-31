@@ -1,0 +1,94 @@
+<include file="common/header" />
+    <style>
+        .h60 {
+            height:1.6rem;
+        }
+
+        .icon_share img{
+            width: 0.8rem;
+        }
+        .weui-media-box__ft {
+            text-align: right;
+        }
+        .icon_menu img{
+            width: 0.9rem;
+        }
+        .arrow-down {
+            margin-left: 5px;
+        }
+    </style>
+
+<div class="page">
+    <div class="page-hd">
+    <div class="header">
+        <div class="header-left">
+            <a href="javascript:history.go(-1)" class="left-arrow"></a>
+        </div>
+        <div class="header-title">我的分享</div>
+        <div class="header-right"><a href="#"></a> </div>
+    </div>
+</div>
+    <div class="page-bd">
+<foreach name="user" item="u">
+        <div class="vux-1px-t" style="margin-top: -9px;">
+            <div class="weui-cells weui-cells_checkbox">
+                <a href="{:U('Goods/goodsInfo',array('id'=>$u['goods_id']))}">
+                    <div class="weui-media-box weui-media-box_appmsg">
+                        <div class="weui-media-box__hd">
+                            <img class="weui-media-box__thumb" src="{$u[original_img]}" alt="">
+                        </div>
+                        <div class="weui-media-box__bd">
+                            <h4 class="weui-media-box__title  h60">{$u[goods_name]}</h4>
+                            <div class="mt5"><span>￥</span><b class="fs12">{$u[shop_price]}</b></div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+</foreach>
+        <div class="clear_msg">
+            <img src="__STATIC__/assets/images/icon_trash2.png" alt=""><span>清空所有信息</span>
+        </div>
+    </div>
+</div>
+
+
+<script src="__STATIC__/assets/js/zepto.min.js"></script>
+<script src="__STATIC__/assets/js/lib/weui.min.js"></script>
+<script src="__STATIC__/assets/js/comm.js"></script>
+<script>
+    var emptyurl =  "{:url('User/share_empty')}";//清空收藏
+    $(".clear_msg").on('click', function () {
+            layer.open({
+                  anim: 'up'
+                  ,content: '确定要清空所以信息吗？'
+                  ,btn: ['确认', '取消'],
+                  yes:function(index){
+                    // layer.close(index)
+                    $.ajax({
+                        url: emptyurl,
+                        type: 'POST',
+                        dataType:'json',
+                        success: function (data) {
+                            console.log(data)
+                            if(data.status == 'error'){
+                                layer.open({content:data.error,time:2})
+                                setTimeout("location.reload()",1000)
+                                // alert(1)
+                            }else{
+                                layer.open({content:data.message,time:2})
+                                setTimeout("location.reload()",1000)
+                            }
+                        }
+                    })
+                  }
+                });
+        });
+
+    $(function () {
+        $('.allselect').on('click',function () {
+            var val = $(this).find('input').prop("checked");
+            $(".weui-media-box").find('input').prop("checked", val);
+        });
+    });
+</script>

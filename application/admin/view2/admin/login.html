@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="utf-8">
+    <title>登录页</title>
+    <link rel="stylesheet" media="screen" href="__PUBLIC__/static/js/Swiper2/swiper.min.css">
+    <link rel="stylesheet" media="screen" href="__PUBLIC__/static/css/style.css">
+    <!--[if lte IE 8]>
+    <script type="Text/Javascript" language="JavaScript">
+        function detectBrowser()
+        {
+            var browser = navigator.appName
+            if(navigator.userAgent.indexOf("MSIE")>0){
+                var b_version = navigator.appVersion
+                var version = b_version.split(";");
+                var trim_Version = version[1].replace(/[ ]/g,"");
+                if ((browser=="Netscape"||browser=="Microsoft Internet Explorer"))
+                {
+                    if(trim_Version == 'MSIE8.0' || trim_Version == 'MSIE7.0' || trim_Version == 'MSIE6.0'){
+                        alert('请使用IE9.0版本以上进行访问');
+                        return false;
+                    }
+                }
+            }
+        }
+        detectBrowser();
+    </script>
+    <![endif]-->
+    <script type="text/javascript">
+        //若cookie值不存在，则跳出iframe框架
+        if(!$.cookie('tpshopActionParam') && $.cookie('admin_type') != 1){
+            $.cookie('admin_type','1' , {expires: 1 ,path:'/'});
+            //top.location.href = location.href;
+        }
+    </script>
+</head>
+<style>
+    .chicuele {
+        cursor: pointer;
+        width:98px;
+        position: RELATIVE;
+        left: 18px;
+        top: 3px;
+        height: 37px;
+        float: right;
+        padding-right: 16px;
+    }
+    .yanz-ico{
+        background: url(__PUBLIC__/static/images/yanz-ico.png);
+        background-size: 100% 100%;
+    }
+    .error {
+        font-size: 16px;
+        color: #ea5813;
+        width: 395px;
+        font-weight: bold;
+        background: white;
+        padding: 0 5px;
+        border-radius: 4px;
+    }
+</style>
+<body style="overflow:hidden;">
+<div class="topbar">
+    <div class="container">
+        <div class="topbar_l">
+            <!--<img src="__PUBLIC__/static/images/winmobi_logo.png" alt="">-->
+        </div>
+        <div class="topbar_r">
+            <!--<a href="#">赢在移动</a><span>|</span><a href="#">一码通</a><span>|</span><a href="#">甲骨文科技</a>-->
+        </div>
+    </div>
+</div>
+<div class="page-lg">
+    <div class="login-box clearfix">
+        <div class="left-swiper">
+            <div class="swiper-container" style="height:372px;">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide">
+                        <img src="__PUBLIC__/static/images/sw-img00.png" alt="">
+                    </div>
+                    <div class="swiper-slide"><img src="__PUBLIC__/static/images/sw-img02.png" alt=""></div>
+                    <div class="swiper-slide"><img src="__PUBLIC__/static/images/sw-img01.png" alt=""></div>
+                </div>
+                <!-- Add Pagination -->
+                <div class="pagination"></div>
+            </div>
+        </div>
+        <div class="right-login" style="padding: 25px 25px 0;">
+
+            <!--<div class="tip-box">扫码登录更安全</div>-->
+            <form action="" name='theForm' id="theForm" method="post">
+            <div class="tab-con">
+
+                <div class="login-title">商家登录</div>
+                <div class="input-box">
+                    <label for="userd">
+                        <input type="text" placeholder="用户名" name="username" id="userd">
+                        <span class="user-ico"></span>
+                    </label>
+                    <div class="tip-del" title="输入错误"></div>
+                </div>
+                <div class="input-box">
+                    <label for="passd">
+                        <input type="password" placeholder="密码"  name="password" id="passd">
+                        <span class="pass-ico"></span>
+                    </label>
+                    <div class="tip-del" title="输入错误"></div>
+                </div>
+                <div class="input-box formText" style="border-bottom:none">
+                    <input type="text" name="vertify" autocomplete="off" class="input-text chick_ue" value=""  placeholder="验证码" style="height: 36px;width: 160px;border-bottom: 1px solid #e5e5e5" />
+                    <span class="yanz-ico"></span>
+                    <img src="{:U('Admin/vertify')}" class="chicuele" id="imgVerify" alt="" onclick="fleshVerify()">
+                </div>
+                <div class="login-btn" style="margin-top: 26px;">
+                    登录
+                </div>
+            </div>
+            <!--<div class="tab-con">-->
+                <!--<div class="wei-img"><img src="__PUBLIC__/static/images/wei-bg.jpg" /></div>-->
+                <!--<div class="wei-text"><span class="sao-ico"></span>打开微信扫一扫<br/>立刻安全等录</div>-->
+            <!--</div>-->
+            </form>
+            <div id="error" style="position: absolute;left:0px;bottom: 12px;text-align: center;width:441px;">
+
+            </div>
+        </div>
+    </div>
+
+    <div class="right-lg" style="display:none;">
+        <div class="guanzhu">
+            <span class="wei-ico"><img src="__PUBLIC__/static/images/wei-ico.png" /></span>
+            <p>点我关注</p>
+        </div>
+        <div class="weixin-box">
+            <div class="close">×</div>
+            <div class="xin-title">扫码关注</div>
+            <div class="weixin-img"><img src="__PUBLIC__/static/images/wei-bg.jpg" /></div>
+            <div class="xin-tips">关注最新产品开发状态</div>
+        </div>
+    </div>
+
+    <div class="copy-lg">
+        <!--<p>©2010-2019 广东正品信息科技有限公司 版权所有 | 粤ICP备14043700号-1</p>-->
+    </div>
+</div>
+
+
+
+<script type="text/javascript" src="__PUBLIC__/static/js/jquery.js"></script>
+<script src="__PUBLIC__/static/js/Swiper2/swiper.min.js"></script>
+<script>
+    $(function(){
+
+        // 扫码登录
+        $(".tab-con").eq(0).show();
+
+        //swiper
+        var mySwiper = new Swiper('.swiper-container',{
+            pagination: '.pagination',
+            loop:true
+        })
+    })
+
+    function fleshVerify(){
+        $('#imgVerify').attr('src','/index.php?m=Admin&c=Admin&a=vertify&r='+Math.floor(Math.random()*100));//重载验证码
+    }
+
+    $(function(){
+        $('#theForm  .login-btn').on('click',function(){
+            var username=true;
+            var password=true;
+            var vertify=true;
+
+            if($('#theForm input[name=username]').val() == ''){
+                $('#error').html('<span class="error">用户名不能为空!</span>');
+                $('#theForm input[name=username]').focus();
+                username = false;
+                return false;
+            }
+            if($('#theForm input[name=password]').val() == ''){
+                $('#error').html('<span class="error">密码不能为空!</span>');
+                $('#theForm input[name=password]').focus();
+                password = false;
+                return false;
+            }
+
+            if($('#theForm input[name=vertify]').val() == ''){
+                $('#error').html('<span class="error">验证码不能为空!</span>');
+                $('#theForm input[name=vertify]').focus();
+                vertify = false;
+                return false;
+            }
+
+            if(vertify && $('#theForm input[name=username]').val() != '' && $('#theForm input[name=password]').val() != ''){
+                $.ajax({
+                    async:false,
+                    url:'/index.php?m=Admin&c=Admin&a=login&t='+Math.random(),
+                    data:{'username':$('#theForm input[name=username]').val(),'password':$('#theForm input[name=password]').val(),vertify:$('#theForm input[name=vertify]').val()},
+                    type:'post',
+                    dataType:'json',
+                    success:function(res){
+                        if(res.status != 1){
+                            $('#error').html('<span class="error">'+res.msg+'!</span>');
+                            fleshVerify();
+                            username=false;
+                            password=false;
+                            return false;
+                        }else{
+                            top.location.href = res.url;
+                        }
+                    },
+                    error : function(XMLHttpRequest, textStatus, errorThrown) {
+                        $('#error').html('<span class="error">网络失败，请刷新页面后重试!</span>');
+                    }
+                });
+            }else{
+                return false;
+            }
+
+
+        })
+    })
+</script>
+
+</body>
+</html>

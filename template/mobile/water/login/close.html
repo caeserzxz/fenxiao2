@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,viewport-fit=cover">
+    <link rel="stylesheet" href="__STATIC__/n_assets/css/zpui.css"/>
+    <link rel="stylesheet" href="__STATIC__/n_assets/css/all.css"/>
+    <script src="__STATIC__/n_assets/js/page.js"></script>
+
+    <title> 禁止访问 </title>
+</head>
+<body>
+<div class="page">
+    <div class="page-hd">
+        <div class="header bor-1px-b">
+          <!--  <div class="header-left">
+                <a href="javascript:history.go(-1)" class="left-arrow"></a>
+            </div>
+           -->
+            <div class="header-right">
+                <a href="#"></a>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-bd c-flex1">
+        <!-- 页面内容-->
+        <div class="weui-cell c-flex1 pt100 bgc-fff" style="flex: 1;">
+            <div class="weui-cell__bd" style="flex: 1;">
+                <div class="logo tc">
+                    <img src="__STATIC__/n_assets/images/close.jpg" style="width:20%;height:20%" alt="">
+                </div>
+                <p style="text-align: center;margin-top: 1rem;font-size:16px;color:#001a35">商城维护中，暂时停止访问</p>
+            </div>
+            <div class="weui-cell__ft pb70">
+                <a href="{:url('mobile/index/index')}" class="weui-btn weui-btn_plain-default c-flex2 mb50">
+                    <img src="__STATIC__/n_assets/images/icon_3.png" alt="" class="img50">&nbsp;
+                    <span class="fs30 fw500">前往首页</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<!--<script src="https://cdn.jsdelivr.net/npm/eruda"></script>-->
+<!--<script>eruda.init();</script>-->
+<script src="__STATIC__/n_assets/js/lib/jquery-2.1.4.js"></script>
+<script src="__STATIC__/n_assets/js/jquery-weui.min.js"></script>
+<script src="__STATIC__/n_assets/js/lib/fastclick.js"></script>
+<script src="__STATIC__/layer/layer.js"  ></script>
+<script>
+    $(function() {
+        FastClick.attach(document.body);
+    });
+</script>
+<script>
+    function uploadApp(){
+        $.ajax({
+            url: '/mobile/login/uploadAppBt',
+            type: 'POST',
+            data:{
+
+            },
+            success: function (data1) {
+                var url=data1.url;
+                window.location.href=url + '/马克医生.apk';
+            },
+            error: function () {
+                layer.msg('下载失败');
+
+            },
+        });
+
+    }
+
+
+    $("#city-picker").cityPicker({
+        title: "请选择地区"
+    });
+
+    //注册
+    function register(){
+        window.location.href = "{:U('Mobile/Login/register')}";
+    }
+
+    //忘记密码
+    function forget(){
+        window.location.href = "{:U('Mobile/Login/forget')}";
+    }
+
+    function wxlogin(){
+
+        window.auc.wxLogin();
+        // wxLoginCallback('061aHIJ004owGF1pFpI00NRFJ00aHIJd');
+    }
+
+    function wxLoginCallback(code) {
+        console.log(code);
+        // 传code去里面授权那用户数据
+        $.ajax({
+            url: '/mobile/Login/applogin',
+            type: 'POST',
+            data: {
+                code:code,
+            },
+            success: function (data) {
+                console.log(data)
+                if(data.status==200)
+                {
+                    layer.load(1);
+                    window.location.href="{:url('mobile/Index/index')}"+'?_user_id='+data.result;
+                }
+                else
+                {
+
+                    layer.msg(data.msg, {
+                        icon: 6,
+                        time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                    }, function(){
+                        window.location.href = "{:url('/mobile/User/login')}";
+                    });
+
+                }
+            },
+            error: function (data) {
+                layer.msg('用户信息获取失败', {
+                    icon: 6,
+                    time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                }, function(){
+                    window.location.href = "{:url('/mobile/User/login')}";
+                });
+            }
+        });
+    }
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

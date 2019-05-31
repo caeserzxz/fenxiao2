@@ -1,0 +1,91 @@
+<include file="public/layout"/>
+<script src="__ROOT__/public/static/js/layer/laydate/laydate.js"></script>
+<body style="background-color: rgb(255, 255, 255); overflow: auto; cursor: default; -moz-user-select: inherit;">
+<div id="append_parent"></div>
+<div id="ajaxwaitid"></div>
+<div class="page">
+    <div class="fixed-bar">
+        <div class="item-title">
+            <div class="subject">
+                <h3>佣金提现审核列表</h3>
+            </div>
+        </div>
+    </div>
+    <!-- 操作说明 -->
+    <div id="explanation" class="explanation"
+         style="color: rgb(44, 188, 163); background-color: rgb(237, 251, 248); width: 99%; height: 100%;">
+        <div id="checkZoom" class="title"><i class="fa fa-lightbulb-o"></i>
+            <h4 title="提示相关设置操作时应注意的要点">操作提示</h4>
+            <span title="收起提示" id="explanationZoom" style="display: block;"></span>
+        </div>
+        <ul>
+            <li>查看佣金情况</li>
+        </ul>
+    </div>
+    <div class="flexigrid">
+
+
+        <div class="bDiv" style="height: auto;">
+            <div id="flexigrid" cellpadding="0" cellspacing="0" border="0">
+                <div class="content-container">
+                    <table cellpadding="0" cellspacing="0">
+                        <thead class="well">
+                        <tr>
+                            <th width="5%" style="font-weight:bold;font-size:14px;">ID</th>
+                            <th width="5%" style="font-weight:bold;font-size:14px;">姓名</th>
+                            <th width="10%" style="font-weight:bold;font-size:14px;">分销佣金</th>
+                            <th width="10%" style="font-weight:bold;font-size:14px;">管理佣金</th>
+                            <th width="10%" style="font-weight:bold;font-size:14px;">上荐佣金</th>
+                            <th width="10%" style="font-weight:bold;font-size:14px;">代收佣金</th>
+                            <th width="10%" style="font-weight:bold;font-size:14px;">总金额</th>
+                            <th width="10%" style="font-weight:bold;font-size:14px;">申请日期</th>
+                            <th width="10%" style="font-weight:bold;font-size:14px;">状态</th>
+
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        <volist name="lists" id="vo">
+                            <tr>
+                                <td style="padding-top:10px;">{$vo.id}</td>
+                                <td style="padding-top:10px;">{$vo.name}</td>
+                                <td style="padding-top:10px;">{$vo.reward_money}</td>
+                                <td style="padding-top:10px;">{$vo.managent_money}</td>
+                                <td style="padding-top:10px;">{$vo.top_money}</td>
+                                <td style="padding-top:10px;">{$vo.agent_money}</td>
+                                <td style="padding-top:10px;">{$vo.total_money}</td>
+                                <td style="padding-top:10px;">{$vo.create_time|date="Y-m-d H:i:s",###}
+                                </td>
+                                <td style="padding-top:10px;">
+                                    <if $vo[
+                                    'status'] == 0>
+                                    <span>申请中</span>
+                                    <elseif $vo[
+                                    'status'] == 1>
+                                    <span>已通过</span>
+                                    <elseif $vo[
+                                    'status'] == 2>
+                                    <span>不通过</span>
+                                    </if>
+                                </td>
+
+                            </tr>
+                        </volist>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="iDiv" style="display: none;"></div>
+        </div>
+        <!--分页位置-->
+
+    </div>
+</div>
+<script>
+
+
+
+
+</script>
+</body>
+</html>

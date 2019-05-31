@@ -1,0 +1,55 @@
+<include file="common/header" title="绑定关系"/>
+    <style>
+        .relation-user-wrap{
+            margin-top: 2rem;
+        }
+
+        .co-black{
+            text-align: center;
+        }
+        .relation-user-wrap .relation-des{
+            padding-top: 5px;
+            font-size: 0.8rem;
+
+        }
+        .relation-btns{
+            margin-top: 0.5rem;
+            
+
+        }
+        .relation-btns.register-btns{
+            border-color: #fff;
+        }
+
+    </style>
+</head>
+<body>
+<include file="common/header_nav" title="绑定关系" href="{:U('index/index')}"/>
+
+    <div class="relation-user-wrap">
+        <div class="user-photo1-h"><img src="{$head_pic|default="__STATIC__/images/user68.jpg"}" alt="" /></div>
+
+        <p class="relation-des co-black">您即将与{$user['nickname']}绑定上下级关系</p>
+
+        <a class="relation-btns register-btns" href="javascript:;" onclick="bind()">确认</a>
+
+        <a class="relation-btns" href="{:U('Mobile/index/index')}">返回首页</a>
+    </div>
+</body>
+<script src="__PUBLIC__/js/jqueryUrlGet.js"></script><!--获取get参数插件-->
+<script>
+    function bind()
+    {
+        $.post('',{},function(data){
+            layer.open({
+                content:data.msg,
+            });
+            if(data.code == 1)
+            {
+                location.href=data.url;
+            }
+        });
+    }
+
+</script>
+</html>

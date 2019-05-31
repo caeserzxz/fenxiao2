@@ -1,0 +1,151 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>jquery实现多级树形分类可折叠菜单特效代码</title>
+    <!--图标样式-->
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/static/jquerytree/css/bootstrap.min.css" />
+    <!--主要样式-->
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/static/jquerytree/css/style.css" />
+    <script type="text/javascript" src="__PUBLIC__/static/jquerytree/js/jquery-1.7.2.min.js"></script>
+    <script type="text/javascript">
+
+        $(function(){
+
+            $('.tree li:has(ul)').addClass('parent_li').find(' > span').attr('title', 'Collapse this branch');
+
+            $('.tree li.parent_li > span').on('click', function (e) {
+
+                var children = $(this).parent('li.parent_li').find(' > ul > li');
+                var user_id=$(this).attr('name');
+
+                if (children.is(":visible")) {
+
+                    children.hide('fast'); //隐藏
+                    $(this).attr('title', 'Expand this branch').find(' > i').addClass('icon-plus-sign').removeClass('icon-minus-sign');
+
+                } else {
+
+                    check_on(user_id);
+
+                    children.show('fast'); //显示
+
+                    $(this).attr('title', 'Collapse this branch').find(' > i').addClass('icon-minus-sign').removeClass('icon-plus-sign');
+
+                }
+
+                e.stopPropagation();
+
+            });
+
+        });
+
+        function check_on(user_id) {
+            $.ajax({
+                url: '/index.php/Admin/user/ajaxTeamList',
+//                url:"{:U('details')}",
+                type: 'POST',
+                data:{
+                    user_id:user_id,
+                },
+                success: function (data) {
+                    //console.log(data)
+                    var html = '';
+                    $("#dd"+user_id).empty(html);
+                    console.log(data)
+                    for(var i in data){
+
+                        html +='<li>'
+                        html +='<span onclick=check_on('+data[i].user_id+')>用户id：'+data[i].user_id+'&nbsp&nbsp&nbsp用户名：'+data[i].real_name+'&nbsp&nbsp&nbsp等级：'+data[i].user_type_name+'&nbsp&nbsp&nbsp购买Vip会员时间：'+data[i].become_vip_time+'</span>'
+                        html +='<ul id=dd'+data[i].user_id+'>';
+                        html +='</ul>';
+                        html +='</li>';
+                    }
+                    $("#dd"+user_id).append(html);
+                },
+                error: function (data) {
+                    //tipTopShow("上传失败");
+                }
+            });
+        }
+
+    </script>
+
+</head>
+
+<body>
+
+
+<div class="tree well">
+    <span style="margin-left: 40px"><a href="{:U('Admin/logout')}">退出登录</a></span>
+    <div style="text-align: center">
+       <h5> 团队列表,现有团队人数{$num}人</h5>
+    </div>
+    <div style="margin-left: 40px">
+        <form action="{:U('Admin/User/teamList2')}" method="post">
+            <input type="text" name="user_id" placeholder="请输入用户ID" style="width: 100px"/>
+            <input type="text" name="mobile" placeholder="请输入用户手机" style="width: 150px"/>
+            <input type="submit" value="搜索"/>
+        </form>
+    </div>
+    <ul>
+        <li>
+            <if>
+                <i class="con-folder-open"></i>
+                用户ID：{$userInfo['user_id']} &nbsp&nbsp 用户名：{$userInfo.real_name}  &nbsp&nbsp&nbsp等级：
+                    <if condition="($userInfo.user_type eq 0) ">普通消费者粉丝
+                    <elseif condition="($userInfo.user_type eq 1) "/>会员
+                    <else/>代理
+                </if>
+                &nbsp&nbsp&nbsp购买Vip的时间：
+                <if condition="$userInfo.become_vip_time neq null">
+                    {$userInfo.become_vip_time|date='Y-m-d',###}
+                <else />
+                    无
+                </if>
+
+
+            </span>
+            <ul>
+                <volist name="list" id="vo">
+                <li>
+                    <span class="badge badge-sdduccess" name="{$vo.user_id}">
+                        <i class="icon-minus-sign"></i>
+                        用户ID：{$vo.user_id}&nbsp&nbsp&nbsp 用户名：{$vo.real_name} &nbsp&nbsp&nbsp身份：
+                       <if condition="($vo.user_type eq 0) ">普通消费者粉丝
+                           <elseif condition="($vo.user_type eq 1) "/>会员
+                           <else/>代理
+                       </if>
+                        &nbsp&nbsp&nbsp购买Vip的时间：
+                        <if condition="$userInfo.become_vip_time neq null">
+                            {$vo.become_vip_time|date='Y-m-d',###}
+                            <else />
+                            无
+                        </if>
+                        <br/>
+                    </span>
+                    <ul id="dd{$vo.user_id}">
+                        <!--遍历内容-->
+                    </ul>
+
+                </li>
+                </volist>
+            </ul>
+
+
+        </li>
+
+
+
+    </ul>
+
+</div>
+
+
+
+</body>
+
+</html>

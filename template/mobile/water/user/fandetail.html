@@ -1,0 +1,93 @@
+<layout name="common/n_layout_nav"/>
+<title> 管理粉 </title>
+</head>
+<body>
+<div class="page">
+    <div class="page-hd">
+        <div class="header bor-1px-b">
+            <div class="header-left">
+                <a href="javascript:history.go(-1)" class="left-arrow"></a>
+            </div>
+            <div class="header-title">粉丝详情页</div>
+            <div class="header-right">
+                <a href="#"></a>
+            </div>
+        </div>
+    </div>
+    <div class="fxs">
+        <div class="weui-cells border-none pt30 mt0 pl30" style="background: none;">
+            <div class="weui-cell">
+                <div class="weui-cell__hd fxs_tx">
+                    <img src="{$userInfo.head_pic}">
+                </div>
+                <div class="weui-cell__bd">
+                    <div class="text-white fs30 fw600">{$userInfo.nickname}</div>
+                    <!--<div class="fs22 text-white" style="opacity: 0.6">{$userInfo.mobile}</div>-->
+                    <div class="sf_label_w">
+                        <span class="sf_label">
+                        <if condition="$userInfo['user_type'] eq 0">会员</if>
+                        <if condition="$userInfo['user_type'] eq 1">健康大使</if>
+                        <if condition="$userInfo['user_type'] eq 2">总代</if>
+                        <if condition="$userInfo['user_type'] eq 3">大区</if>
+                        </span>
+                    </div>
+                    <!--<div class="fs22 text-white mt20" style="opacity: 0.6">邀请码：{$userInfo.user_id}</div>-->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="weui-cell">
+        姓名：{$identity.name}
+    </div>
+
+    <div class="weui-cell">
+        性别：
+        <if condition="$userInfo['sex'] eq 0">
+            保密
+        </if>
+        <if condition="$userInfo['sex'] eq 1">
+            男
+        </if>
+        <if condition="$userInfo['sex'] eq 2">
+            女
+        </if>
+    </div>
+    <div class="weui-cell">
+        手机号码：{$userInfo.mobile}
+    </div>
+    <div class="weui-cell">
+        身份证号码：{$userInfo.id_card}
+    </div>
+    <if condition="$district['name'] neq null">
+        <div class="weui-cell">
+            所在地区：{$province.name}{$city.name}{$district.name}
+        </div>
+    </if>
+    <!--<if condition="$addressName['district'] neq null">-->
+        <!--<div class="weui-cell">-->
+            <!--家庭住址：{$addressName.province}{$addressName.city}{$addressName.district}-->
+        <!--</div>-->
+    <!--</if>-->
+    <if condition="$identity['old_profession'] neq null">
+        <div class="weui-cell">
+            原职业：{$identity.old_profession}
+        </div>
+    </if>
+    <if condition="$identityName['district'] neq null">
+        <div class="weui-cell">
+            代理区域：{$identityName.province}{$identityName.city}{$identityName.district}
+        </div>
+    </if>
+
+    <if condition="$userInfo['user_type'] eq 1">
+        <div class="weui-cell">
+            单位：{$identityName.unit}
+        </div>
+        <div class="weui-cell">
+            科室：{$identityName.title}
+        </div>
+        <div class="weui-cell">
+            单位所在区域：{$identityName.h_province}{$identityName.h_city}{$identityName.h_district}
+        </div>
+    </if>

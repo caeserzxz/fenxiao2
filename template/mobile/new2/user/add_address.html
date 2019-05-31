@@ -1,0 +1,158 @@
+<include file="common/header" title="添加收获地址" />
+<include file="common/header_nav" title="添加收获地址" href="javascript:history.back(-1)"/>
+<style>
+    .custom-classname{
+        font-size: .7rem;
+    }
+</style>
+    <div class="page-bd">
+        <div class="weui-cells weui-cells_form mt0 vux-1px-t">
+            <form action="{:U('Mobile/User/add_address')}" method="post" id="addressForm">
+
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">收货人</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" value="{$address.consignee}" name="consignee" type="text" placeholder="请输入收货人姓名">
+                </div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">手机号码</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="text"  value="{$address.mobile}" name="mobile"  placeholder="请输入绑定手机号码">
+                </div>
+            </div>
+            <div class="weui-cell weui-cell_access" style="font-size: 0.7rem">
+                <div class="weui-cell__hd"><label class="weui-label">省市区</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" id="selectAddr" type="text" placeholder="请选择所在地区" readonly>
+                    <input type="hidden" value="{$address['province']}" name="province" class="hiddle_area"/>
+                    <input type="hidden" value="{$address['city']}" name="city" class="hiddle_area"/>
+                    <input type="hidden" value="{$address['district']}" name="district" class="hiddle_area"/>
+                </div>
+                <div class="weui-cell__ft"></div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">详细地址</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="text" value="{$address.address}" name="address" placeholder="请输入详细地址">
+                </div>
+            </div>
+        </div>
+        <div class="weui-cells weui-cells_checkbox">
+            <label class="weui-cell weui-check__label" for="s11">
+                <div class="weui-cell__hd">
+                    <input type="checkbox" class="weui-check" name="is_default" id="s11"  value="{$address.is_default}"  <if condition="$address.is_default == 1">checked="checked"</if> >
+                    <i class="weui-icon-checked"></i>
+                </div>
+                <div class="weui-cell__bd">
+                    <p>设为默认地址</p>
+                </div>
+            </label>
+        </div>
+
+        <div class="weui-btn-area" style="margin-bottom:0.5rem;">
+            <?php $source = I('source');?>
+            <notempty name="$source"> <!--如果是下订单时提交过了的页面-->
+                <!--<input type="button" value="保存并使用该地址" class="dotm_btn1 beett" onclick="checkForm()" />-->
+                <input type="button" value="保存并使用该地址" class="weui-btn weui-btn_primary" onclick="checkForm()" />
+                <input type="hidden" name="source" value="{$Request.param.source}" />
+                <input type="hidden" name="order_id" value="{$Request.param.order_id}" />
+                <input type="hidden" name="act_id" value="{$Request.param.act_id}" />
+                <input type="hidden" name="goods_id" value="{$Request.param.goods_id}" />
+                <input type="hidden" name="goods_num" value="{$Request.param.goods_num}" />
+                <input type="hidden" name="item_id" value="{$Request.param.item_id}" />
+                <else/>
+                <input type="button" value="保存该地址" class="weui-btn weui-btn_primary"onclick="checkForm()" />
+            </notempty>
+
+        </div>
+    </div>
+    </form>
+</div>
+
+<script>
+
+    $("#selectAddr").on('click',function () {
+
+        //获取json数据
+        $.get("{:url('Home/Api/getAllArea')}",'',function(data){
+            // 级联picker
+            weui.picker(data, {
+                className: 'custom-classname',
+                defaultValue: [1, 3],
+                onChange: function (result) {
+                    $("input[name=province]").attr('value',result[0].value);
+                    $("input[name=city]").attr('value',result[1].value);
+                    $("input[name=district]").attr('value',result[2].value);
+                },
+                onConfirm: function (result) {
+                    var str = result[0].label+'-'+result[1].label+'-'+result[2].label;
+                    $('#selectAddr').attr('value',str);
+                },
+                id: 'doubleLinePicker'
+            });
+        },'json');
+    });
+
+    $('#s11').click(function(){
+        if($(this).is(":checked"))
+        {
+            $(this).attr('value',1);
+        }else{
+            $(this).attr('value',0);
+
+        }
+    });
+
+</script>
+<script type="text/javascript">
+    function checkForm(){
+
+        var consignee = $('input[name="consignee"]').val();
+        var address = $('input[name="address"]').val();
+        var mobile = $('input[name="mobile"]').val();
+        var area = $('#area').val();
+        var error = '';
+        if(consignee == ''){
+            error = '收货人不能为空 <br/>';
+        }
+        if(address == ''){
+            error = '请填写地址 <br/>';
+        }
+        if(!checkMobile(mobile)){
+            error = '手机号码格式有误 <br/>';
+        }
+        if(area == '') {
+            error = '所在地区不能为空 <br/>';
+        }
+        if(error){
+            layer.open({content:error,time:2});
+            return false;
+        }
+        $.ajax({
+            type : "POST",
+            url:"{:U('Mobile/User/add_address')}",//+tab,
+            dataType:'JSON',
+            data :$('#addressForm').serialize(),
+            success: function(data)
+            {
+                $('input[name="consignee"]').val('');
+                $('input[name="address"]').val('');
+                $('input[name="mobile"]').val('');
+                $('input[type="checkbox"]').attr('checked',false);
+                if(data.code == 1){
+                    layer.open({content:data.msg,time:2,end:function(){
+                        window.location.href=data.url;
+                    }});
+                }else{
+                    layer.open({content:data.msg,time:2});
+                }
+            },
+            error:function(){
+                layer.open({content:'请稍后再试',time:2});
+            }
+        });
+    }
+</script>
+</body>
+</html>

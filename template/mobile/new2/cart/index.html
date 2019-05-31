@@ -1,0 +1,445 @@
+<layout name="common/layout_nav" />
+<style type="text/css">
+    .weui-badge {
+        border-radius: 3px;
+    }
+    .number {
+        margin-top: -1.1rem;
+    }
+
+    @media only screen and (max-width: 320px) {
+        .number {
+            transform: scale(0.8);
+            margin-right: -10px;
+            margin-top: -24px;
+        }
+    }
+
+    .cart_swiped {
+        position: relative;
+    }
+
+    .cart-action {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        width: 100px;
+        left: 100%;
+        top: 0;
+        bottom: 0;
+        background-color: #fff;
+        box-shadow: -2px 0 5px rgba(0, 0, 0, 0.05);
+    }
+
+    .cart-action > a {
+        flex: 1;
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .delete-btn {
+        color: #fff;
+        background-color: #f95850;
+    }
+
+    .check_radio i {
+        width: .61867rem;
+        height: .59733rem;
+        display: block;
+        float: left;
+        background-image: url("__STATIC__/images/check.png");
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-size: 1.408rem;
+        background-position: 0
+    }
+
+    .check_radio .check_t i {
+        background-position: -.768rem 0;
+    }
+</style>
+
+<div class="page" style="background: #ffffff;">
+    <div class="page-hd">
+        <div class="header">
+            <!--<div class="header-left"><a href="" class="left-arrow"></a></div>-->
+            <div class="header-title">购物车</div>
+            <div class="header-right"><a href="javascript:history.back(-1);"></a> </div>
+        </div>
+    </div>
+    <div class="page-bd">
+        <div class="weui-panel vux-1px-t">
+            <div class="weui-cell__bd weui-cells_checkbox">
+                <if condition="empty($user['user_id'])">
+                    <!--###用户未登录###-->
+                    <div class="loginlater">
+                        <img src="__STATIC__/images/small_car.png"/>
+                        <span>登录后可同步电脑和手机购物车</span>
+                        <a href="{:U('Mobile/User/loagin')}">登录</a>
+                    </div>
+                </if>
+                <!--购物车没有商品-s-->
+                <div class="nonenothing"  style="margin-top: 20px; <notempty name="cartList">display: none</notempty> ">
+                    <img src="__STATIC__/images/nothing.png"/>
+                    <p>购物车暂无商品</p>
+                    <a href="{:U('Mobile/Index/index')}">去逛逛</a>
+                </div>
+                <volist name="cartList" id="cart">
+                    <div  class="weui-media-box weui-media-box_appmsg cart_swiped orderlistshpop" id="cart_list_{$cart.id}">
+                        <div class="weui-cell__hd check_radio">
+                            <span  <if condition="$cart[selected] eq 1" >class="che check_t"<else/>class="che"</if>>
+                            <i><input name="checkItem" type="checkbox" style="display:none;" value="{$cart.id}" <if condition="$cart[selected] eq 1">checked="checked"</if>></i>
+                            </span>
+                        </div>
+                        <div class="weui-media-box__hd">
+                            <img class="weui-media-box__thumb" src="{$cart.goods_id|goods_thum_images=200,200}" alt="">
+                        </div>
+                        <div class="weui-media-box__bd">
+                            <h4 class="weui-media-box__title">{$cart[goods_name]}</h4>
+                            <p class="weui-media-box__desc mt5">{$cart[spec_key_name]}</p>
+                            <div class="mt5"><span class="fs10">￥</span><b class="fs12">{$cart.member_goods_price}</b>  </div>
+                            <div class="number fr get_mp">
+                                <span class="number-sub mp_minous">-</span>
+                                <input class="number-input input-num mp_mp" type="text" value="{$cart['goods_num']}" name="changeQuantity_{$cart['id']}" id="changeQuantity_{$cart['id']}" onkeyup="this.value=this.value.replace(/[^\d]/g,'')">
+                                <span class="number-plus mp_plus">+</span>
+                            </div>
+                        </div>
+                        <div class="cart-action">
+                            <a class="delete-btn vux-1px-b deleteGoods" data-cart-id="{$cart.id}">删除</a>
+                        </div>
+                    </div>
+                </volist>
+                <!--提交栏-s-->
+                <notempty name="cartList">
+                    <div class="fixed-bottom3">
+                        <div class="weui-flex"  style="bottom: 1.86rem;">
+                            <div class="weui-cells_checkbox check_radio">
+                                <span class="che alltoggle checkFull"  style="padding: 5px"><i></i></span>
+                                <span class="all"> 全选 </span>
+                            </div>
+                            <div style="display: block;padding: 10px">
+                                <div style="width: 100%; display: block;"><span class="fs10 text-gray">合计</span><span class="fs10 text-red">￥</span><b class="fs12 text-red" id="total_fee">0</b></div>
+                                <div style="width: 100%; display: block;" class="text-gray" id="goods_fee">节省 : 0</div>
+                            </div>
+                            <div><a href="javascript:void(0);" onclick="cart_submit();" class="btn">去结算</a></div>
+                        </div>
+                    </div>
+                    <!--提交栏-e-->
+                    <script type="text/javascript">
+                        $(document).ready(function(){
+                            initDecrement();
+                            initCheckBox();
+                        });
+                    </script>
+                </notempty>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    var wrap = document.querySelectorAll('.cart_swiped');
+    var wrap2 = document.querySelector('.cart_swiped');
+    // 初始化手指坐标点
+    var startPoint = 0;
+    var startEle = 0;
+    var endPoint = 0;
+    //手指按下
+    var boxlen = wrap.length;
+    for(var i =0; i<boxlen; i++){
+        wrap[i].addEventListener("touchstart",function(e){
+            startPoint = e.changedTouches[0].pageX;
+            startEle = wrap2.offsetLeft;
+        });
+        //手指滑动
+        wrap[i].addEventListener("touchmove",function(e){
+            var currPoint = e.changedTouches[0].pageX;
+            var disX = currPoint - startPoint;
+            var left = startEle + disX;
+            if (left < -100) {
+                left = -100;
+            }
+            if (left > 0) {
+                left = 0;
+            }
+            $(this).css('left', left + 'px');
+        });
+
+        //当手指抬起的时候
+        wrap[i].addEventListener("touchend",function(e){
+            endPoint = e.changedTouches[0].pageX;
+            if(endPoint-startPoint> 20){
+                //console.log('右滑');
+                $(this).animate({
+                    "left": 0 + 'px'
+                });
+            }
+            else if(endPoint-startPoint< -20){
+                // console.log('左滑');
+                $(this).animate({
+                    "left": -100 + 'px'
+                });
+            }
+            else{
+                $(this).animate({
+                    "left": 0 + 'px'
+                });
+            }
+        });
+    }
+
+
+    $(document).ready(function(){
+        AsyncUpdateCart();
+    });
+    //点击结算
+    function cart_submit() {
+        //获取选中的商品个数
+        var j = 0;
+        $('input[name^="checkItem"]:checked').each(function () {
+            j++;
+        });
+        //选择数大于0
+        if (j > 0) {
+            //跳转订单页面
+            window.location.href = "{:U('Mobile/Cart/cart2')}"
+        } else {
+            layer.open({content: '请选择要结算的商品！', time: 2});
+            return false;
+        }
+    }
+    //购物车对象
+    function CartItem(id, goods_num,selected) {
+        this.id = id;
+        this.goods_num = goods_num;
+        this.selected = selected;
+    }
+    //初始化计算订单价格
+    function AsyncUpdateCart(){
+        var cart = new Array();
+        var inputCheckItem = $("input[name^='checkItem']");
+        inputCheckItem.each(function(i,o){
+            var id = $(this).attr("value");
+            var goods_num = $(this).parents('.sc_list').find("input[id^='changeQuantity']").attr('value');
+            if ($(this).attr("checked") == 'checked') {
+                var cartItemCheck = new CartItem(id,goods_num,1);
+                cart.push(cartItemCheck);
+            }else{
+                var cartItemNoCheck = new CartItem(id,goods_num,0);
+                cart.push(cartItemNoCheck);
+            }
+        })
+        $.ajax({
+            type : "POST",
+            url:"{:U('Mobile/Cart/AsyncUpdateCart')}",//,
+            dataType:'json',
+            data: {cart: cart},
+            success: function(data){
+                if(data.status == 1){
+                    $('#goods_num').empty().html(data.result.goods_num);
+                    $('#total_fee').empty().html(data.result.total_fee);
+                    $('#goods_fee').empty().html('节省：￥'+data.result.goods_fee);
+                    var cartList =  data.result.cartList;
+                    if(cartList.length > 0){
+                        for(var i = 0; i < cartList.length; i++){
+                            $('#cart_'+cartList[i].id+'_goods_price').empty().html('￥'+cartList[i].goods_price);
+                            $('#cart_'+cartList[i].id+'_member_goods_price').empty().html('￥'+cartList[i].member_goods_price);
+                            $('#cart_'+cartList[i].id+'_total_price').empty().html('￥'+cartList[i].total_fee);
+                            $('#cart_'+cartList[i].id+'_market_price').empty().html('￥'+(cartList[i].member_goods_price*cartList[i].goods_num).toFixed(2)); //活动价格
+                        }
+                    }else{
+                        $('.total_price').empty();
+                        $('.cut_price').empty();
+                    }
+                }else{
+                    $('#goods_num').empty().html(data.result.goods_num);
+                    $('#total_fee').empty().html(data.result.total_fee);
+                    $('#goods_fee').empty().html('节省：￥'+data.result.goods_fee);
+                }
+            }
+        });
+    }
+    //商品数量加减
+    $(function(){
+        //减数量
+        $('.mp_minous').click(function(){
+            if(!$(this).hasClass('disable')){
+                var inputs = $(this).siblings('.mp_mp');
+                var val = inputs.val();
+                if(val>0){
+                    val--;
+                }
+                inputs.val(val);
+                inputs.attr('value',val);
+                initDecrement();
+                changeNum(this);
+            }
+        })
+        //加数量
+        $('.mp_plus').click(function(){
+            var inputs = $(this).siblings('.mp_mp');
+             var val = inputs.val();
+            console.log(val);
+
+            val++;
+            if(val > 200){
+                val = 200;
+                layer.msg("购买商品数量不能大于200",{icon:2});
+            }
+            inputs.val(val);
+            inputs.attr('value',val);
+            initDecrement();
+            changeNum(this);
+        })
+        $(document).on("blur", '.get_mp input', function (e) {
+            var changeQuantityNum = parseInt($(this).val());
+            if(changeQuantityNum <= 0){
+                layer.open({
+                    content: '商品数量必须大于0'
+                    ,btn: ['确定']
+                });
+                $(this).val($(this).attr('value'));
+            }else{
+                $(this).attr('value', changeQuantityNum);
+            }
+            initDecrement();
+            changeNum(this);
+        })
+    })
+    //勾选商品
+    function  checkGoods(obj){
+        var input_obj = $(obj).parent('.check_radio').find('input');
+        console.log($(input_obj).attr('checked'));
+        if($(input_obj).attr('checked')){
+            //改变颜色
+            $(obj).removeClass('check_t');
+            //取消选中
+            $(input_obj).attr('checked',false);
+        }else {
+            //改变颜色
+            $(obj).addClass('check_t');
+           // $(obj).addClass('check_t');
+            //勾选选中
+         //   $(obj).find('input').attr('checked',true);
+            $(input_obj).attr('checked',true);
+        }
+        //选中全选多选框
+        if($(obj).hasClass('checkFull')){
+            if($(obj).hasClass('check_t')){
+                $(".che").each(function(i,o){
+                    $(this).addClass('check_t');
+                    $(this).find('input').attr('checked',true);
+                })
+            }else{
+                $(".che").each(function(i,o){
+                    $(this).removeClass('check_t');
+                    $(this).find('input').attr('checked',false);
+                })
+            }
+        }
+    }
+    //更改购买数量对减购买数量按钮的操作
+    function initDecrement(){
+        $("input[id^='changeQuantity']").each(function(i,o){
+            if($(o).val() == 1){
+                $(o).parents('.get_mp').find('.mp_minous').addClass('disable');
+            }
+            if($(o).val() > 1){
+                $(o).parents('.get_mp').find('.mp_minous').removeClass('disable');
+            }
+        })
+    }
+    //多选框点击事件
+    $(function () {
+        $(document).on("click", '.che', function (e) {
+            checkGoods($(this));
+            initCheckBox();
+            AsyncUpdateCart();
+        })
+    })
+    //更改购物车请求事件
+    function changeNum(obj){
+        var checkall = $(obj).parents('.orderlistshpop').find('.che');
+        if(!checkall.hasClass('check_t')){
+            checkGoods(checkall);
+            initCheckBox();
+        }
+        var input = $(obj).parents('.get_mp').find('input');
+        var cart_id = input.attr('id').replace('changeQuantity_','');
+        var goods_num = input.attr('value');
+        var cart = new CartItem(cart_id, goods_num, 1);
+        $.ajax({
+            type: "POST",
+            url: "{:U('Mobile/Cart/changeNum')}",//+tab,
+            dataType: 'json',
+            data: {cart: cart},
+            success: function (data) {
+                if(data.status == 1){
+                    AsyncUpdateCart();
+                }else{
+                    input.val(data.result.limit_num);
+                    input.attr('value',data.result.limit_num);
+                    layer.open({
+                        content: data.msg
+                        ,btn: ['确定']
+                    });
+                    initDecrement();
+                }
+            }
+        });
+    }
+    //删除购物车商品
+    $(function () {
+        //删除购物车商品事件
+        $(document).on("click", '.deleteGoods', function (e) {
+            var cart_ids = new Array();
+            cart_ids.push($(this).attr('data-cart-id'));
+            layer.open({
+                content: '确定要删除此商品吗'
+                ,btn: ['确定', '取消']
+                ,yes: function(index){
+                    layer.close(index);
+                    $.ajax({
+                        type : "POST",
+                        url:"{:U('Mobile/Cart/delete')}",
+                        dataType:'json',
+                        data: {cart_ids: cart_ids},
+                        success: function(data){
+                            if(data.status == 1){
+                                for (var i = 0; i < cart_ids.length; i++) {
+                                    $('#cart_list_' + cart_ids[i]).remove();
+                                }
+                                var store_div = $('.orderlistshpop');
+                                if(store_div.length == 0){
+                                    location.reload();
+                                }
+                            }else{
+                                layer.msg(data.msg,{icon:2});
+                            }
+                            AsyncUpdateCart();
+                        }
+                    });
+                }
+            });
+        })
+    })
+    /**
+     * 检测选项框
+     */
+    function initCheckBox(){
+        var checkBoxsFlag = true;
+        $("input[name^='checkItem']").each(function(i,o){
+            if ($(this).attr("checked") != 'checked') {
+                checkBoxsFlag = false;
+            }
+        })
+        if(checkBoxsFlag == false){
+            $('.checkFull').removeClass('check_t');
+        }else{
+            $('.checkFull').addClass('check_t');
+        }
+    }
+</script>
+</body>
+</html>

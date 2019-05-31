@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,viewport-fit=cover">
+    <link rel="stylesheet" href="__STATIC__/n_assets/css/zpui.css"/>
+    <link rel="stylesheet" href="__STATIC__/n_assets/css/all.css"/>
+    <script src="__STATIC__/n_assets/js/page.js"></script>
+
+    <title> 注册 </title>
+</head>
+<body>
+<div class="page">
+    <div class="page-hd">
+        <div class="header bor-1px-b">
+            <div class="header-left">
+                <a href="javascript:history.go(-1)" class="left-arrow"></a>
+            </div>
+            <div class="header-title">注册</div>
+            <div class="header-right">
+                <a href="#"></a>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-bd" style="background-color: #ffffff;">
+        <!-- 页面内容-->
+        <div class="weui-cells mt0 pt30">
+            <div class="weui-cell">
+                <div class="weui-cell__bd">
+                    <input id="real_name" class="weui-input" type="text" placeholder="姓名"/>
+                </div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__bd">
+                    <input id="mobile" class="weui-input" type="tel" placeholder="请输入手机号码"/>
+                </div>
+            </div>
+            <div class="weui-cell border-left_0">
+                <div class="weui-cell__bd">
+                    <input id="code" class="weui-input" type="number" placeholder="请输入验证码"/>
+                </div>
+                <div>
+                    <button href="javascript:;" has-click="0" class="inline-btn">获取验证码</button>
+                    <span style="font-size: 10px; color:#a0a0a0" id="countDownTime"></span>
+                </div>
+            </div>
+
+            <if $recommendId gt 0>
+                <div class="weui-cell">
+                    <div class="weui-cell__bd">
+                        <input id="pid" class="weui-input" type="tel" readonly="readonly"value="{$recommendId}" placeholder="推荐人ID"/>
+                    </div>
+                </div>
+            </if>
+            <if $recommendId elt 0>
+                <div class="weui-cell">
+                    <div class="weui-cell__bd">
+                        <input id="pid" class="weui-input" type="tel"  value="" placeholder="推荐人ID"/>
+                    </div>
+                </div>
+            </if>
+
+            <div class="weui-cell">
+                <div class="weui-cell__bd">
+                    <input id="password" class="weui-input" type="password" placeholder="登录密码"/>
+                </div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__bd">
+                    <input id="confirm_password" class="weui-input" type="password" placeholder="确认登录密码"/>
+                </div>
+            </div>
+        </div>
+
+        <div class="weui-btn-area">
+            <a onclick=tijiao() class="weui-btn weui-btn_primary mt20" href="#">注册</a>
+        </div>
+    </div>
+
+</div>
+
+<script src="__STATIC__/n_assets/js/lib/jquery-2.1.4.js"></script>
+<script src="__STATIC__/n_assets/js/jquery-weui.min.js"></script>
+<script src="__STATIC__/n_assets/js/lib/fastclick.js"></script>
+<script src="__STATIC__/thirdparty/leftTime/leftTime.min.js"></script>
+<script src="__STATIC__/layer/layer.js"></script>
+<script>
+    $(function () {
+        FastClick.attach(document.body);
+        wxlogin();
+    });
+</script>
+<script>
+
+
+    var res_data = "";
+    $("button").click(function () {
+
+        var obj = $(this);
+        //has_click  防止重复多次点击
+        var has_click = obj.attr('has-click');
+        //防止重复点击
+        if (has_click == '1') {
+            return;
+        }
+        obj.attr('has-click', '1');
+
+        var mobile = $("#mobile").val();
+        //验证手机格式
+        var reg = /(1[3-9]\d{9}$)/;
+        if (!reg.test(mobile)) {
+            $("#mobile").focus();
+            layer.msg('请输入正确的手机号码', function () {
+                $("button").attr('has-click', '0');
+            });
+            return false;
+        }
+
+        //发送验证码
+        $.ajax({
+            url: '/mobile/login/captcha',
+            type: 'POST',
+            data: {
+                mobile: mobile,
+            },
+            success: function (data1) {
+                console.log(data1);
+                // return  false;
+                if (data1.status == 200) {
+                    res_data = data1.result;
+                    console.log(res_data);
+                    layer.msg('发送成功');
+                }
+                else {
+                    layer.msg(data1.msg);
+                    $("button").attr('has-click', '0');
+                    return;
+                }
+
+                //隐藏获取验证码
+                $("button").hide();
+                //倒计时
+                daojishi();
+
+
+            },
+            error: function () {
+                layer.msg('发送失败');
+                $("button").attr('has-click', '0');
+            },
+
+
+        });
+
+
+    });
+
+    //倒计时
+    function daojishi() {
+        var time;
+        $.leftTime(59, function (d) {
+            if (d.status) {
+                //alert(d.status);
+                time = d.s;
+                //alert(time);
+                $("#countDownTime").show();
+                $('#countDownTime').html(time + "秒后重新获取");
+
+            }
+            else {
+
+                $("#countDownTime").hide();
+                $("button").show();
+                $("button").attr('has-click', '0');
+                window.clearInterval(time);
+
+            }
+        }, true);
+    }
+
+    //提交注册
+    function tijiao() {
+        var real_name = $("#real_name").val();
+        var mobile = $("#mobile").val();
+        var code = $("#code").val();
+        var pid = $("#pid").val();
+        var password = $("#password").val();
+        var confirm_password = $("#confirm_password").val();
+
+
+        if (!real_name) {
+            layer.open({
+                title: '信息'
+                , content: '姓名不能为空'
+            });
+            return;
+        }
+
+        if (!mobile) {
+            layer.open({
+                title: '信息'
+                , content: '手机号码不能为空'
+            });
+            return;
+        }
+
+        if (!code) {
+            layer.open({
+                title: '信息'
+                , content: '请填写正确的验证码'
+            });
+            return;
+        }
+
+        if (!password) {
+            layer.open({
+                title: '信息'
+                , content: '登录密码不能为空'
+            });
+            return;
+        }
+
+        if (!confirm_password) {
+            layer.open({
+                title: '信息'
+                , content: '确认登录密码不能为空'
+            });
+            return;
+        }
+
+
+        if (password != confirm_password) {
+            layer.open({
+                title: '信息'
+                , content: '两次输入的登录密码不一致'
+            });
+            return;
+        }
+
+
+        //验证手机格式
+        var reg = /(1[3-9]\d{9}$)/;
+        if (!reg.test(mobile)) {
+            $("#mobile").focus();
+            layer.alert('请输入正确格式的手机号码', {icon: 6});
+            return false;
+        }
+
+
+        //注册
+        $.ajax({
+            url: '/mobile/login/dealRegister',
+            type: 'POST',
+            data: {
+                real_name: real_name,
+                mobile: mobile,
+                code: code,
+                pid: pid,
+                password: password,
+                confirm_password: confirm_password,
+            },
+            success: function (data) {
+                console.log(data);
+                if (data.status == 200) {
+                    // location.href = "{:url('mobile/login/downApp')}";
+                    location.href = "{:url('mobile/login/index')}";
+                }
+                else {
+                    layer.msg(data.msg);
+                    return;
+                }
+
+            },
+            error: function (data) {
+                layer.msg(data.msg);
+                return;
+            },
+
+
+        });
+
+    }
+
+
+
+    $("#city-picker").cityPicker({
+        title: "请选择地区"
+    });
+
+    function wxlogin(){
+
+        window.auc.wxLogin();
+        // wxLoginCallback('061aHIJ004owGF1pFpI00NRFJ00aHIJd');
+    }
+
+    function wxLoginCallback(code) {
+        // alert(code);
+        // console.log(code);
+        // return false;
+        // 传code去里面授权那用户数据
+        $.ajax({
+            url: '/mobile/Login/appauth',
+            type: 'POST',
+            data: {
+                code:code,
+            },
+            success: function (data) {
+                console.log(data)
+                // alert(data);
+                // alert(data.openid);
+                // return false;
+                // if(data.status==200)
+                // {
+                //     layer.load(1);
+                //     window.location.href="/index.php/mobile/Index/index.html"+'?_user_id='+data.result;
+                // }
+                // else
+                // {
+                //
+                //     layer.msg(data.msg, {
+                //         icon: 6,
+                //         time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                //     }, function(){
+                //         window.location.href = "/index.php/mobile/User/login.html";
+                //     });
+                //
+                // }
+            },
+            error: function (data) {
+                layer.msg('微信授权失败', {
+                    icon: 6,
+                    time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                }, function(){
+                    window.location.href = "/index.php/mobile/User/login.html";
+                });
+            }
+        });
+    }
+
+</script>
+</body>
+</html>

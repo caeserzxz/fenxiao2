@@ -1,0 +1,155 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>jquery实现多级树形分类可折叠菜单特效代码</title>
+    <!--图标样式-->
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/static/jquerytree/css/bootstrap.min.css" />
+    <!--主要样式-->
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/static/jquerytree/css/style.css" />
+    <script type="text/javascript" src="__PUBLIC__/static/jquerytree/js/jquery-1.7.2.min.js"></script>
+    <script type="text/javascript">
+
+        $(function(){
+
+            $('.tree li:has(ul)').addClass('parent_li').find(' > span').attr('title', 'Collapse this branch');
+
+            $('.tree li.parent_li > span').on('click', function (e) {
+
+                var children = $(this).parent('li.parent_li').find(' > ul > li');
+                var user_id=$(this).attr('name');
+
+                if (children.is(":visible")) {
+
+                    children.hide('fast'); //隐藏
+                    $(this).attr('title', 'Expand this branch').find(' > i').addClass('icon-plus-sign').removeClass('icon-minus-sign');
+
+                } else {
+
+                    check_on(user_id);
+
+                    children.show('fast'); //显示
+
+                    $(this).attr('title', 'Collapse this branch').find(' > i').addClass('icon-minus-sign').removeClass('icon-plus-sign');
+
+                }
+
+                e.stopPropagation();
+
+            });
+
+        });
+
+        function check_on(user_id) {
+            $.ajax({
+                url: 'admin/User/xiaji_tree_guanli',
+                type: 'POST',
+                data:{
+                    user_id:user_id,
+                },
+                success: function (data) {
+                    //console.log(data)
+                    var html = '';
+                    $("#dd"+user_id).empty(html);
+                    console.log(data)
+                    for(var i in data){
+
+                        html +='<li>'
+                        html +='<span onclick=check_on1('+data[i].user_id+')>用户id：'+data[i].user_id+'&nbsp&nbsp&nbsp用户名：'+data[i].nickname+'&nbsp&nbsp&nbsp等级：'+data[i].user_type_name+'</span>'
+                        html +='<ul id=dd'+data[i].user_id+'>';
+                        html +='</ul>';
+                        html +='</li>';
+                    }
+                    $("#dd"+user_id).append(html);
+                },
+                error: function (data) {
+                    //tipTopShow("上传失败");
+                }
+            });
+        }
+
+        function check_on1(user_id) {
+            $.ajax({
+                url: 'admin/User/xiaji_tree_guanli',
+                type: 'POST',
+                data:{
+                    user_id:user_id,
+                },
+                success: function (data) {
+                    //console.log(data)
+                    var html = '';
+                    $("#dd"+user_id).empty(html);
+                    //console.log(data)
+                    for(var i in data){
+
+                        html +='<li>'
+                        html +='<span onclick=check_on1('+data[i].user_id+')>用户id：'+data[i].user_id+'&nbsp&nbsp&nbsp用户名：'+data[i].nickname+'&nbsp&nbsp&nbsp等级：会员</span>'
+                        html +='</li>';
+                    }
+                    $("#dd"+user_id).append(html);
+                },
+                error: function (data) {
+                    //tipTopShow("上传失败");
+                }
+            });
+        }
+    </script>
+
+
+
+</head>
+
+<body>
+
+
+<div class="tree well">
+
+    <ul>
+        <li>
+            <span>
+                <i class="con-folder-open"></i>
+                用户ID：{$user_data['user_id']} &nbsp&nbsp 用户名：{$user_data.nickname}  &nbsp&nbsp&nbsp等级：
+                    <if condition="($user_data.user_type eq 2) ">总代
+                    <elseif condition="($user_data.user_type eq 3) "/>大区经理
+                    <elseif condition="($user_data.user_type eq 1) "/>健康大使
+                    <else/>会员
+                </if>
+            </span>
+            <ul>
+                <volist name="list" id="vo">
+                <li>
+                    <span class="badge badge-sdduccess" name="{$vo.user_id}">
+                        <i class="icon-minus-sign"></i>
+                        用户ID：{$vo.user_id}&nbsp&nbsp&nbsp 用户名：{$vo.nickname} &nbsp&nbsp&nbsp等级：
+                            <if condition="($vo.user_type eq 2) ">总代
+                            <elseif condition="($vo.user_type eq 3) "/>大区经理
+                            <elseif condition="($vo.user_type eq 1) "/>健康大使
+                            <else/>会员
+                            </if>
+                        <br/>
+                    </span>
+                    <ul id="dd{$vo.user_id}">
+                        <!--遍历内容-->
+                    </ul>
+
+                </li>
+                </volist>
+            </ul>
+
+
+        </li>
+
+
+
+    </ul>
+
+</div>
+
+
+
+</body>
+
+</html>

@@ -1,0 +1,72 @@
+<include file="public/layout"/>
+<script src="__ROOT__/public/static/js/layer/laydate/laydate.js"></script>
+<body style="background-color: #FFF; overflow: auto;">
+<div class="page">
+    <div class="fixed-bar">
+        <div class="item-title"><a class="back" href="javascript:history.back();" title="返回列表"><i
+                class="fa fa-arrow-circle-o-left"></i></a>
+            <div class="subject">
+                <h3>查看合同</h3>
+            </div>
+        </div>
+    </div>
+    <!--表单数据-->
+    <form method="post" id="handleposition" action="">
+        <div class="cjht_box" style="width:650px;margin-left:50px;margin-top:20px;padding:20px 50px;border:solid 0.006667rem #cccccc">
+            <div class="tr text-muted">{$data.number}</div>
+            <div class="fs28 tc" style="font-size:0.986rem">区域总代理合同</div>
+            <div class="mt20" style="font-size:0.986rem">甲方：{$data.jia_name}</div>
+            <div style="font-size:0.986rem">乙方：{$data.yi_name}</div>
+            <div class="htnr" style="font-size:0.16rem">
+                <p style="font-size:0.986rem">"甲乙双方经协商确定，就乙方承接甲方特定区域销售总代理/合伙人(平台中确认区域和角色)事宜，在互利互惠，优势互补的基础上，经好友协商，达成共识，签订本区域销售代理合同书。具体条款如下：</p>
+                <p style="font-size:0.986rem">一、甲方权利与义务<br>
+                    1.甲方全面负责平台运营，策划与宣传。<br>
+                    2.晃方向乙方提供产品包装完好无损，品质优良的产品。<br>
+                    3.甲方负责网络平台的客户服务及消购买指导，统一负责订单处理，承担快递送货及退货处理工作。<br>
+                    4.甲方推出新产品、调整市场价格必须提前通知乙方。<br>
+                    5.甲方要按时每月给乙方支付分销佣金，管理佣金。</p>
+                <p style="font-size:0.986rem">
+                    二、乙方权利与义务<br>
+                    1.乙方需在销售区域内尽力拓展客户，并积极宣传甲方的产品性能和品牌优势。<br>
+                    2.乙方尽力维护甲方在当地的公司形象及产品的品牌形象。<br>
+                    3.乙方应维护好客户关系，指导并管理好渠道分销商的推广工作，确保区域业绩稳定健康增长。<br>
+                    4.根据平台规则和销售业绩，乙方拥有获得分销佣金和管理佣金的权利。<br>
+                    5.乙方有代收渠道分销商佣金的权利和及时代发分销商佣金的义务。
+                </p>
+                <p style="font-size:0.986rem">三、本代理协议双方各执一份，有效期两年。<br>
+                <p style="font-size:0.986rem">四、代理区域：{$address.name}{$city.name}{$area.name}<br>
+
+                </p>
+                <p style="font-size:0.986rem;margin-top:0.2rem;">甲方：{$data.jia_name}<br>
+                    地址：香港湾仔押道18号海德中心16楼D室</p>
+                <div class="weui-flex mt30" style="padding:10px;">
+                    <div style="font-size:0.986rem;float:left;">已方签名：</div>
+                    <img style="width: 200px;float: left;margin-top:-40px;" src="/{$data.img}" alt="">
+
+                </div>
+                <div style="clear:both"></div>
+                <div>
+                    <p style="font-size:0.986rem">身份证号码：{$data.id_card}</p>
+                    <p style="font-size:0.986rem">电话：{$data.phone}</p>
+
+                </div>
+                <div class="tr text-muted" style="font-size:0.986rem">签约日期：{$data.create_time|date="Y-m-d",###}</div>
+            </div>
+        </div>
+
+    </form>
+</div>
+<script>
+    function adsubmit() {
+        $('#handleposition').submit();
+    }
+
+    function img_call_back(fileurl_tmp)
+    {
+        $("#banner_path").val(fileurl_tmp);
+        $("#img_a").attr('href', fileurl_tmp);
+        $("#img_i").attr('onmouseover', "layer.tips('<img src="+fileurl_tmp+">',this,{tips: [1, '#fff']});");
+    }
+</script>
+</body>
+</html>

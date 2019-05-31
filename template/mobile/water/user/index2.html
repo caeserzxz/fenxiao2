@@ -1,0 +1,222 @@
+<layout name="common/n_layout_nav"/>
+<title> 我的 </title>
+</head>
+<body>
+<div class="page">
+    <div class="page-hd">
+        <div class="header bor-1px-b">
+            <div class="header-left">
+                <a href="javascript:history.go(-1)" class="left-arrow"></a>
+            </div>
+            <div class="header-title">我的</div>
+            <div class="header-right">
+                <a href="#"></a>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-bd">
+        <!-- 页面内容-->
+        <div class="fxs">
+            <div class="weui-cells border-none pt30 mt0 pl30" style="background: none;">
+                <div class="weui-cell">
+                    <div class="weui-cell__hd fxs_tx">
+                        <img src="{$user.head_pic}">
+                    </div>
+                    <div class="weui-cell__bd">
+                        <div class="text-white fs30 fw600">{$user.nickname}</div>
+                        <div class="fs22 text-white" style="opacity: 0.6">{$user.mobile}</div>
+                        <div class="sf_label_w">
+                            <span class="sf_label">{$user.user_type_name}</span>
+                            <if condition="$user['user_type'] gt 0">
+                                <span style="color: white">{$province}{$city}{$area}</span>
+                            </if>
+                        </div>
+                        <div class="sf_label" style="display: none;">健康大使</div>
+                        <div class="fs22 text-white mt20" style="opacity: 0.6">邀请码：{$user.user_id}</div>
+                        <if condition="$user['user_type'] eq 2">
+                            <div class="fs22 text-white mt20" style="opacity: 0.6">管理上级：{$user_management_name}</div>
+                        </if>
+                        <if condition="$user['user_type'] eq 1">
+                            <div class="fs22 text-white mt20" style="opacity: 0.6">管理上级：{$user_management_name}</div>
+                        </if>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <if condition="$user[user_type] eq 2||$user[user_type] eq 3">
+            <div class="card-flex my_card">
+                <a class="flex_item" href="{:U('User/usualProblem')}">
+                    <div class="icon">
+                        <img src="__STATIC__/n_assets/images/my_card_icon_01.png" alt="">
+                    </div>
+                    <div class="label">常见问题</div>
+                </a>
+                <a href="{:U('User/feedback')}" class="flex_item">
+                    <div class="icon">
+                        <img src="__STATIC__/n_assets/images/my_card_icon_02.png" alt="">
+                    </div>
+                    <div class="label">意见反馈</div>
+                </a>
+                <a href="{:U('User/balanceZd')}" class="flex_item">
+                    <div class="icon">
+                        <img src="__STATIC__/n_assets/images/my_card_icon_03.png" alt="">
+                    </div>
+                    <div class="label">钱包</div>
+                </a>
+            </div>
+        </if>
+        <!--总代、大区——S-->
+        <!--健康大使——S-->
+        <if condition="$user[user_type] eq 1">
+            <div class="card-flex my_card">
+                <a class="flex_item" href="{:U('User/usualProblem')}">
+                    <div class="icon">
+                        <img src="__STATIC__/n_assets/images/my_card_icon_01.png" alt="">
+                    </div>
+                    <div class="label">常见问题</div>
+                </a>
+                <a href="{:U('User/feedback')}" class="flex_item">
+                    <div class="icon">
+                        <img src="__STATIC__/n_assets/images/my_card_icon_02.png" alt="">
+                    </div>
+                    <div class="label">意见反馈</div>
+                </a>
+                <a href="{:U('User/balanceHealthy')}" class="flex_item">
+                    <div class="icon">
+                        <img src="__STATIC__/n_assets/images/my_card_icon_03.png" alt="">
+                    </div>
+                    <div class="label">功德</div>
+                </a>
+            </div>
+        </if>
+        <!--健康大使——S-->
+        <!--会员——S-->
+        <if condition="$user[user_type] eq 0">
+            <div class="card-flex my_card">
+                <a class="flex_item" href="{:U('User/usualProblem')}">
+                    <div class="icon">
+                        <img src="__STATIC__/n_assets/images/my_card_icon_01.png" alt="">
+                    </div>
+                    <div class="label">常见问题</div>
+                </a>
+                <a href="{:U('User/feedback')}" class="flex_item">
+                    <div class="icon">
+                        <img src="__STATIC__/n_assets/images/my_card_icon_02.png" alt="">
+                    </div>
+                    <div class="label">意见反馈</div>
+                </a>
+            </div>
+            　   </if>
+        <!--会员——E-->
+        <div class="weui-panel my_panel">
+            <a href="{:U('Mobile/Order/order_list')}" class="weui-panel__hd">
+                <span>我的订单</span>
+                <div class="weui-cell_access">
+                    <span class="weui-cell__ft"></span>
+                </div>
+            </a>
+            <div class="weui-panel__bd">
+                <div class="weui-grids my_grids">
+                    <a href="{:U('order/order_list', ['type' => 'wait_pay'])}">
+                        <div class="weui-grid">
+                            <div class="weui-grid__icon">
+                                <img src="__STATIC__/n_assets/images/my_grid_icon_01.png" alt="">
+                            </div>
+                            <div class="weui-grid__label">待付款</div>
+                        </div>
+                    </a>
+                    <a href="{:U('order/order_list', ['type' => 'wait_delivery'])}">
+                        <div class="weui-grid">
+                            <div class="weui-grid__icon">
+                                <img src="__STATIC__/n_assets/images/my_grid_icon_02.png" alt="">
+                            </div>
+                            <div class="weui-grid__label">待发货</div>
+                        </div>
+                    </a>
+                    <a href="{:U('order/order_list', ['type' => 'wait_receive'])}">
+                        <div class="weui-grid">
+                            <div class="weui-grid__icon">
+                                <img src="__STATIC__/n_assets/images/my_grid_icon_03.png" alt="">
+                            </div>
+                            <div class="weui-grid__label">待收货</div>
+                        </div>
+                    </a>
+                    <a href="{:U('order/order_list', ['type' => 'wait_comment'])}">
+                        <div class="weui-grid">
+                            <div class="weui-grid__icon">
+                                <img src="__STATIC__/n_assets/images/my_grid_icon_04.png" alt="">
+                            </div>
+                            <div class="weui-grid__label">待评价</div>
+                        </div>
+                    </a>
+                    <a href="{:U('order/return_goods_list', ['type' => 'returns'])}">
+                        <div class="weui-grid">
+                            <div class="weui-grid__icon">
+                                <img src="__STATIC__/n_assets/images/my_grid_icon_05.png" alt="">
+                            </div>
+                            <div class="weui-grid__label">退款/售后</div>
+                        </div>
+                    </a>
+                    <a href="{:U('zpevaluate_list')}">
+                        <div class="weui-grid">
+                            <div class="weui-grid__icon">
+                                <img src="__STATIC__/n_assets/images/my_grid_icon_06.png" alt="">
+                            </div>
+                            <div class="weui-grid__label">我的评价</div>
+                        </div>
+                    </a>
+                    <a href="{:U('address_list')}">
+                        <div class="weui-grid">
+                            <div class="weui-grid__icon">
+                                <img src="__STATIC__/n_assets/images/my_grid_icon_07.png" alt="">
+                            </div>
+                            <div class="weui-grid__label">收货地址</div>
+                        </div>
+                    </a>
+                    <a href="{:U('myMakebi')}" class="weui-grid">
+                        <div class="weui-grid__icon">
+                            <img src="__STATIC__/n_assets/images/my_grid_icon_08.png" alt="">
+                        </div>
+                        <div class="weui-grid__label">我的马克币</div>
+                    </a>
+                    <a href="{:U('userinfo')}">
+                        <div class="weui-grid">
+                            <div class="weui-grid__icon">
+                                <img src="__STATIC__/n_assets/images/my_grid_icon_09.png" alt="">
+                            </div>
+                            <div class="weui-grid__label">设置</div>
+                        </div>
+                    </a>
+                    <a href="{:U('getFans')}" class="weui-grid">
+                        <div class="weui-grid__icon">
+                            <img src="__STATIC__/n_assets/images/my_grid_icon_10.png" alt="">
+                        </div>
+                        <div class="weui-grid__label">管理粉</div>
+                    </a>
+                    <if condition="$user[user_type] eq 2||$user[user_type] eq 3">
+                        <a href="{:U('gongdeHistory')}" class="weui-grid">
+                            <div class="weui-grid__icon">
+                                <img src="__STATIC__/n_assets/images/my_grid_icon_11.png" alt="">
+                            </div>
+                            <div class="weui-grid__label">功德表</div>
+                        </a>
+                    </if>
+                    <a href="{:U('strNext')}" class="weui-grid">
+                        <div class="weui-grid__icon">
+                            <img src="__STATIC__/n_assets/images/my_grid_icon_10.png" alt="">
+                        </div>
+                        <div class="weui-grid__label">直粉</div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="__STATIC__/n_assets/js/lib/jquery-2.1.4.js"></script>
+    <script src="__STATIC__/n_assets/js/jquery-weui.min.js"></script>
+    <script src="__STATIC__/n_assets/js/lib/fastclick.js"></script>
+    <script>
+        $(function() {
+            FastClick.attach(document.body);
+        });
+    </script>

@@ -1,0 +1,207 @@
+<include file="common/header" title="订单详情" body="g4"/>
+<include file="common/header_nav" title="订单详情" href="{:U('mobile/Cart/index')}"/>
+
+
+    <div class="page-bd"  style="bottom: 2rem">
+        <div class="weui-cells mt0 vux-1px-t">
+            <div class="weui-cell">
+                <div class="weui-cell__bd">
+                    <div class="fs11"><span>{$order_info.consignee}</span> <span>{$order_info.mobile}</span></div>
+                    <div class="fs11 text-gray">{$region_list[$order_info['province']]},{$region_list[$order_info['city']]},{$region_list[$order_info['district']]},{$order_info.address}</div>
+                </div>
+            </div>
+          <!--  <div class="weui-cell">
+                <div class="weui-cell__bd">收货时间</div>
+                <div class="weui-cell__ft"><span class="text-muted">不限收货时间</span></div>
+            </div>-->
+        </div>
+        <div class="weui-panel weui-panel_access">
+         <!--   <div class="weui-panel__hd">
+                <div class="fs11"><span class="weui-badge" style="margin-left: 5px;">官方自营</span> <span>赢在移动自营</span></div>
+            </div>-->
+            <!--订单商品列表-s-->
+            <div class="weui-panel__bd">
+                <volist name="order_info.goods_list" id="good">
+
+                    <div class="weui-media-box weui-media-box_appmsg mymedia">
+                        <div class="weui-media-box__hd">
+                            <img class="weui-media-box__thumb" src="{$good[goods_id]|goods_thum_images=100,100}" alt="">
+                        </div>
+                        <div class="weui-media-box__bd">
+                            <h4 class="fs11">{$good[goods_name]} {$good[goods_id]}</h4>
+                            <p class="fs9 text-muted">{$good['spec_key_name']}</p>
+                        </div>
+                        <div class="weui-media-box__ft">
+                            <div><span class="fs10">￥</span><b class="fs12">{$good['member_goods_price']}</b></div>
+                            <div class="fs9 text-muted tr">x{$good['goods_num']}</div>
+                        </div>
+                    </div>
+                </volist>
+            </div>
+            <div class="weui-panel__ft">
+                <div class="weui-cell weui-cell_link fs11">
+                    <div class="weui-cell__bd">订单运费</div>
+                    <div class="weui-cell__ft"><span class="text-muted">{$order_info.shipping_price}</span></div>
+                </div>
+                <div class="weui-cell weui-cell_link fs11">
+                    <div class="weui-cell__bd">可使用卡券</div>
+                    <div class="weui-cell__ft"><span class="text-muted">-￥{$order_info.coupon_price}</span></div>
+                </div>
+                <div class="weui-cell weui-cell_link fs11">
+                    <div class="weui-cell__bd">实付金额</div>
+                    <div><span class="fs10">￥</span><b class="fs12">{$order_info.order_amount}</b></div>
+                </div>
+            </div>
+        </div>
+        <div class="weui-cells">
+            <div class="weui-cell">
+                <div class="weui-cell__bd">订单编号</div>
+                <div class="weui-cell__ft"><span class="text-muted">{$order_info.order_sn}</span></div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__bd">下单时间</div>
+                <div class="weui-cell__ft"><span class="text-muted">{:date('Y-m-d  H:i:s', $order_info.add_time)}</span></div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__bd">订单状态</div>
+                <div class="weui-cell__ft"><span class="">{$order_info.order_status_desc}</span></div>
+            </div>
+        </div>
+        <div class="weui-cells">
+            <div class="weui-cell">
+                <div class="weui-cell__bd"><label class="weui-label">购买备注</label></div>
+                <div class="weui-cell__ft"><span class="text-muted">{$order_info.user_note}</span></div>
+            </div>
+        </div>
+        <div class="weui-panel">
+            <div class="weui-panel__hd"><span class="fs11">支付明细</span></div>
+            <div class="weui-panel__bd fs10">
+                <div class="weui-cell">
+                    <div class="weui-cell__bd">积分抵扣</div>
+                    <div class="weui-cell__ft"><span class="text-muted">￥{$order_info.integral_money}</span></div>
+                </div>
+              <!--  <div class="weui-cell">
+                    <div class="weui-cell__bd">佣金抵扣</div>
+                    <div class="weui-cell__ft"><span class="text-muted">￥0.00</span></div>
+                </div>-->
+                <div class="weui-cell">
+                    <div class="weui-cell__bd">余额支付</div>
+                    <div class="weui-cell__ft"><span class="text-muted">￥{$order_info.user_money}</span></div>
+                </div>
+              <!--  <div class="weui-cell">
+                    <div class="weui-cell__bd">微信支付</div>
+                    <div class="weui-cell__ft"><span class="text-muted">￥0.00</span></div>
+                </div>
+                <div class="weui-cell">
+                    <div class="weui-cell__bd">支付宝支付</div>
+                    <div class="weui-cell__ft"><span class="text-muted">￥211.36</span></div>
+                </div>
+                <div class="weui-cell">
+                    <div class="weui-cell__bd">银联支付</div>
+                    <div class="weui-cell__ft"><span class="text-muted">￥36.00</span></div>
+                </div>
+                <div class="weui-cell">
+                    <div class="weui-cell__bd">线下支付</div>
+                    <div class="weui-cell__ft"><span class="text-muted">￥693.00</span></div>
+                </div>-->
+            </div>
+        </div>
+    </div>
+
+
+    <!--取消订单-s-->
+    <div class="losepay closeorder" style="display: none;">
+        <div class="maleri30">
+            <p class="con-lo">取消订单后,存在促销关系的子订单及优惠可能会一并取消。是否继续？</p>
+            <div class="qx-rebd">
+                <a class="ax">取消</a>
+                <if condition="$order_info.pay_status eq 0">
+                    <a class="are" onclick="cancel_order({$order_info.order_id})">确定</a>
+                </if>
+                <if condition="$order_info.pay_status eq 1">
+                    <a class="are" href="{:U('Order/refund_order', ['order_id'=>$order_info['order_id']])}">取消订单</a>
+                </if>
+            </div>
+        </div>
+    </div>
+<!--取消订单-e-->
+
+    <div class="mask-filter-div" style="display: none;"></div>
+
+    <!--底部支付栏-s-->
+    <div class="payit ma-to-20" style="position: fixed;right: 0px;bottom:0px;width: 100%;z-index:99">
+        <!--<div class="fl">-->
+        <!--<p><span class="pmo">实付金额：</span>-->
+        <!--<span>￥</span><span>{$order_info.order_amount+$order_info.shipping_price}</span>-->
+        <!--</p>-->
+        <!--<p class="lastime"><span>付款剩余时间：</span><span id="lasttime"></span></p>-->
+        <!--&lt;!&ndash;<p class="deel"><a href="{:U('Mobile/User/order_del',array('order_id'=>$order_info.order_id))}">删除订单</a></p>&ndash;&gt;-->
+        <!--</div>-->
+        <div class="fr s">
+            <if condition="$order_info.pay_btn eq 1">
+                <a href="{:U('Mobile/Cart/cart4',array('order_id'=>$order_info['order_id']))}">立即付款</a>
+                <else/>
+                <!--<a>{$order_info.order_status_desc}</a>-->
+            </if>
+            <if condition="$order_info.receive_btn eq 1">
+                <a href="{:U('Mobile/Order/order_confirm',array('id'=>$order_info['order_id']))}">收货确认</a>
+            </if>
+            <if condition="$order_info.shipping_btn eq 1">
+                <a href="{:U('Mobile/User/express',array('order_id'=>$order_info['order_id']))}" >查看物流</a>
+            </if>
+            <if condition="$order_info.order_prom_type eq 4 AND $order_info.pay_status eq 2 AND $order_info.pre_sell_is_finished eq 1 AND (time() egt $order_info.pre_sell_retainage_start AND time() elt $order_info.pre_sell_retainage_end)">
+                <a href="{:U('/Home/Cart/cart4',array('order_id'=>$order_info[order_id]))}'">支付尾款</a>
+            </if>
+        </div>
+    </div>
+    <!--底部支付栏-d-->
+
+</div>
+
+
+<script type="text/javascript">
+    //取消订单按钮
+    $('.closeorder_butt').click(function(){
+        $('.mask-filter-div').show();
+        $('.losepay').show();
+    })
+    //取消取消订单
+    $('.qx-rebd .ax').click(function(){
+        $('.mask-filter-div').hide();
+        $('.losepay').hide();
+    })
+
+    //确认取消订单
+    function cancel_order(id){
+        $.ajax({
+            type: 'GET',
+            dataType:'JSON',
+            url:"/index.php?m=Mobile&c=Order&a=cancel_order&id="+id,
+            success:function(data){
+                if(data.code == 1){
+                    layer.open({content:data.msg,time:2});
+                    location.href = "/index.php?m=Mobile&c=Order&a=order_detail&id="+id;
+                }else{
+                    layer.open({content:data.msg,time:2});
+                    location.href = "/index.php?m=Mobile&c=Order&a=order_detail&id="+id;
+                    return false;
+                }
+            },
+            error:function(){
+                layer.open({content:'网络异常，请稍后重试',time:3});
+            },
+        });
+        $('.mask-filter-div').hide();
+        $('.losepay').hide();
+    }
+
+
+    //        $('.loginsingup-input .lsu i').click(function(){
+    //            $(this).toggleClass('eye');
+    //            if ($(this).hasClass('eye')) {
+    //                $(this).siblings('input').attr('type','text')
+    //            } else{
+    //                $(this).siblings('input').attr('type','password')
+    //            }
+    //        });
+</script>

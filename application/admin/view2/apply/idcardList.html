@@ -1,0 +1,166 @@
+<include file="public/layout"/>
+<script src="__ROOT__/public/static/js/layer/laydate/laydate.js"></script>
+<body style="background-color: rgb(255, 255, 255); overflow: auto; cursor: default; -moz-user-select: inherit;">
+<div id="append_parent"></div>
+<div id="ajaxwaitid"></div>
+<div class="page">
+    <div class="fixed-bar">
+        <div class="item-title">
+            <div class="subject">
+                <h3>身份证审核列表</h3>
+            </div>
+        </div>
+    </div>
+    <!-- 操作说明 -->
+    <div id="explanation" class="explanation"
+         style="color: rgb(44, 188, 163); background-color: rgb(237, 251, 248); width: 99%; height: 100%;">
+        <div id="checkZoom" class="title"><i class="fa fa-lightbulb-o"></i>
+            <h4 title="提示相关设置操作时应注意的要点">操作提示</h4>
+            <span title="收起提示" id="explanationZoom" style="display: block;"></span>
+        </div>
+        <ul>
+            <li>根据状态审核，决定通过或不通过</li>
+        </ul>
+    </div>
+    <div class="flexigrid">
+        <div class="mDiv">
+            <div class="ftitle">
+                <h3>身份证审核列表</h3>
+                <h5>(共{$pager->totalRows}条记录)</h5>
+            </div>
+            <div title="刷新数据" class="pReload"><i class="fa fa-refresh"></i></div>
+            <form class="navbar-form form-inline" id="search-form" action="" method="post"
+                  onsubmit="return check_form();">
+                <input type="hidden" name="id" value="1">
+
+                <div class="sDiv">
+                    <div class="sDiv2" style="margin-right: 10px;">
+                        <input type="text" size="30" id="start_time" name="start_time" value="{$start_time}"
+                               placeholder="起始时间" class="qsbox">
+                        <input type="button" class="btn" value="申请起始时间">
+                    </div>
+                    <div class="sDiv2" style="margin-right: 10px;">
+                        <input type="text" size="30" id="end_time" name="end_time" value="{$end_time}"
+                               placeholder="截止时间" class="qsbox">
+                        <input type="button" class="btn" value="申请截止时间">
+                    </div>
+                    <div class="sDiv2">
+                        <input type="text" size="30" name="name" value="" placeholder="姓名模糊查询" class="qsbox">
+                        <input type="submit" class="btn" value="搜索">
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="bDiv" style="height: auto;">
+            <div id="flexigrid" cellpadding="0" cellspacing="0" border="0">
+                <div class="content-container">
+                    <table cellpadding="0" cellspacing="0">
+                        <thead class="well">
+                        <tr>
+                            <th width="5%"  style="font-weight:bold;font-size:14px;">姓名</th>
+                            <th width="5%"  style="font-weight:bold;font-size:14px;">身份证号</th>
+                            <th width="10%" style="font-weight:bold;font-size:14px;">身份证正面</th>
+                            <th width="10%" style="font-weight:bold;font-size:14px;">身份证反面</th>
+                            <th width="8%" style="font-weight:bold;font-size:14px;">申请时间</th>
+                            <th width="5%"  style="font-weight:bold;font-size:14px;">状态</th>
+                            <th width="15%" style="font-weight:bold;font-size:14px;">操作</th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        <volist name="lists" id="vo">
+                            <tr>
+                                <td style="padding-top:10px;">{$vo.real_name}</td>
+                                <td style="padding-top:10px;">{$vo.id_card}</td>
+                                <td style="padding-top:10px;"><a target="_blank" class="idcardImg" value="{$vo.positive_path}"><img style="width:150px;height:70px;" src="{$vo.positive_path}"></a></td>
+                                <td style="padding-top:10px;"><a target="_blank" class="idcardImg" value="{$vo.reverse_path}"><img style="width:150px;height:70px;" src="{$vo.reverse_path}"></a></td>
+                                <td style="padding-top:10px;">{$vo.create_time|date="Y-m-d
+                                    H:i",###}</td>
+                                <td style="padding-top:10px;">
+                                    <if $vo['status'] == 0>
+                                    <span>申请中</span>
+                                    <elseif $vo['status'] == 1>
+                                    <span>已通过</span>
+                                    <elseif $vo['status'] == 2>
+                                    <span>不通过</span>
+                                    </if>
+                                </td>
+                                <td style="padding-top:10px;">
+                                    <if $vo['status'] == 0>
+                                    <a class="btn btn-info btn-jump" href="{:U('Apply/IdcardDealSuccess',array('id'=>$vo.id))}">
+                                        通过
+                                    </a>
+                                    <a class="btn btn-info btn-jump" href="{:U('Apply/IdcardDealError',array('id'=>$vo.id))}">
+                                        不通过
+                                    </a>
+                                    </if>
+                                </td>
+                            </tr>
+                        </volist>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="iDiv" style="display: none;"></div>
+        </div>
+        <!--分页位置-->
+        {$page}
+    </div>
+</div>
+<script>
+
+
+    $(document).ready(function () {
+        // 表格行点击选中切换
+        $('#flexigrid > table>tbody >tr').click(function () {
+            $(this).toggleClass('trSelected');
+        });
+
+        // 点击刷新数据
+        $('.fa-refresh').click(function () {
+            location.href = location.href;
+        });
+        $('#start_time').layDate();
+        $('#end_time').layDate();
+    });
+
+    function delfun(obj) {
+        // 删除按钮
+        layer.confirm('确认删除？', {
+            btn: ['确定', '取消'] //按钮
+        }, function () {
+            $.ajax({
+                type: 'post',
+                url: $(obj).attr('data-url'),
+                data: {act: 'del', level_id: $(obj).attr('data-id')},
+                dataType: 'json',
+                success: function (data) {
+                    layer.closeAll();
+                    if (data) {
+                        $(obj).parent().parent().parent().remove();
+                    } else {
+                        layer.alert('删除失败', {icon: 2});  //alert('删除失败');
+                    }
+                }
+            })
+        }, function () {
+            layer.closeAll();
+        });
+    }
+
+    //身份证正面、反面照片
+    $(".idcardImg").click(function () {
+        var img=$(this).attr('value');
+
+        layer.open({
+            type: 1,
+            skin: 'layui-layer-rim', //加上边框
+            area: ['700px', '330px'], //宽高
+            content: "<img style=width:100%;height:100%; src="+img+">"
+        });
+    })
+
+</script>
+</body>
+</html>

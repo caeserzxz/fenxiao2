@@ -1,0 +1,95 @@
+<include file="public/layout"/>
+<body style="background-color: rgb(255, 255, 255); overflow: auto; cursor: default; -moz-user-select: inherit;">
+<div id="append_parent"></div>
+<div id="ajaxwaitid"></div>
+<div class="page">
+    <div class="fixed-bar">
+        <div class="item-title">
+            <div class="subject">
+                <h3>二维码背景图设置</h3>
+            </div>
+        </div>
+    </div>
+    <!-- 操作说明 -->
+    <div id="explanation" class="explanation"
+         style="color: rgb(44, 188, 163); background-color: rgb(237, 251, 248); width: 99%; height: 100%;">
+        <div id="checkZoom" class="title"><i class="fa fa-lightbulb-o"></i>
+            <h4 title="提示相关设置操作时应注意的要点">操作提示</h4>
+            <span title="收起提示" id="explanationZoom" style="display: block;"></span>
+        </div>
+        <ul>
+            <!-- <li>业务员列表管理, 可以给会员群发站内信、邮件等.</li> -->
+            <li>设置相关参数</li>
+        </ul>
+    </div>
+    <div class="flexigrid">
+        <div class="mDiv">
+            <div class="ftitle">
+                <h3>设置</h3>
+            </div>
+            <div title="刷新数据" class="pReload"><i class="fa fa-refresh"></i></div>
+
+        </div>
+        <div class="hDiv">
+            <div class="hDivBox" style="margin-left:100px;">
+                <!--表单数据-->
+                <form action="{:U('System/upQrCodeBackground')}" name="myForm" method="post">
+                    <!--通用信息-->
+                    <div class="tab-content col-md-10">
+                        <div class="tab-pane active" id="tab_tongyong">
+                            <table class="table table-bordered">
+                                <tbody>
+                                <input type="hidden" name="add" value="add"/>
+                                <dl class="row">
+                                    <dt class="tit">
+                                        <label for="store_logo">背景图</label>
+                                    </dt>
+                                    <dd class="opt">
+                                        <div class="input-file-show">
+                        <span class="show">
+                            <a id="img_a" class="nyroModal" rel="gal" href="{$img.value}">
+                                <i id="img_i" class="fa fa-picture-o" onmouseover="layer.tips('<img src={$img.value}>',this,{tips: [1, '#fff']});" onmouseout="layer.closeAll();"></i>
+                            </a>
+                        </span>
+           	            <span class="type-file-box">
+                            <input type="text" id="store_logo" name="img" value="{$img.value}" class="type-file-text">
+                            <input type="button" name="button" id="button1" value="选择上传..." class="type-file-button">
+                            <input class="type-file-file" onClick="GetUploadify(1,'','logo','img_call_back')" size="30" hidefocus="true" nc_type="change_site_logo" title="点击前方预览图可查看大图，点击按钮选择文件并提交表单后上传生效">
+                        </span>
+                                        </div>
+                                        <span class="err"></span>
+                                        <p class="notic">二维码背景图</p>
+                                    </dd>
+                                </dl>
+
+
+                                </tbody>
+                                <tfoot>
+                                <tr>
+                                    <td style="width:100px;height:50px;">
+                                        <input style="width:100px;height:30px;text-align: center" type="submit"
+                                               class="btn btn-success" value="确认修改"/>
+                                    </td>
+                                </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </form><!--表单数据-->
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<script>
+    //背景图
+    function img_call_back(fileurl_tmp)
+    {
+        $("#store_logo").val(fileurl_tmp);
+        $("#img_a").attr('href', fileurl_tmp);
+        $("#img_i").attr('onmouseover', "layer.tips('<img src="+fileurl_tmp+">',this,{tips: [1, '#fff']});");
+    }
+
+</script>
+</body>
+</html>

@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,viewport-fit=cover">
+    <link rel="stylesheet" href="__STATIC__/n_assets/css/zpui.css"/>
+    <link rel="stylesheet" href="__STATIC__/n_assets/css/all.css"/>
+    <script src="__STATIC__/n_assets/js/page.js"></script>
+
+    <title> 转增金豆</title>
+</head>
+<body>
+<div class="page">
+    <div class="page-hd">
+        <div class="header bor-1px-b">
+            <div class="header-left">
+                <a href="javascript:history.go(-1)" class="left-arrow"></a>
+            </div>
+            <div class="header-title">转增金豆</div>
+            <div class="header-right">
+                <a href="#"></a>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-bd" style="background-color: #ffffff;">
+        <!-- 页面内容-->
+        <div class="weui-cells mt0 pt30">
+            <div class="weui-cell">
+                <div class="weui-cell__hd phone_img">
+                    <img src="__STATIC__/n_assets/images/icon_1.png" alt="">
+                </div>
+                <div class="weui-cell__bd">
+                    <input id="mobile" class="weui-input"  type="tel" placeholder="请输入接收人的手机号码"/>
+                </div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__hd phone_img">
+                    <img src="__STATIC__/n_assets/images/icon_2.png" alt="">
+                </div>
+                <div class="weui-cell__bd">
+                    <input id="paypwd" class="weui-input"  type="password" placeholder="请输入支付密码"/>
+                </div>
+            </div>
+            <div class="weui-cell border-left_0">
+                <div class="weui-cell__hd phone_img">
+                    <img src="__STATIC__/n_assets/images/icon_2.png" alt="">
+                </div>
+                <div class="weui-cell__bd">
+                    <input id="jindou" class="weui-input"  type="number" placeholder="请输入转赠金豆数量"/>
+                </div>
+                <div>
+                    <button href="javascript:;" class="inline-btn">可用金豆{$user.jindou}</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="weui-btn-area">
+            <a onclick=tijiao() class="weui-btn weui-btn_primary mt20" href="#">转赠</a>
+        </div>
+    </div>
+
+</div>
+
+<script src="__STATIC__/n_assets/js/lib/jquery-2.1.4.js"></script>
+<script src="__STATIC__/n_assets/js/jquery-weui.min.js"></script>
+<script src="__STATIC__/n_assets/js/lib/fastclick.js"></script>
+<script src="__STATIC__/thirdparty/leftTime/leftTime.min.js"></script>
+<script src="__STATIC__/layer/layer.js"  ></script>
+<script>
+    $(function() {
+        FastClick.attach(document.body);
+    });
+</script>
+<script>
+
+
+    var res_data="";
+    $("button").click(function(){
+
+        var obj = $(this);
+        //has_click  防止重复多次点击
+        var has_click = obj.attr('has-click');
+        //防止重复点击
+        if(has_click == '1'){
+            return;
+        }
+        obj.attr('has-click','1');
+
+        var mobile = $("#mobile").val();
+        //验证手机格式
+        var reg = /(1[3-9]\d{9}$)/;
+        if (!reg.test(mobile))
+        {
+            $("#mobile").focus();
+            layer.msg('请输入正确的手机号码', function(){
+                $("button").attr('has-click','0');
+            });
+            return false;
+        }
+
+        //发送验证码
+        $.ajax({
+            url: '/mobile/login/captcha',
+            type: 'POST',
+            data:{
+                mobile:mobile,
+            },
+            success: function (data1) {
+                console.log(data1);
+                if(data1.status==200)
+                {
+                    res_data = data1.result;
+                    console.log(res_data);
+                    layer.msg('发送成功');
+                }
+                else
+                {
+                    layer.msg(data1.msg);
+                    $("button").attr('has-click','0');
+                    return;
+                }
+
+                //隐藏获取验证码
+                $("button").hide();
+                //倒计时
+                daojishi();
+
+
+            },
+            error: function () {
+                layer.msg('发送失败');
+                $("button").attr('has-click','0');
+            },
+
+
+        });
+
+
+    });
+
+    //倒计时
+    function daojishi()
+    {
+        var time;
+        $.leftTime(59,function(d){
+            if(d.status)
+            {
+                //alert(d.status);
+                time = d.s;
+                //alert(time);
+                $("#countDownTime").show();
+                $('#countDownTime').html(time+"秒后重新获取");
+
+            }
+            else
+            {
+
+                $("#countDownTime").hide();
+                $("button").show();
+                $("button").attr('has-click','0');
+                window.clearInterval(time);
+
+            }
+        },true);
+    }
+
+    //提交转赠
+    function tijiao()
+    {
+        var mobile = $("#mobile").val();
+        var paypwd = $("#paypwd").val();
+        var jindou = $("#jindou").val();
+
+        if(!mobile)
+        {
+            layer.open({
+                title: '信息'
+                ,content: '手机号码不能为空'
+            });
+            return ;
+        }
+
+        if(!paypwd)
+        {
+            layer.open({
+                title: '信息'
+                ,content: '支付密码不能为空'
+            });
+            return ;
+        }
+
+        if(!jindou)
+        {
+            layer.open({
+                title: '信息'
+                ,content: '转赠金豆数量不能为空'
+            });
+            return ;
+        }
+
+
+        //验证手机格式
+        var reg = /(1[3-9]\d{9}$)/;
+        if (!reg.test(mobile))
+        {
+            $("#mobile").focus();
+
+            layer.alert('请输入正确格式的手机号码', {icon: 6});
+            return false;
+
+        }
+
+        //登录
+        $.ajax({
+            url: '/mobile/user/doturnJindou',
+            type: 'POST',
+            data:{
+                mobile:mobile,
+                paypwd:paypwd,
+                jindou:jindou,
+                id:res_data.id,
+                time:res_data.time
+            },
+            success: function (data) {
+                if(data.status==200)
+                {
+                    location.href="{:url('mobile/user/index')}"+'?_user_id='+data.result;
+                }
+                else
+                {
+                    layer.alert(data.msg, {icon: 5});
+                    return false;
+                }
+
+            },
+            error: function (data) {
+                layer.msg(data.msg);
+                return;
+            },
+
+
+        });
+
+    }
+</script>
+</body>
+</html>

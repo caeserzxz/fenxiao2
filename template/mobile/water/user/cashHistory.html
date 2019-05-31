@@ -1,0 +1,86 @@
+<layout name="common/n_layout_nav"/>
+<script src="__STATIC__/js/sourch_submit.js"></script>
+<script src="__STATIC__/Swiper-4.0.7/swiper.min.js"></script>
+<link rel="stylesheet" href="__STATIC__/Swiper-4.0.7/swiper.min.css"/>
+<style>
+    /*分页样式*/
+    .pagination{text-align:center;margin-top:20px;margin-bottom: 1rem;}
+    .pagination li{margin:0px 10px; border:1px solid #e6e6e6;padding: 3px 8px;display: inline-block;}
+    .pagination .active{background-color: #46A3FF;color: #fff;}
+    .pagination .disabled{color:#aaa;}
+</style>
+<div class="page">
+    <div class="page-hd">
+        <div class="header">
+            <div class="header-left">
+                <a href="{:U('User/balanceZd')}" class="left-arrow"></a>
+            </div>
+            <div class="header-title">提现记录</div>
+            <div class="header-right"><a href="#"></a> </div>
+        </div>
+    </div>
+    <div style="overflow-y:auto">
+        <table>
+            <tr>
+                <th>奖金类型</th>
+                <th>总金额</th>
+                <th>状态</th>
+                <th>时间</th>
+                <th>操作</th>
+            </tr>
+            <volist name="result" id="vo">
+                <tr>
+                    <td>
+                        分销佣金:￥{$vo.reward_money}<br>
+                        管理佣金:￥{$vo.managent_money}<br>
+                        上荐佣金:￥{$vo.top_money}<br>
+                        代收佣金:￥{$vo.agent_money}<br>
+                    </td>
+                    <td>
+                        ￥{$vo.total_money}
+                    </td>
+                    <td>
+                        <if condition="$vo.status eq 0">申请中</if>
+                        <if condition="$vo.status eq 1">通过</if>
+                        <if condition="$vo.status eq 2">不通过</if>
+                    </td>
+                    <td>{$vo.create_time|date="y-m-d H:i:s",###}</td>
+                    <td>
+                        <if condition="$vo.fapiao_img eq null">
+                            <a href="{:U('user/fapiao',array('id'=>$vo.id))}">
+                                查看发票
+                            </a>
+                        </if>
+                        <if condition="$vo.fapiao_img neq null">
+                            <a class="fapiao1" value="{$vo.fapiao_img}">
+                                查看发票
+                            </a>
+                        </if>
+
+                    </td>
+                </tr>
+            </volist>
+        </table>
+        {$result->render()}
+    </div>
+</div>
+<script src="__STATIC__/n_assets/js/lib/jquery-2.1.4.js"></script>
+<script src="__STATIC__/layer/layer.js"  ></script>
+<script>
+
+    $(".fapiao1").click(function () {
+        var img=$(this).attr('value');
+        layer.open({
+            type: 1,
+            skin: 'layui-layer-rim', //加上边框
+            area: ['330px', '600px'], //宽高
+            content: "<img style=width:100%;height:100%; src=\/"+img+">"
+        });
+    })
+
+</script>
+
+
+
+
+

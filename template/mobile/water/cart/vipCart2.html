@@ -1,0 +1,895 @@
+<include file="common/header" title="确认订单" body="g4"/>
+<include file="common/header_nav" title="确认订单" href="{:U('mobile/Cart/index')}"/>
+<!--<script src="__STATIC__/n_assets/js/page.js"></script>-->
+<script src="__STATIC__/js/lib/lodash.min.js"></script>
+<script src="__STATIC__/js/style.js" type="text/javascript" charset="utf-8"></script>
+<script src="__STATIC__/js/swipeSlide.min.js" type="text/javascript" charset="utf-8"></script>
+
+<style>
+    .address_icon{
+        width: 0.4rem;
+        height: 0.6rem;
+        margin-right: 0.3rem;
+    }
+    .id_card{
+        width: 70%;
+        left: 50%;
+        bottom: 50%;
+        transform: translate(-50%, 50%);
+    }
+    .card_ran{
+        border-radius: 0.4rem;
+    }
+    .card_top{
+        margin-top: 1rem;
+    }
+    .card_ma{
+        margin: 0.5rem;
+    }
+    .card_detail{
+        padding: 0.6rem 10px;
+    }
+    .card_label{
+        width: 3rem;
+    }
+    .card_butt{
+        width: 8rem;
+        margin: 0 auto;
+        margin-bottom: 0.2rem;
+        height: 1.2rem;
+        line-height: 1.2rem;
+        font-size: 0.6rem;
+        margin-bottom: 1rem;
+    }
+    .card_z_index{
+        z-index: 10000;
+    }
+    .card_title{
+        margin-left: 0.5rem;
+        font-size: 0.7rem;
+        margin-top: 0.3rem;
+    }
+    .card_back{
+        background: rgba(88, 88, 88, 0.4);
+    }
+    .card_card{
+        position: fixed;
+    }
+    .card_img{
+        margin-top: 0.5rem;
+        width: auto;
+        height: auto;
+        max-width: 60%;
+        max-height: 60%;
+        margin-left: 2rem;
+    }
+    .card_font1{
+        text-align: center;
+        font-size: 0.8rem;
+        margin: 0.2rem;
+    }
+    .card_font2{
+        font-size: 14px !important;
+        margin: 0.2rem;
+        text-align: center;
+    }
+    .card_font3{
+        color: black;
+    }
+    .card_font4{
+        font-size: 0.6rem;
+        color: #8e8b8b;
+        padding: 1rem;
+        line-height: 0.9rem;
+    }
+    .card_shui{
+        font-size: 0.5rem;
+        color: rgba(8, 8, 8, 0.7);
+    }
+    .card_font_size1{
+        font-size: 0.55rem;
+        color: #000000;
+        line-height: 1.2rem;
+    }
+    .card_font_size2{
+        font-size: 0.5rem;
+        line-height: 0.7rem;
+    }
+    .resonco {
+        margin-top: -10px;
+    }
+
+</style>
+<div class="page-bd ">
+    <div class="weui-cells mt0 vux-1px-t">
+    <form name="cart2_form" id="cart2_form" method="post"  >
+
+            <!--立即购买才会用到-s-->
+            <input type="hidden" name="action" value="{$Request.param.action}">
+            <input type="hidden" name="goods_id" value="{$Request.param.goods_id}">
+            <input type="hidden" name="item_id" value="{$Request.param.item_id}">
+            <input type="hidden" name="goods_num" value="{$Request.param.goods_num}">
+            <input type="hidden" name="g_type" value="{$g_type}">
+            <input type="hidden" name="paypwd" value="">
+            <input type="hidden" name="share_id" value="{$share_id}"><!-- 商品id -->
+            <!--立即购买才会用到-e-->
+            <div class="detail_panel">
+                <h3 class="h3_tit card_title">收货信息</h3>
+                <a id="newView" class="weui-cell weui-cell_access" href="javascript:void(0);">
+                    <div>
+                        <img class="address_icon" src="__STATIC__/n_assets/images/icon_address.png" alt="">
+                    </div>
+                <if condition="isset($address.address_id)">
+                    <div id="address_all_1">
+                        <div class="weui-cell__bd">
+                            <div class="fs11"><span>{$address.consignee}</span> <span>{$address.mobile}</span></div>
+                            <div class="fs11 text-gray">{$address.province_name} {$address.city_name} {$address.district_name} {$address.address}</div>
+                        </div>
+                        <!--<div class="weui-cell__ft"></div>-->
+                        <input type="hidden" value="{$address.address_id}" name="address_id" />
+                    </div>
+                    <!--收货地址id-->
+                    <else/>
+                    <div class="weui-cell__bd">
+                        <span style="text-align: center;">请添加收货地址</span>
+                    </div>
+                </if>
+            </a>
+            </div>
+
+    </div>
+
+
+    <div class="weui-panel weui-panel_access">
+        <div class="weui-panel__bd">
+        <h3  class="h3_tit h3_tit1 card_title">
+                身份商品
+        </h3>
+        </div>
+        <volist name="cartList" id="cart">
+            <div class="weui-panel__bd">
+                <div class="weui-media-box weui-media-box_appmsg mymedia">
+                    <div class="weui-media-box__hd">
+                        <img class="weui-media-box__thumb" src="{$cart[goods_id]|goods_thum_images=100,100}" alt="">
+                    </div>
+                    <div class="weui-media-box__bd">
+                        <div class="weui-media-box__bd">
+                            <div style="display: flex; align-items: center">
+                                <div class="weui-media-box__bd" style="height: 44px;">
+                                    <h4 class="fs11">{$cart[goods_name]}</h4>
+                                    <p class="fs9 text-muted">{$cart[spec_key_name]}</p>
+                                </div>
+                                <!--<div class="weui-media-box__ft">-->
+                                    <!--<div>-->
+                                        <!--<span class="fs10">￥</span><b class="fs12">{$cart[goods_price]}</b>-->
+
+                                        <!--&lt;!&ndash;<if condition="$cart.integral">&ndash;&gt;-->
+                                        <!--&lt;!&ndash;+ <b class="fs12">{$cart.integral}</b>积分&ndash;&gt;-->
+                                        <!--&lt;!&ndash;</if>&ndash;&gt;-->
+                                    <!--</div>-->
+                                    <!--<div class="fs9 text-muted tr">x{$cart[goods_num]}</div>-->
+
+                                <!--</div>-->
+                            </div>
+                            <div style="display: flex; align-items: center">
+                                <div class="weui-media-box__bd">
+                                    <span class="fs10">￥</span><b class="fs12">{$cart[goods_price]}</b>
+                                </div>
+                                <div class="weui-media-box__ft">
+
+                                    <div class="fs14 text-muted tr" style="color: #333;">x{$cart[goods_num]}</div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </volist>
+
+
+        <!--<div class="weui-panel__ft">
+            <div class="weui-cell weui-cell_link fs11">
+                <div class="weui-cell__bd">订单运费</div>
+                <div class="weui-cell__ft"><span class="text-muted" id="postFee" style="color: #333">包邮</span></div>
+            </div>
+            <input type="hidden" name="coupon_id"  value=""/>
+        </div>-->
+    </div>
+
+
+   <!-- <div class="weui-cells">
+        <div class="weui-cell">
+            <div>
+                <p id="show_shuiMoney" class="shui_font card_shui">
+                    <if condition="$rate_type eq 1">
+                        进口
+                    </if>
+                    税费0元
+                </p>
+            </div>
+
+
+            <if condition="($canGetFree eq 0) AND ($rate_type eq 1)">
+                <div class="weui-cell__bd">
+                    <p style="float: right;color: red;">今日免税额度已用完或超额</p>
+                </div>
+                <elseif condition="($canGetFree eq 1) AND ($real_name neq null)  AND ($rate_type eq 1)" />
+                <div class="weui-cell__bd">
+                    <p  style="color: #ff2f2f;" >
+                   <span  style="float: right;padding: 0.15rem">
+                       每日免税额度333元（一次性）
+                   </span>
+                    </p>
+                </div>
+                <elseif condition="($canGetFree eq 1) AND ($real_name eq null)  AND ($rate_type eq 1)" />
+                <div class="weui-cell__bd">
+                    <p id="idCard" style="color: #ff2f2f;" onclick="getFreeOrder()">
+                   <span id="hkStr" style="float: right;border: 0.05rem solid red;border-radius: 0.3rem;padding: 0.15rem">
+                       免税额度立马获取
+                   </span>
+                    </p>
+                </div>
+            </if>
+
+            </if>
+
+
+        </div>
+    </div>-->
+
+    <div class="weui-cells">
+         <!--   <div  class="">
+                <div class="weui-cells" style="margin-left: 0.5rem;margin-right: 0.5rem;margin-bottom: 0.5rem;">
+                    <div style="float: left">
+                        <input class='' type="checkbox" id="makebi_check" onclick="makebiCheck(this)" checked value="">
+                        马克币抵（共
+                    <span id="canUserMakebi">
+
+                    </span>
+                        马克币，使用
+                    <span id="canOrderMakebi">
+
+                    </span>
+                        马克币）
+                    </div>
+
+                    <div style="float: right">
+                    <label  class="">
+                        -
+                        <span id="canExchangeMoney" class="text-muted" style="color: #333;">
+
+                        </span>
+                        元
+                    </label>
+                    </div>
+                </div>
+            </div>
+        </div>-->
+
+
+    <div class="weui-cells">
+        <div class="weui-cell">
+            <div class="weui-cell__bd">
+                <label class="weui-label">
+                    购买备注
+                </label>
+                <div class="mt5"><textarea class="weui-textarea tapassa"  onkeyup="checkfilltextarea('.tapassa','50')" name="user_note" rows="" cols=""  placeholder="请留言"></textarea></div>
+            </div>
+        </div>
+    </div>
+    <div class="fixed-bottom2 card_card">
+        <div class="weui-flex">
+            <div class="weui-flex__item fs10 ">
+                <div>
+                    <span class="text-muted">合计金豆</span>
+                    <span class="text-red">￥</span><b class="fs15 text-red" id="payables"></b>
+
+                    <if condition="$cartPriceInfo.total_integral">
+                        + <b class="fs15 text-red">{$cartPriceInfo.total_integral}</b><span class="text-red">积分</span>
+                    </if>
+                </div>
+            </div>
+            <div class="weui-flex__item">
+                <if condition="$canDeal eq 0">
+                    <a href="javascript:void(0)" class="weui-btn weui-btn_primary" style="background: grey;border:none">金豆不足</a>
+                </if>
+
+                <if condition="$canDeal eq 1">
+                    <a href="javascript:void(0)" id="submit_form" class="weui-btn weui-btn_primary submit-order">提交订单</a>
+                </if>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="mask-filter-div card_back" style="max-width: 100rem;"></div>
+<!--地址弹窗 -s-->
+<div class="losepay closeorder " id="newViews" style="display: none; width: 100%;">
+    <div class="maleri30">
+        <div class="l_top">
+            <span>选择地址</span>
+            <em class="turenoff"></em>
+        </div>
+        <div class="resonco" name="address_all">
+
+            <foreach name="userAddressList" item="v"  key="k">
+                <label >
+                   <div class="radio" id="input_{$v.address_id}" style="margin: 0 auto; width: 96%;">
+                            <span class='weui-cell che <if condition="$k eq 0">check_t</if>' postname='{$v.name}'>
+                                <div class="weui-cell__hd">
+                                <i ></i>
+                                <input type="radio" id="{$v.address_id}" name="address_id" id="{$v.address_id}" value="{$v.address_id}" style="display: none;" <if condition="$v.is_default eq 1"> checked="checked" </if>class="c_checkbox_t" />
+                                </div>
+                                    <div class="weui-cell__bd" style="margin-left: 8px;">
+                                    <div class="fs11" style="margin-bottom: 8px;"><span>{$v.consignee}</span> <span>{$v.mobile}</span></div>
+                                    <div class="fs11 text-gray">{$v.province_name} {$v.city_name} {$v.district_name} {$v.address}</div>
+                                    </div>
+
+                            </span>
+                    </div>
+                </label>
+            </foreach>
+        </div>
+    </div>
+    <div id="address_ad" class="submits_de bagrr" onclick="changeOrderMoney(this)" >确认</div>
+</div>
+<!--地址弹窗 -e-->
+
+    <!--支付密码弹窗1——s-->
+    <div class="losepay closeorder id_card card_ran" id="baoshui1" style="display: none;">
+        <div class="maleri30">
+            <div class="l_top">
+            <span class="card_ma card_top">
+                <p>请输入支付密码</p>
+            </span>
+            </div>
+            <div class="resonco" name="address_all">
+                <div class="weui-cell pl-pr-0 card_detail">
+                    <div class="weui-cell__hd"><label class="weui-label w140 card_label">支付密码</label></div>
+                    <div class="weui-cell__bd">
+                        <input class="weui-input" id="paypwd_value" name="paypwd_value" type="password"  placeholder="请输入支付密码" value="">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div onclick="confirm_pay()" id="sure_bs1" class="submits_de bagrr card_ran card_butt" >确认</div>
+    </div>
+
+</form>
+<script>
+    //解决安卓input被顶出界面问题
+         var u = navigator.userAgent;
+         var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
+     isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+         if(isAndroid){
+             $('.weui-input').bind('focus',function(){
+                 $("#baoshui1").css({'position':'fixed'})
+             }).bind('blur',function(){
+                 $("#baoshui1").css({'position':'fixed'});
+             });
+             $('.weui-input').bind('focus',function(){
+                 $("#xg1").css({'position':'fixed'})
+             }).bind('blur',function(){
+                 $("#xg1").css({'position':'fixed'});
+             });
+         }
+
+
+    $('#sure_bs1').click(function(){
+        var name = $('name_bs1').val();
+        var card = $('getIdCard_bs1').val();
+        if(name==""||card==""){
+            layer.open({content:"姓名和身份证不能为空！", time:1000});
+            return false;
+        }
+    })
+
+
+    $(document).ready(function(){
+        $('.use-all-points').on('click', function() {
+            var usePoints =  parseInt('{$integralInfo.pay_points}', 10);
+            if (!usePoints) {
+                return;
+            }
+            var $input = $('#points');
+            $input.val(usePoints);
+
+            ajax_order_price();
+        });
+        $('#points').on('keyup', _.debounce(ajax_order_price, 300));
+        function toogle(id){
+            condition=$(id).attr('data');
+            //个人
+            if(condition=='geren'){
+                $('#monad').hide();
+            }
+            //单位
+            if(condition=='danwei'){
+                invoice_title=$('#invoice_title').val();
+                $('#monad').show();
+            }
+
+            invoice_title=$(id).find('input').attr('value');
+            //不开发票
+            if(condition=='noincorise'){
+//                $('#monad,#invoice').hide();
+//                $(".invoice_title").html("不开发票");
+            }
+            $("input[type='radio']").each(function(){
+                if($(this).is(":checked")){
+                    if($(this).val()=="个人"){
+                        invoice_title = "个人";
+                        taxpayer      = "";
+                        str           = "个人";
+                    }
+                    if($(this).val()=='不开发票'){
+                        invoice_title="";
+                        taxpayer="";
+                        invoice_desc='不开发票';
+                        str="不开发票";
+                    }
+                    if($(this).val()=="单位"){
+                        invoice_title = $("#invoice_title").val();
+                        taxpayer      = $("#taxpayer").val();
+                        str           = "单位";
+                    }
+                    if($(this).val()=='明细'){
+                        invoice_desc="明细";
+                    }
+                }
+            });
+            if($("#detail").is(":checked")){
+                str+=" - 明细";
+            }
+            if(str=="不开发票"){
+                $(".invoice_title").html(str);
+            }else{
+                $(".invoice_title").html("纸质（"+str+"）");
+            }
+        }
+        $(document).on("click","input[type='radio']",function(){
+            toogle(this);
+        });
+
+        function save_invoice(){
+            var str="";
+            var invoice_title;
+            var taxpayer;
+            var invoice_desc;
+            var res="y";
+            $("input[type='radio']").each(function(){
+                if($(this).is(":checked")){
+                    if($(this).val()=="个人"){
+                        invoice_title = "个人";
+                        taxpayer      = "";
+                        str           = "个人";
+                    }
+                    if($(this).val()=='不开发票'){
+                        invoice_title="个人";
+                        taxpayer="";
+                        invoice_desc='不开发票';
+                        str="不开发票";
+                    }
+                    if($(this).val()=="单位"){
+                        if( $("#invoice_title").val()==""){
+                            layer.open({content:'请输入单位名称',time:2});
+                            res="n";
+                            return false;
+                        }
+                        invoice_title = $("#invoice_title").val();
+                        taxpayer      = $("#taxpayer").val();
+                        str           = $("#invoice_title").val();
+                    }
+                    if($(this).val()=='明细'){
+                        invoice_desc="明细";
+                    }
+                }
+            });
+            if($("#detail").is(":checked")){
+                str+=" - 明细";
+            }
+            if(str=="不开发票"){
+                $(".invoice_title").html(str);
+            }else{
+                $(".invoice_title").html("纸质（"+str+"）");
+            }
+
+            if(res!="n"){
+                var data = {invoice_title: invoice_title, taxpayer: taxpayer, invoice_desc: invoice_desc};
+                $.post("{:U('Cart/save_invoice')}", data, function(json) {
+                    var data = eval("(" + json + ")");
+                    $("#invoice").hide()
+                });
+            }
+
+        }
+
+        function get_invoice(){
+            var str="";
+            $.get("{:U('Cart/invoice')}", function(json) {
+                var data = eval("(" + json + ")");
+                if (data.status > 0) {
+
+                    if(data.result.invoice_title==""){
+                        $('#monad').hide();
+
+                    }else{
+                        $('#invoice_title').val(data.result.invoice_title);
+                        $("#invoice_desc").val(data.result.invoice_desc);
+                        $("#taxpayer").val(data.result.taxpayer);
+                        str="纸质（"+data.result.invoice_title+"-明细）";
+                        $("#danwei").attr("checked","checked");
+                    }
+                    if(data.result.invoice_title=="个人"){
+                        $("#geren").attr("checked","checked");
+                        $('#invoice_title').val("");
+                        $("#invoice_desc").val("");
+                        $("#taxpayer").val("");
+                        $('#monad').hide();
+                        $(".invoice_title").html("纸质（个人-明细）");
+                        str="纸质（个人-明细）";
+                    }
+                    if (data.result.invoice_desc == "不开发票") {
+                        $('#invoice_title').val("");
+                        $("#invoice_desc").val(data.result.invoice_desc);
+                        $("#taxpayer").val("");
+                        $("#noincorises").attr("checked","checked");
+                        str="不开发票";
+                    }else{
+//                        $('#monad,#invoice').show();
+                        $("#detail").attr("checked","checked");
+                    }
+                    $(".invoice_title").html(str);
+
+                }else{
+                    $("#geren").attr("checked","checked");
+                    $('#monad').hide();
+                    $("#noincorises").attr("checked","checked");
+                }
+            });
+        }
+
+        $("#selecttime").on('click', function (e) {
+            // 单列picker
+            weui.picker([
+                {
+                    label: '只限双休日收货',
+                    value: 0
+                },
+                {
+                    label: '只限工作日收货',
+                    value: 1
+                },
+                {
+                    label: '共组日/双休日/节假日均可收货',
+                    value: 3
+                },
+                {
+                    label: '不限收货时间',
+                    value: 3
+                }
+
+            ], {
+                className: 'custom-classname',
+                defaultValue: [3],
+                onChange: function (result) {
+//                    console.log(result)
+                },
+                onConfirm: function (result) {
+//                    console.log(result)
+                    $("#selecttime").find('.showres').html(result[0].label);
+                },
+                id: 'singleLinePicker'
+            });
+        });
+
+        showPostName();
+
+        $('.radio .che').bind('click',function(){
+            //选择配送方式
+            $(this).addClass('check_t')
+                    .parent().parent().siblings('label').find('.che').removeClass('check_t');
+            //选择配送方式显示到支持配送栏
+            showPostName()
+        });
+
+        ajax_order_price(); // 计算订单价钱
+
+        //显示选择的物流公司
+        function showPostName(){
+            $('#postname').text($('.radio .check_t').attr('postname'));
+        }
+
+        //兑换优惠券
+        function wield(){
+            var couponCode = $('#couponCode').val();
+            if(couponCode !=''){
+                $.ajax({
+                    type : "POST",
+                    url:'/index.php?m=Home&c=Cart&a=cartCouponExchange&t='+Math.random(),
+                    data : {coupon_code:couponCode},
+                    dataType: "json",
+                    success: function(data){
+                        if(data.status != 1){
+                            showErrorMsg(data.msg);
+                            // 登录超时
+                            if(data.status == -100){
+                                location.href ="{:U('Mobile/User/login')}";
+                                return false;
+                            }
+                        }else{
+                            showErrorMsg(data.msg);
+                            window.location.href=''
+                        }
+                    }
+                });
+            }else{
+                showErrorMsg('请输入兑换码！');
+            }
+        }
+        // 获取订单价格
+        function ajax_order_price()
+        {
+
+            $.ajax({
+                type : "POST",
+                url:'/index.php?m=Mobile&c=Cart&a=cart3&act=order_price&t='+Math.random(),
+                data : $('#cart2_form').serialize(),
+                dataType: "json",
+                success: function(data){
+
+                    if(data.status == -3 || data.status == -4){
+                        showErrorMsg(data.msg);
+                        refresh_price(data);
+                        $('.submit_price a').addClass("disable");
+                    }else if(data.status != 1){
+                        //执行有误
+                        $('#coupon_div').show();
+                        showErrorMsg(data.msg);
+                        // 登录超时
+                        if(data.status == -100){
+                            location.href ="{:U('Mobile/User/login')}";
+                            return false;
+                        }
+                    }else{
+                        //成功,把税费显示
+                        $('.submit_price a').removeClass("disable");
+
+                        refresh_price(data);
+                    }
+                }
+            });
+
+        }
+
+
+        function refresh_price(data){
+            $("#balance").text(data.result.balance);// 余额
+            $("#pointsFee").text(data.result.pointsFee);// 积分支付
+            $("#order_prom_amount").text(data.result.order_prom_amount);// 订单 优惠活动
+            $("#postFee").text(data.result.postFee); // 物流费
+            if(data.result.couponFee == null){
+                $("#couponFee").text(0);// 优惠券
+            }else{
+                $("#couponFee").text(data.result.couponFee);// 优惠券
+            }
+
+            var start_total_money = data.result.payables;
+
+            var final_money = Math.floor(start_total_money*100)/100;//只取小数点后两位
+
+            //订单总额最终显示
+            $("#payables").text(final_money);
+        }
+
+        // 提交订单
+        ajax_return_status = 1; // 标识ajax 请求是否已经回来 可以进行下一次请求
+
+        $('.submit-order').on('click', function() {
+
+            var paypwd=$("input[name='paypwd']").val();
+            if(paypwd == '' || paypwd ==null || paypwd== 0 || paypwd == '0'){
+                //没填写支付密码的时候，需要弹框
+                //提交订单，需要填支付密码
+                $('.mask-filter-div').show();
+                $('#baoshui1').show();
+            }else{
+                if($('.submit_price a').hasClass("disable")){
+                    return;
+                }
+
+                if (ajax_return_status == 0)
+                    return false;
+
+                ajax_return_status = 0;
+
+                $.ajax({
+                    type: "POST",
+                    url: "{:U('Mobile/Cart/cart3')}",//+tab,
+                    data: $('#cart2_form').serialize() + "&act=submit_order",// 你的formid
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.status != '1') {
+                            if (data.msg) {
+                                var new_paypwd=null;
+                                $("input[name='paypwd']").attr('value',new_paypwd);  //支付密码不正确，重新设为空
+                                $("input[name='paypwd_value']").attr('value',new_paypwd);  //支付密码不正确，重新设为空
+                                showErrorMsg(data.msg);
+                            }
+                            // 登录超时
+                            if (data.status == -100)
+                                location.href = "{:U('Mobile/User/login')}";
+
+                            if (data.status == -99) {
+                                // 未关注公众号
+
+                                if (qr_url) {
+                                    showQrCode(qr_url);
+                                } else {
+                                    alert('请先关注公众号');
+                                }
+                            }
+
+                            ajax_return_status = 1; // 上一次ajax 已经返回, 可以进行下一次 ajax请求
+
+                            return false;
+                        }
+
+                        $("#postFee").text(data.result.postFee); // 物流费
+                        if(data.result.couponFee == null){
+                            $("#couponFee").text(0);// 优惠券
+                        }else{
+                            $("#couponFee").text(data.result.couponFee);// 优惠券
+                        }
+                        $("#balance").text(data.result.balance);// 余额
+                        $("#pointsFee").text(data.result.pointsFee);// 积分支付
+//                    console.log(data.result.payables);
+                        $("#payables").text(data.result.payables);// 应付
+                        $("#order_prom_amount").text(data.result.order_prom_amount);// 订单 优惠活动
+                        showErrorMsg('订单提交成功，跳转支付页面!');
+                        location.href = "/Mobile/Cart/cart4?order_id="+ data.result;
+                    }
+                });
+            }
+
+        });
+
+       function showQrCode(qr_url) {
+            layer.open({
+                type: 1,
+                title: false,       //不显示标题栏
+                closeBtn: false,
+                area: '260px;',
+                shade: 0.8,
+                id: 'LAY_layuipro', //设定一个id，防止重复弹出
+                btn: ['下次关注'],
+                btnAlign: 'c',
+                moveType: 1 ,       //拖拽模式，0或者1
+                content: '<div style="padding: 52px; line-height: 27px; font-weight: 100;"><center>长按识别关注公众号</center><img style="height:150px;" src="' + qr_url + '"></div>',
+                // success: function(layero){
+                // }
+            });
+        }
+
+        get_invoice();
+        //显示配送弹窗
+        $('.takeoutps').click(function(){
+            cover()
+            $('.mask-filter-div').show();
+            $('.losepay').show();
+        })
+        //关闭选择物流
+        $('.turenoff').click(function(){
+            undercover()
+            $('.mask-filter-div').hide();
+            $('.losepay').hide();
+        })
+
+        $('#newView').click(function(){
+            cover()
+            $('#newViews').show();
+        })
+        //统一关闭蒙版
+        $('.submits_de').click(function(){
+//            $('.mask-filter-div').hide();
+//            $('.losepay').hide();
+        })
+
+        //显示隐藏使用发票信息
+        $('.invoiceclickin').click(function(){
+            get_invoice();
+            $('#invoice').toggle(300);
+        })
+//        //显示隐藏使用余额/积分
+//        $('.remain').click(function(){
+//            $('#balance-li').toggle(300);
+//        })
+
+        //优惠券
+        $(document).on('click','.coupon_click',function(){
+            cover();
+            $('.coupongg').show();
+            $('html,body').addClass('ovfHiden');
+            var coupon_length = {:count($userCartCouponList)};
+            if(coupon_length == 0){
+                $('.soldout_cp').show();
+                $('.no_get_coupon').hide();
+            }else{
+                $('.no_get_coupon').show();
+                $('.soldout_cp').hide();
+            }
+        })
+
+        //关闭优惠券弹窗
+        function closer(){
+            undercover();
+            $('.newchoosecar').hide();
+            $('html,body').removeClass('ovfHiden');
+        }
+
+        //选择优惠券
+        function checkCoupon(obj){
+
+            $(obj).find('.coupon_check').toggleClass('coupon_act');
+            $(obj).siblings('div').find('.coupon_check').removeClass('coupon_act');
+
+            if($(obj).find('.coupon_check').hasClass('coupon_act')){
+                //var conponname = $(obj).data('conponname');
+                var couponid = $(obj).data('couponid');
+                //  $('.counpn_name').text(conponname); //优惠券名称显示出来
+                $("input[name^='coupon_id']").val(couponid);  //优惠券ID写到隐藏表单
+            }else{
+                $("input[name^='coupon_id']").val('');  //优惠券ID写到隐藏表单
+                // $('.counpn_name').text('未使用');
+            }
+                ajax_order_price();
+        }
+
+        var check_real_name = "{$real_name}";
+        var check_can_get_free = "{$canGetFree}";
+//        console.log(check_can_get_free);
+//        console.log(check_real_name);
+        if(check_can_get_free == 1 && check_real_name != null){
+            $("input[name='is_use_free_order']").val(1);
+        }
+    });
+
+
+    $("#newView").on('click', function (e) {
+        $("#pop1").show();
+    });
+    //更改收货地址
+    function changeOrderMoney(obj){
+        var rate_type = $("input[name='meikelun_rateType']").val();
+        var pureOrderMoney="{$pureOrderMoney}";
+        var addressAllSecond = $("div[name='address_all']").html();
+        var chid = $("input[name='address_id']:checked").val();
+        var getId = "#input_"+chid;
+        var getHtml = $(getId).html();
+        $("#address_all_1").html(getHtml);        //显示更改后的地址
+        //商品价格
+        var order_money = "{$cart[goods_price]}";
+        var order_money2 = order_money;
+
+
+        $("#newViews").hide();
+        $(".mask-filter-div").hide();
+        //替换显示的邮费
+    }
+
+    //点击支付密码确认框
+    function confirm_pay(){
+        var paypwd=$("input[name='paypwd_value']").val();
+        $("input[name='paypwd']").val(paypwd);
+
+        $('.mask-filter-div').hide();
+        $('#baoshui1').hide();
+    }
+
+
+</script>
+
+

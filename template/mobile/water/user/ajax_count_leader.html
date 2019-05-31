@@ -1,0 +1,22 @@
+<style>
+    .fansbox .grid_avatar span {
+        left: 0px;
+        right: 0px;
+    }
+</style>
+<volist name="list" id="c">
+    <div class="weui-grids" style="float: left; width: 33.3%">
+        <div class="weui-grid" style="text-align: center;width: 100%;" onclick="subordinate(this)" u_id = "{$c['user_id']}">
+            <div class="grid_avatar"><img src="{$c['head_pic']}" alt="">
+                <span class="have">
+                    <if condition="$c['memberorder']">
+                        已消费
+                    <else />
+                        未消费
+                    </if>
+                </span>
+            </div>
+            <div class="grid_text" style="width: 100%; text-align: center;">{$c['user_id']}</div>
+        </div>
+    </div>
+</volist>

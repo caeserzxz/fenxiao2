@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,viewport-fit=cover">
+
+    <include file="common/resources_old"/>
+
+    <include file="common/resources"/>
+
+    <title>{$title}<if condition="$tpshop_config['shop_info_store_title']"> - {$tpshop_config['shop_info_store_title']}</if></title>
+</head>
+
+<body>
+
+<include file="common/header_nav" title="{$title}" href="javascript:history.go(-1)"/>
+
+    <div class="page-bd">
+
+        <block name="pageBody"></block>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>

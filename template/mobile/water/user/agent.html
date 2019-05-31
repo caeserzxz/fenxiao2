@@ -1,0 +1,239 @@
+<include file="common/header" title="申请成为总代" />
+<include file="common/header_nav" title="申请成为总代" href="javascript:history.back(-1)"/>
+<style>
+    .custom-classname{
+        font-size: .7rem;
+    }
+
+    .weui-btn_primary {
+        background-color: #FF7074;
+        border: 1px solid #FD536D;
+    }
+
+    .weui-cells_checkbox .weui-check:checked + .weui-icon-checked:before {
+        content: '\EA08';
+        color: #fff;
+        border: 1px solid #FF7074;
+        background-color: #FD536D;
+    }
+</style>
+<div class="page-bd">
+    <div class="weui-cells weui-cells_form mt0 vux-1px-t">
+        <form action="{:U('Mobile/User/agent')}" method="post">
+            <label id="tip" style="display: none"></label>
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">姓名：</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" id="name" name="name" value="{$userInfo.real_name}" type="text" placeholder="请输入被申请人姓名">
+                </div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">性别：</label></div>
+                <div class="weui-cell__bd">
+                    <label style="margin-right: 15px;"><input  type="radio" id="sex" name="sex" value="1">男</label>
+                    <label style="margin-right: 15px;"><input  type="radio" id="sex2" name="sex" value="2">女</label>
+                </div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">手机号码：</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="text"  id="phone"  name="phone"  placeholder="请输入绑定手机号码" value="{$userInfo.mobile}">
+                </div>
+            </div>
+            <div class="weui-cell weui-cell_access" style="font-size: 0.7rem">
+                <div class="weui-cell__hd"><label class="weui-label">所在区域：</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" id="selectAddr1" type="text" placeholder="请选择所在区域" readonly>
+                    <input type="hidden"  name="province1" class="hiddle_area"/>
+                    <input type="hidden"  name="city1" class="hiddle_area"/>
+                    <input type="hidden"  name="district1" class="hiddle_area"/>
+                    <!--申请类型-->
+                    <input type="hidden"  name="user_type" class="hiddle_area" value="2"/>
+                    <!--被申请者ID-->
+                    <input type="hidden"  name="obj_id" class="hiddle_area" value="{$userInfo.user_id}"/>
+                </div>
+                <div class="weui-cell__ft"></div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">详细地址：</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="text" id="home_address" name="address" placeholder="请输入详细地址">
+                </div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">身份证号码：</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="text" id="id_card" name="id_card"  placeholder="请输入身份证号码" value="{$userInfo.id_card}">
+                </div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">原职业：</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="text" id="old_profession" name="old_profession" placeholder="请输入原职业">
+                </div>
+            </div>
+            <div class="weui-cell weui-cell_access" style="font-size: 0.7rem">
+                <div class="weui-cell__hd"><label class="weui-label">代理区域：</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" id="selectAddr" type="text" placeholder="请选择代理区域" readonly>
+                    <input type="hidden" value="{$address['province']}" name="province" class="hiddle_area"/>
+                    <input type="hidden" value="{$address['city']}" name="city" class="hiddle_area"/>
+                    <input type="hidden" value="{$address['district']}" name="district" class="hiddle_area"/>
+                </div>
+                <div class="weui-cell__ft"></div>
+            </div>
+           <input type="submit" value="确认" id="sure" class="weui-btn weui-btn_primary" />
+</form>
+    </div>
+</div>
+
+<script>
+    $("input").on("change",function(){
+        $("#tip").hide();
+    });
+
+    $("#sure").click(function(){
+        var name = $("#name").val();
+        if(name==""){
+            $("#tip").show();
+            $("#tip").replaceWith("<span id='tip' style='color: red;margin-left: 0.5rem;'>请输入姓名</span>");
+            return false;
+        }
+
+        var sex = $("input[name='sex']:checked").val();
+        if(sex==""){
+            $("#tip").show();
+            $("#tip").replaceWith("<span id='tip'   style='color: red;margin-left: 0.5rem;'>请选择性别</span>");
+            return false;
+        }
+
+        var phone = $("#phone").val();
+        if(phone==""){
+            $("#tip").show();
+            $("#tip").replaceWith("<span id='tip'   style='color: red;margin-left: 0.5rem;'>请输入绑定手机号码</span>");
+            return false;
+        }
+
+        var selectAddr1 = $("selectAddr1").val();
+        if(selectAddr1==""){
+            $("#tip").show();
+            $("#tip").replaceWith("<span id='tip'   style='color: red;margin-left: 0.5rem;'>请选择所在区域</span>");
+            return false;
+        }
+
+        var home_address = $("#home_address").val();
+        if(home_address==""){
+            $("#tip").show();
+            $("#tip").replaceWith("<span id='tip'   style='color: red;margin-left: 0.5rem;'>请输入详细地址</span>");
+            return false;
+        }
+
+        var id_card = $("#id_card").val();
+        if(id_card==""){
+            $("#tip").show();
+            $("#tip").replaceWith("<span id='tip'   style='color: red;margin-left: 0.5rem;'>请输入身份证号码</span>");
+            return false;
+        }
+
+        var old_profession = $("#old_profession").val();
+        if(old_profession==""){
+            $("#tip").show();
+            $("#tip").replaceWith("<span id='tip'   style='color: red;margin-left: 0.5rem;'>请输入原职业</span>");
+            return false;
+        }
+
+        var selectAddr = $("#selectAddr").val();
+        if(selectAddr==""){
+            $("#tip").show();
+            $("#tip").replaceWith("<span id='tip'   style='color: red;margin-left: 0.5rem;'>请输入原职业</span>");
+            return false;
+        }
+
+    });
+
+    $("#selectAddr").on('click',function () {
+
+        //获取json数据
+        $.get("{:url('Home/Api/getAllArea')}",'',function(data){
+            // 级联picker
+            weui.picker(data, {
+                className: 'custom-classname',
+                defaultValue: [1, 3],
+                onChange: function (result) {
+                    $("input[name=province]").attr('value',result[0].value);
+                    $("input[name=city]").attr('value',result[1].value);
+                    $("input[name=district]").attr('value',result[2].value);
+                },
+                onConfirm: function (result) {
+                    var str = result[0].label+'-'+result[1].label+'-'+result[2].label;
+                    $('#selectAddr').attr('value',str);
+                },
+                id: 'doubleLinePicker'
+            });
+        },'json');
+    });
+    $("#selectAddr1").on('click',function () {
+
+        //获取json数据
+        $.get("{:url('Home/Api/getAllArea')}",'',function(data){
+            // 级联picker
+            weui.picker(data, {
+                className: 'custom-classname',
+                defaultValue: [1, 3],
+                onChange: function (result) {
+                    $("input[name=province1]").attr('value',result[0].value);
+                    $("input[name=city1]").attr('value',result[1].value);
+                    $("input[name=district1]").attr('value',result[2].value);
+                },
+                onConfirm: function (result) {
+                    var str = result[0].label+'-'+result[1].label+'-'+result[2].label;
+                    $('#selectAddr1').attr('value',str);
+                },
+                id: 'doubleLinePicker'
+            });
+        },'json');
+    });
+    $('#s11').click(function(){
+        if($(this).is(":checked"))
+        {
+            $(this).attr('value',1);
+        }else{
+            $(this).attr('value',0);
+
+        }
+    });
+    function tobeZd(obj){
+        var url="{:U('Mobile/User/agent')}";
+        var obj_id = "{$userInfo.user_id}";
+        var name = $('#name').val();
+        var sex = $('input[name="sex"]:checked').val();
+        var phone = $('#phone').val();
+        var address = $('#home_address').val();
+        var province = $('#province').val();
+        var city = $('#city').val();
+        var district = $('#district').val();
+        var province1 = $('#province1').val();
+        var city1 = $('#city1').val();
+        var district1 = $('#district1').val();
+        var card = $('#id_card').val;
+        var old_profession = $('#old_profession').val();
+
+        $.ajax({
+            url : url,
+            type:'post',
+            dataType:'json',
+            data:{user_type:2,obj_id:obj_id,name:name,sex:sex,phone:phone,address:address,province:province,city:city,district:district,old_profession:old_profession,province1:province1,city1:city1,district1:district1,idCard:card},
+            success:function(res){
+                if(res.code==1){
+                    showErrorMsg(res.msg);
+                    window.location.href="{:U('User/userinfo')}";
+                }else{
+                    showErrorMsg(res.msg);
+                }
+            }
+        })
+    }
+
+</script>
+</body>
+</html>

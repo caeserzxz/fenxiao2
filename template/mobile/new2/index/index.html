@@ -1,0 +1,154 @@
+<layout name="common/layout_nav" />
+
+<div class="page-hd">
+    <div class="search-bar">
+        <div class="weui-flex">
+            <a href="{:U('Goods/categoryList')}" class="fenlei"></a>
+            <div class="weui-flex__item search-input">
+                <form action=""  method="post">
+                    <a href="{:U('Goods/ajaxSearch')}"><input type="search" name="q" id="search_text" class="search_text"   value="" placeholder="搜索您想要的商品名称">
+                <a href="" class="search-icon"></a></a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="page-bd">
+    <div class="swiper-container index-banner">
+        <div class="swiper-wrapper">
+            <adv pid ="32" limit="5" item="v">
+                <div class="swiper-slide"> <a href="{$v.ad_link}"><img src="{$v[ad_code]}" style="width: 100%"/> </a></div>
+            </adv>
+        </div>
+        <!-- Add Pagination -->
+        <div class="swiper-pagination-wrap"><div class="swiper-pagination"></div></div>
+    </div>
+    <div class="weui-panel">
+        <div class="weui-panel__bd">
+            <div class="weui-flex">
+                <div class="weui-flex__item">
+                    <a href="{:U('Activity/promote_goods')}" class="nav-icon-link">
+                        <div class="weui-grid__icon">
+                            <img src="__STATIC__/assets/images/icon_01.png" alt="">
+                        </div>
+                        <p class="weui-grid__label">优惠活动</p>
+                    </a>
+                </div>
+                <div class="weui-flex__item">
+                    <a href="{:U('hot/goods_list')}" class="nav-icon-link">
+                        <div class="weui-grid__icon">
+                            <img src="__STATIC__/assets/images/icon_03.png" alt="">
+                        </div>
+                        <p class="weui-grid__label">狂销热卖</p>
+                    </a>
+                </div>
+                <div class="weui-flex__item">
+                    <a href="{:U('activity/todaygoods')}" class="nav-icon-link">
+                        <div class="weui-grid__icon">
+                            <img src="__STATIC__/assets/images/icon_04.png" alt="">
+                        </div>
+                        <p class="weui-grid__label">今日上新</p>
+                    </a>
+                </div>
+                <div class="weui-flex__item">
+                    <a href="{:U('activity/group_list')}" class="nav-icon-link">
+                        <div class="weui-grid__icon">
+                            <img src="__STATIC__/assets/images/icon_05.png" alt="">
+                        </div>
+                        <p class="weui-grid__label">团购商城</p>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="weui-panel">
+        <div class="weui-panel__hd after-left__0">
+            <h3 class="index-panel__title"><i class="icon-hot"></i><span>热门专场</span></h3>
+        </div>
+        <div class="weui-panel__bd">
+            <div class="weui-flex vux-1px-b">
+                <div class="weui-flex__item">
+                    <adv pid='51318' limit='1' item='v'>
+                        <a href="{$v[ad_link]}" class="graphic__item vux-1px-r"><img src="{$v[ad_code]}" style="width:100%"/></a>
+                    </adv>
+                </div>
+                <div class="weui-flex__item">
+                    <adv pid='51319' limit='2' item='v'>
+                        <a href="{$v[ad_link]}"  class="graphic__item vux-1px-b"><img src="{$v[ad_code]}" style="width:100%"/></a>
+                    </adv>
+                </div>
+            </div>
+            <div class="weui-flex">
+                <adv pid='51320' limit='2' item='v'>
+                    <div class="weui-flex__item vux-1px-r">
+                        <a href="{$v[ad_link]}" class="graphic__item">
+                            <img src="{$v[ad_code]}" style="width:100%"/>
+                        </a>
+                    </div>
+                </adv>
+            </div>
+        </div>
+    </div>
+    <adv pid='51321' limit='1' item='v'>
+        <div class="ad-banner" style="margin:10px 0;">
+            <a href="{$v[ad_link]}">
+                <img src="{$v[ad_code]}" alt="" style="width: 100%">
+            </a>
+        </div>
+    </adv>
+
+    <div class="weui-panel" style="margin-bottom: 10px">
+        <div class="weui-panel__hd after-left__0">
+            <h3 class="index-panel__title"><i class="icon-new"></i><span>发现好货</span></h3>
+        </div>
+    </div>
+
+<!--底部商品列表-s-->
+<div class="floor guesslike groupquess dic">
+    <div class="likeshop">
+        <ul>
+
+        </ul>
+    </div>
+</div>
+    <!--底部商品列表-e-->
+</div>
+<script type="text/javascript" src="__STATIC__/js/sourch_submit.js"></script>
+<script type="text/javascript">
+    //加载更多商品
+    var page = 0;
+    function ajax_sourch_submit() {
+        ++page;
+        $.ajax({
+            type: 'GET',
+            url: "/index.php?m=Mobile&c=Index&is_ajax=1&a=_index_goods&p=" + page,
+            success: function (data) {
+                if (data) {
+                    $(".likeshop > ul").append(data);
+                    $('.get_more').hide();
+                } else {
+                    $('.get_more').hide();
+                    $('#getmore').remove();
+                }
+            }
+        })
+    }
+    ajax_sourch_submit();//调用加载更多
+    //滚动加载更多
+    $('.page-bd').scroll(function () {
+        var scrollTop = $(this).scrollTop();
+        var scrollHeight = $(document).height();
+        var windowHeight = $(this).height();
+        //console.log(scrollTop - (scrollHeight + windowHeight))
+        if (scrollTop - (scrollHeight + windowHeight) > 50) {
+            ajax_sourch_submit();//调用加载更多
+        }
+    });
+</script>
+<script src="__STATIC__/assets/js/lib/Swiper-3.4.2/swiper.jquery.min.js"></script>
+<script>
+    var swiper = new Swiper('.index-banner', {
+        pagination: '.swiper-pagination',
+        paginationClickable: true
+    });
+</script>

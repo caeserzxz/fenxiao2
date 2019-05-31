@@ -1,0 +1,171 @@
+<include file="public/layout"/>
+<script src="__ROOT__/public/static/js/layer/laydate/laydate.js"></script>
+<body style="background-color: rgb(255, 255, 255); overflow: auto; cursor: default; -moz-user-select: inherit;">
+<div id="append_parent"></div>
+<div id="ajaxwaitid"></div>
+<div class="page">
+    <div class="fixed-bar">
+        <div class="item-title">
+            <div class="subject">
+                <h3>购买身份卡记录列表</h3>
+            </div>
+        </div>
+    </div>
+    <!-- 操作说明 -->
+    <div id="explanation" class="explanation"
+         style="color: rgb(44, 188, 163); background-color: rgb(237, 251, 248); width: 99%; height: 100%;">
+        <div id="checkZoom" class="title"><i class="fa fa-lightbulb-o"></i>
+            <h4 title="提示相关设置操作时应注意的要点">操作提示</h4>
+            <span title="收起提示" id="explanationZoom" style="display: block;"></span>
+        </div>
+
+    </div>
+    <div class="flexigrid">
+        <div class="mDiv">
+            <div class="ftitle">
+                <h3>列表</h3>
+                <h5>(共{$pager->totalRows}条记录)</h5>
+            </div>
+            <div title="刷新数据" class="pReload"><i class="fa fa-refresh"></i></div>
+            <form class="navbar-form form-inline" id="search-form" action="" method="post"
+                  onsubmit="return check_form();">
+                <input type="hidden" name="id" value="1">
+
+                <div class="sDiv">
+                    <div class="sDiv2" style="margin-right: 10px;">
+                        <input type="text" size="30" id="user_id" name="user_id" value="{$user_id}"
+                               placeholder="用户ID" class="qsbox">
+                        <input type="button" class="btn" value="用户ID">
+                    </div>
+                    <div class="sDiv2" style="margin-right: 10px;">
+                        <input type="text" size="30" id="start_time" name="start_time" value="{$start_time}"
+                               placeholder="起始时间" class="qsbox">
+                        <input type="button" class="btn" value="申请起始时间">
+                    </div>
+                    <div class="sDiv2" style="margin-right: 10px;">
+                        <input type="text" size="30" id="end_time" name="end_time" value="{$end_time}"
+                               placeholder="截止时间" class="qsbox">
+                        <input type="button" class="btn" value="申请截止时间">
+                    </div>
+                    <div class="sDiv2">
+                        <input type="submit" class="btn" value="搜索">
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="bDiv" style="height: auto;">
+            <div id="flexigrid" cellpadding="0" cellspacing="0" border="0">
+                <div class="content-container">
+                    <table cellpadding="0" cellspacing="0">
+                        <thead class="well">
+                        <tr>
+                            <th width="5%" style="font-weight:bold;font-size:14px;">姓名</th>
+                            <th width="5%" style="font-weight:bold;font-size:14px;">用户ID</th>
+                            <th width="10%" style="font-weight:bold;font-size:14px;">金额</th>
+                            <th width="10%" style="font-weight:bold;font-size:14px;">日期</th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        <volist name="lists" id="vo">
+                            <tr>
+                                <td style="padding-top:10px;">{$vo.userInfo.real_name}</td>
+                                <td style="padding-top:5px;">{$vo.user_id}</td>
+                                <td style="padding-top:10px;">{$vo.order_amount}</td>
+                                <td style="padding-top:10px;">{$vo.add_time|date="Y-m-d H:i:s",###}
+                                </td>
+                            </tr>
+                        </volist>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="iDiv" style="display: none;"></div>
+        </div>
+        <!--分页位置-->
+        {$page}
+    </div>
+</div>
+<script>
+
+    function readyMan(obj){
+        var url = $(obj).attr('data-url');
+        layer.open({
+            type: 2,
+            title: '列表',
+            shadeClose: true,
+            shade: 0.2,
+            area: ['61%', '75%'],
+            content: url,
+        });
+    }
+
+
+    $(document).ready(function () {
+        // 表格行点击选中切换
+        $('#flexigrid > table>tbody >tr').click(function () {
+            $(this).toggleClass('trSelected');
+        });
+
+        // 点击刷新数据
+        $('.fa-refresh').click(function () {
+            location.href = location.href;
+        });
+        $('#start_time').layDate();
+        $('#end_time').layDate();
+    });
+
+    function delfun(obj) {
+        // 删除按钮
+        layer.confirm('确认删除？', {
+            btn: ['确定', '取消'] //按钮
+        }, function () {
+            $.ajax({
+                type: 'post',
+                url: $(obj).attr('data-url'),
+                data: {},
+                dataType: 'json',
+                success: function (data) {
+                    layer.closeAll();
+                    if (data.status == '1') {
+                        window.location.href = "{:U('Question/questionList')}";
+                    } else {
+                        layer.alert('删除失败', {icon: 2});  //alert('删除失败');
+                    }
+                }
+            })
+        }, function () {
+            layer.closeAll();
+        });
+    }
+
+    function applyfun(obj) {
+        // 审核按钮
+        layer.confirm('确认状态操作？', {
+            btn: ['确定', '取消'] //按钮
+        }, function () {
+            $.ajax({
+                type: 'post',
+                url: $(obj).attr('data-url'),
+                data: {},
+                dataType:'JSON',
+                success: function (data) {
+                    layer.closeAll();
+                    if (data.status == '1') {
+                        console.log(data.status);
+                        window.location.href = "{:U('Apply/cashWithdrawalList')}";
+                    } else {
+                        layer.alert('操作失败', {icon: 2});  //alert('操作失败');
+                    }
+                }
+            })
+        }, function () {
+            layer.closeAll();
+        });
+    }
+
+
+</script>
+</body>
+</html>

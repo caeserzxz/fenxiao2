@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,viewport-fit=cover">
+    <link rel="stylesheet" href="__STATIC__/n_assets/css/zpui.css"/>
+    <link rel="stylesheet" href="__STATIC__/n_assets/css/all.css"/>
+    <script src="__STATIC__/n_assets/js/page.js"></script>
+    <link href="__STATIC__/n_assets/js/Swiper-4.0.7/swiper.min.css">
+    <link href="__PUBLIC__/static/css/page.css" rel="stylesheet" type="text/css">
+
+    <title>在线客服</title>
+</head>
+<style>
+    .btnn{
+        width: 2rem;
+        height: 0.426667rem;
+        margin: 0.333333rem 0 0.133333rem;
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: flex;
+        -webkit-box-align: center;
+        -webkit-align-items: center;
+        align-items: center;
+        -webkit-box-pack: center;
+        -webkit-justify-content: center;
+        justify-content: center;
+        background-color: #ff3a30;
+        border-radius: 0.226667rem;
+        color:#fff2e4;
+        margin: 0 auto;
+    }
+
+
+</style>
+<body>
+<body>
+<div class="page">
+    <div class="page-hd">
+        <div class="header bor-1px-b">
+            <div class="header-left">
+                <a href="{:U('User/index')}" class="left-arrow"></a>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-bd">
+        <!-- 页面内容-->
+        <div class="weui-cells" style="text-align: center;">
+            请扫码关注在线客服
+        </div>
+        <div class="weui-cells" style="text-align: center;">
+
+            <img src="{$code1}"  style="width: 2rem">
+
+        </div>
+        <div class="weui-cells" style="text-align: center;">
+
+            <img src="{$code2}" style="width: 2rem">
+
+        </div>
+    </div>
+
+
+</div>
+
+<script src="__STATIC__/n_assets/js/lib/jquery-2.1.4.js"></script>
+<script src="__STATIC__/n_assets/js/jquery-weui.min.js"></script>
+<script src="__STATIC__/n_assets/js/lib/fastclick.js"></script>
+<script>
+    $(function() {
+        FastClick.attach(document.body);
+    });
+
+    //签到
+    function buy(){
+        $.ajax({
+            type: "POST",
+            dataType: 'json',
+            data: {},
+            url: "/index.php?m=Mobile&c=User&a=dealBuyVip",
+            success: function (data) {
+                if (data.status == 1) {
+                    //成功
+                    alert(data.msg);
+                    window.location.href = "{:U('Mobile/User/index')}";
+                } else{
+
+                }
+            }
+        });
+    }
+</script>

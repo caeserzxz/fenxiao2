@@ -1,0 +1,193 @@
+<include file="public/layout" />
+<style>
+    .ncm-goods-gift {
+        text-align: left;
+    }
+    .ncm-goods-gift ul {
+        display: inline-block;
+        font-size: 0;
+        vertical-align: middle;
+    }
+    .ncm-goods-gift li {
+        display: inline-block;
+        letter-spacing: normal;
+        margin-right: 4px;
+        vertical-align: top;
+        word-spacing: normal;
+    }
+    .ncm-goods-gift li a {
+        background-color: #fff;
+        display: table-cell;
+        height: 30px;
+        line-height: 0;
+        overflow: hidden;
+        text-align: center;
+        vertical-align: middle;
+        width: 30px;
+    }
+    .ncm-goods-gift li a img {
+        max-height: 30px;
+        max-width: 30px;
+    }
+
+    a.green{
+
+        background: #fff none repeat scroll 0 0;
+        border: 1px solid #f5f5f5;
+        border-radius: 4px;
+        color: #999;
+        cursor: pointer !important;
+        display: inline-block;
+        font-size: 12px;
+        font-weight: normal;
+        height: 20px;
+        letter-spacing: normal;
+        line-height: 20px;
+        margin: 0 5px 0 0;
+        padding: 1px 6px;
+        vertical-align: top;
+    }
+
+    a.green:hover { color: #FFF; background-color: #1BBC9D; border-color: #16A086; }
+
+    .ncap-order-style .ncap-order-details{
+        margin:20px auto;
+    }
+    .contact-info h3,.contact-info .form_class{
+        display: inline-block;
+        vertical-align: middle;
+    }
+    .form_class i.fa{
+        vertical-align: text-bottom;
+    }
+</style>
+<div class="page">
+    <div class="fixed-bar">
+        <div class="item-title"><a class="back" href="javascript:history.go(-1)" title="返回列表"><i class="fa fa-arrow-circle-o-left"></i></a>
+            <div class="subject">
+                <h3>兑水管理 </h3>
+                <h5>兑水订单详情</h5>
+            </div>
+            <div class="subject" style="width:62%">
+            </div>
+        </div>
+
+    </div>
+    <div class="ncap-order-style">
+        <div class="titile">
+            <h3></h3>
+        </div>
+
+        <div class="ncap-order-details">
+            <form id="order-action">
+                <div class="tabs-panels">
+                    <div class="misc-info">
+                        <h3>基本信息</h3>
+                        <dl>
+                            <dt>订单 ID：</dt>
+                            <dd>{$order.id}</dd>
+                            <dt>订单号：</dt>
+                            <dd>{$order.order_sn}</dd>
+                            <dt>会员：</dt>
+                            <dd>{$order.nickname}</dd>
+                        </dl>
+                        <dl>
+                            <dt>E-Mail：</dt>
+                            <dd>{$order.user_email}</dd>
+                            <dt>电话：</dt>
+                            <dd>{$order.mobile}</dd>
+                            <dt>已付水币：</dt>
+                            <dd>{$order.total_coin}</dd>
+                        </dl>
+                        <dl>
+                            <dt>下单时间：</dt>
+                            <dd>{$order.create_time|date='Y-m-d H:i',###}</dd>
+                        </dl>
+                    </div>
+                    <div class="addr-note">
+                        <h4>收货信息</h4>
+                        <dl>
+                            <dt>收货人：</dt>
+                            <dd>{$order.consignee}</dd>
+                            <dt>联系方式：</dt>
+                            <dd>{$order.mobile}</dd>
+                        </dl>
+                        <dl>
+                            <dt>收货地址：</dt>
+                            <dd>{$order.fulladdress}</dd>
+                        </dl>
+                        <dl>
+                            <dt>配送状态：</dt>
+                            <!--<dd>{$order.is_deliver ?'<span style="color: #00acd6;font-weight:bold;">已发货</span>':'<span style="color: red;font-weight:bold;">待发货</span>'}</dd>-->
+                            <dd>
+                                <if condition="$order.is_deliver eq 0"><span style="color: red;font-weight:bold;">待发货</span></if>
+                                <if condition="$order.is_deliver eq 1"><span style="color: red;font-weight:bold;">已发货</span></if>
+                                <if condition="$order.is_deliver eq 2"><span style="color: red;font-weight:bold;">已收货</span></if>
+                            </dd>
+                        </dl>
+                        <if condition="$order.is_deliver eq 1">
+                            <dl>
+                                <dt>配送方式：</dt>
+                                <dd>{$order.deliver_name}</dd>
+                            </dl>
+                            <dl>
+                                <dt>物流单号：</dt>
+                                <dd>{$order.deliver_sn}</dd>
+                            </dl>
+                        </if>
+
+                    </div>
+
+
+                    <div class="goods-info">
+                        <h4>商品信息</h4>
+                        <table>
+                            <thead>
+                            <tr>
+                                <th >商品编号</th>
+                                <th>兑水商品图</th>
+                                <th>名称</th>
+                                <th>数量</th>
+                                <th>单价水币</th>
+                                <th>总水币</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <volist name="splitOrder" id="good">
+                                <tr>
+                                    <td class="w60">{$good.id}</td>
+                                    <td class="w30" style="text-align: center;"><a href="{:U('Home/Goods/goodsInfo',array('id'=>$good['goods_id']))}" target="_blank"><img alt="" src="{$good['goods_id']|goods_thum_images=50,50}" style="width: 100px;"/> </a></td>
+                                    <td class="w30" style="text-align: center;"><a href="{:U('Home/Goods/goodsInfo',array('id'=>$good['goods_id']))}" target="_blank">{$good.goods_name}</a><br/></td>
+                                    <td class="w80">{$good.num}</td>
+                                    <td class="w60">{$good.per_goods_coin}</td>
+                                    <td class="w60">{$good.sum_coin}</td>
+                                </tr>
+                            </volist>
+                        </table>
+                    </div>
+                    <div class="total-amount contact-info">
+                        <h3>消费总水币：{$total_coin}</h3>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+
+
+    function delfun() {
+        // 删除按钮
+        layer.confirm('确认删除？', {
+            btn: ['确定'] //按钮
+        }, function () {
+            console.log("确定");
+        }, function () {
+            console.log("取消");
+        });
+    }
+
+
+</script>
+</body>
+</html>

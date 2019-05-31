@@ -1,0 +1,103 @@
+<extend name="layout/common"/>
+<block name="pageBody">
+
+  <link rel="stylesheet" href="_STATIC__/Swiper-4.0.7/swiper.min.css"/>
+
+    <!-- 页面内容-->
+    <div class="weui-panel__bd tx_wrap">
+      <div  class="weui-media-box weui-media-box_appmsg txs">
+        <div class="weui-media-box__hd txs1">
+          <img class="weui-media-box__thumb" src="{$user['head_pic']}">
+        </div>
+        <div class="weui-media-box__bd txs2">
+          <p class="weui-media-box__desc">会员ID：{$user['user_id']}</p>
+          <p class="weui-media-box__desc">呢称：{$user['nickname']}</p>
+          <div class="btns">
+
+            <!--普通会员-->
+              <if condition='$user[level] eq 1'>
+            <span class="hybtn">
+              <img src="__STATIC__/images/icon_zs.png">
+              <span>会员</span>
+            </span>
+              <elseif condition='$user[level] eq 2'>
+            <span class="hybtn">
+              <img src="__STATIC__/images/icon_setvip.png">
+              <span>高级会员</span>
+            </span>
+              <elseif condition='($user[level] == 3 AND $user[is_sales] == 1)'>
+            <span class="hybtn">
+              <span>业务员</span>
+            </span>
+              <else />
+            <span class="hybtn">
+              <span>消费者</span>
+            </span>
+              </if>
+          </div>
+
+
+        </div>
+      </div>
+    </div>
+    <div class="card-flex suibi-card">
+      <div>
+        <h3>{$user['water_coin']}</h3>
+        <p>当前水币</p>
+        <div class="icon">
+          <img src="__STATIC__/images/icon_jf.png" alt="">
+        </div>
+      </div>
+      <div>
+        <h3>{$total_water}</h3>
+        <p>累计水币</p>
+        <div class="icon">
+          <img src="__STATIC__/images/icon_ca.png" alt="">
+        </div>
+      </div>
+      <div>
+        <h3>{$total_coin}</h3>
+        <p>消费水币</p>
+        <div class="icon">
+          <img src="__STATIC__/images/icon_qb.png" alt="">
+        </div>
+      </div>
+    </div>
+
+
+    <div class="weui-tab" style="height: auto">
+      <div class="weui-navbar">
+        <a class="weui-navbar__item weui-bar__item--on" href="#tab1">
+          返币记录
+        </a>
+        <a class="weui-navbar__item" href="#tab2">
+          消费记录
+        </a>
+      </div>
+      <div class="weui-tab__bd">
+        <div id="tab1" class="weui-tab__bd-item weui-tab__bd-item--active">
+
+          <div class="data_table">
+              <volist name="water_list" id="list">
+                <div class="weui-cell">
+                  <div class="col_01"><span class="price">+{$list.water_coin}</span></div>
+                  <div class="weui-flex__item">{$list.time}</div>
+                  <div class="weui-flex__item tr"><span class="text-muted">{$list.create_time}</span></div>
+                </div>
+              </volist>
+          </div>
+        </div>
+        <div id="tab2" class="weui-tab__bd-item">
+          <div class="data_table">
+              <volist name="order_list" id="list">
+            <div class="weui-cell">
+              <div class="col_01"><span class="price">-{$list.total_coin}</span></div>
+              <div class="weui-flex__item">兑水消费</div>
+              <div class="weui-flex__item tr"><span class="text-muted">{$list.create_time}</span></div>
+            </div>
+              </volist>
+          </div>
+        </div>
+      </div>
+    </div>
+</block>

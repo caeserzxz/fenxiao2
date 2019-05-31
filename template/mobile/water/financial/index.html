@@ -1,0 +1,220 @@
+<extend name="layout/common"/>
+<block name="pageBody">
+
+    <include file="components/financial_modal"/>
+    <include file="components/list"/>
+    <include file="components/financial_item"/>
+
+    <style>
+        .avatar {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+        }
+
+        .tx_wrap .txs .txs2 .txs3 {
+            display: inline-block;
+            width: auto;
+            padding: 0 .1rem;
+            line-height: 0.266667rem;
+            margin-left: .05rem;
+            margin-right: .05rem;
+        }
+        .tx_wrap .txs .txs2 .txs3 img {
+            width: 0.18rem;
+            height: auto;
+            vertical-align: middle;
+        }
+
+        .weui-loadmore_line .weui-loadmore__tips {
+            background-color: #f2f7fa;
+        }
+    </style>
+
+    <div id="app">
+
+        <div class="weui-panel__bd tx_wrap">
+            <div class="weui-media-box weui-media-box_appmsg txs">
+                <div class="weui-media-box__hd txs1">
+                    <img class="weui-media-box__thumb avatar" src="{$user['head_pic']|default='__STATIC__/images/user68.jpg'}">
+                </div>
+                <div class="weui-media-box__bd txs2">
+                    <p class="weui-media-box__desc">会员ID：{$user['user_id']}</p>
+                    <p class="weui-media-box__desc">呢称：{$user['nickname']}</p>
+                    <p class="weui-media-box__desc">当前理财本金：￥{$user['total_financial_amount']}</p>
+                    <div class="txs3">
+                        <if condition="$user['user_level']">
+                        </if>
+                        <if condition="$user['user_level']['icon']">
+                            <img src="__STATIC__{$user['user_level']['icon']}" alt="">
+                        </if>
+                        <span>{$user['user_level']['level_name']}</span>
+                    </div>
+                    <if condition="$user['is_sales']">
+                        <div class="txs3">
+                            <span>业务员</span>
+                        </div>
+                    </if>
+                    <if condition="$user['is_share_holder']">
+                        <div class="txs3">
+                            <span>股东</span>
+                        </div>
+                    </if>
+                </div>
+            </div>
+        </div>
+        <div class="card-flex mycarflex">
+            <a class="flex_item" href="{:U('startManagement')}">
+                <div class="icon myicon">
+                    <img src="__STATIC__/images/icon_lc01.png" alt="">
+                </div>
+                <div class="label mylabel">理财说明</div>
+            </a>
+            <a class="flex_item" href="javascript:" @click.prevent="newManagement">
+                <div class="icon myicon" href="javascript:">
+                    <img class="new_licai" src="__STATIC__/images/icon_lc02.png" alt="">
+                </div>
+                <div class="label mylabel">申请新理财</div>
+            </a>
+        </div>
+        <div class="licai_list">
+
+            <div is="list" ref="list" :get-list="getList">
+
+                <div slot="listItem" slot-scope="item" is="financial_item" :data="item.data" @item-cancel="itemCancel"></div>
+
+            </div>
+
+        </div>
+
+        <div is="financial_modal" ref="financial_modal"></div>
+
+        <!--确认支取弹框-->
+        <div class="weui-popup__container popup-bottom popup-center" ref="item_cancel_modal">
+            <div class="weui-popup__overlay"></div>
+            <div class="weui-popup__modal">
+                <div class="modal_bg">
+                    <div class="modal_top">
+                        <div class="modal_zhiqu">支取</div>
+                        <div class="modal_close" @click="closeModal">
+                            <img src="__STATIC__/images/icon_close.png" alt="">
+                        </div>
+                    </div>
+                    <div class="modal_content">
+                        <h3>该笔理财未到截止日期，您确定提前支取？</h3>
+                        <p>理财本金：{{cancelItem.amount_text | rmbPrefix}}</p>
+                        <p>本次存期：{{settleInterestInfo.interval_month}}个月（月利率{{settleInterestInfo.interest_rate}}%）</p>
+                        <p>本期分红：佣金{{settleInterestInfo.money_text | rmbPrefix}} + 积分{{settleInterestInfo.point}}</p>
+                    </div>
+                    <div class="modal_btn" @click="doCancel">
+                        <a href="javascript:" >确定支取</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        'use strict';
+
+        new Vue({
+            el: '#app',
+            data: {
+                list: [],
+
+                cancelItem: {},
+                settleInterestInfo: {},
+            },
+
+            mounted: function () {
+                var self = this;
+                this.update();
+
+                $('.page-bd').infinite(200).on('infinite', function () {
+                    self.$refs.list.loadMore();
+                });
+            },
+
+            methods: {
+
+                update: function () {
+                    this.$refs.list.loadMore({
+                        init: true,
+                    });
+                },
+
+                getList: function (options) {
+
+                    var list = [],
+                        item,
+                        ended = false;
+
+                    $.api.request("{:url('getList')}", {
+                        p: options.page + 1,
+
+                    }).fail(this.failHandler).done(function (res) {
+
+                        if (res.length) {
+
+                            for (var i in res) {
+                                item = res[i];
+
+                                list.push(item);
+                            }
+                        } else {
+                            ended = true;
+                        }
+
+                        options.finish({
+                            newList: list,
+                            ended: ended,
+                        });
+                    });
+                },
+
+                newManagement: function () {
+                    this.$refs.financial_modal.popup();
+                },
+
+                itemCancel: function (item) {
+                    var self = this;
+                    this.cancelItem = item;
+
+                    $.showLoading();
+
+                    $.api.request("{:U('getSettleInterestInfo')}", {
+                        id: item.id,
+                    }).fail(this.failHandler).done(function(res) {
+
+                        self.settleInterestInfo = res;
+
+                        $.hideLoading();
+
+                        $(self.$refs.item_cancel_modal).popup();
+                    });
+                },
+
+                doCancel: function () {
+                    var self = this;
+
+                    this.closeModal();
+                    $.showLoading();
+
+                    $.api.request("{:url('doCancel')}", {
+                        id: this.$data.cancelItem.id,
+
+                    }).fail(this.failHandler).done(function () {
+                        $.hideLoading();
+                        $.toptip('订单取消成功', 'success');
+                        self.update();
+                    });
+                },
+
+                closeModal: function () {
+                    $.closePopup();
+                },
+            },
+        });
+    </script>
+
+</block>

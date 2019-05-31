@@ -1,0 +1,174 @@
+<include file="public/layout" />
+<style>
+.ncm-goods-gift {
+	text-align: left;
+}
+.ncm-goods-gift ul {
+    display: inline-block;
+    font-size: 0;
+    vertical-align: middle;
+}
+.ncm-goods-gift li {
+    display: inline-block;
+    letter-spacing: normal;
+    margin-right: 4px;
+    vertical-align: top;
+    word-spacing: normal;
+}
+.ncm-goods-gift li a {
+    background-color: #fff;
+    display: table-cell;
+    height: 30px;
+    line-height: 0;
+    overflow: hidden;
+    text-align: center;
+    vertical-align: middle;
+    width: 30px;
+}
+.ncm-goods-gift li a img {
+    max-height: 30px;
+    max-width: 30px;
+}
+
+a.green{
+	
+	background: #fff none repeat scroll 0 0;
+    border: 1px solid #f5f5f5;
+    border-radius: 4px;
+    color: #999;
+    cursor: pointer !important;
+    display: inline-block;
+    font-size: 12px;
+    font-weight: normal;
+    height: 20px;
+    letter-spacing: normal;
+    line-height: 20px;
+    margin: 0 5px 0 0;
+    padding: 1px 6px;
+    vertical-align: top;
+}
+
+a.green:hover { color: #FFF; background-color: #1BBC9D; border-color: #16A086; }
+
+.ncap-order-style .ncap-order-details{
+	margin:20px auto;
+}
+.contact-info h3,.contact-info .form_class{
+  display: inline-block;
+  vertical-align: middle;
+}
+.form_class i.fa{
+  vertical-align: text-bottom;
+}
+</style>
+<div class="page">
+  <div class="fixed-bar">
+    <div class="item-title"><a class="back" href="javascript:history.go(-1)" title="返回列表"><i class="fa fa-arrow-circle-o-left"></i></a>
+      <div class="subject">
+        <h3>申请详情</h3>
+        <h5>会员用户申请退还押金查询及管理</h5>
+      </div>
+    </div>
+  </div>
+  <div class="ncap-order-style">
+    <div class="titile">
+      <h3></h3>
+    </div>
+ 
+    <div class="ncap-order-details">
+      <form id="order-action">
+        <div class="tabs-panels">
+            <div class="misc-info">
+                <h3>基本信息</h3>
+                <dl>
+                    <dt>用户名</dt>
+                    <dd>{$detail.nickname}</dd>
+                    <dt>头像：</dt>
+                    <dd><img src="{$detail.head_pic}" style="width: 45px; height: 45px"></dd>
+                    <dt>等级：</dt>
+                    <dd>{$detail.level_name} </dd>
+                </dl>
+                <dl>
+                    <dt>余额：</dt>
+                    <dd>{$detail.user_money}</dd>
+                    <dt>积分：</dt>
+                    <dd>{$detail.pay_points}</dd>
+                    <dt>水币：</dt>
+                    <dd>{$detail.water_coin}</dd>
+                </dl>
+                <dl>
+                    <dt>状态：</dt>
+                    <dd>
+                        <if condition="$detail['status'] eq 0"><span style="color: red">未审核</span>
+                        <elseif condition="$detail['status'] eq 1">审核通过
+                            <else />拒绝</if>
+                    </dd>
+                    <dt>申请时间：</dt>
+                    <dd>{$detail.create_time|date='Y-m-d H:i',###}</dd>
+                    <dt>最后登录时间：</dt>
+                    <dd>{$detail.last_login|date='Y-m-d H:i',###}</dd>
+                </dl>
+            </div>
+            <div class="misc-info">
+                <h3>打款详情</h3>
+                <dl>
+                    <dt></dt>
+                    <dd>{$detail.detail}</dd>
+                </dl>
+            </div>
+        <div class="total-amount contact-info">
+          <h3>退还押金：￥{$detail.apply_deposit}</h3>
+        </div>
+        <div class="contact-info">
+	      <dl class="row">
+	        <dt class="tit">
+	          <label for="note">可执行操作</label>
+	        </dt>
+	        <dd class="opt" style="margin-left:10px">
+                <if condition="$detail['status'] eq 0">
+                <a class="ncap-btn-big ncap-btn-green" data-url="{:U('Deposit/status',array('id'=>$detail['id'],'status'=>1))}" onclick="status(this)">审核通过</a>
+                <a class="ncap-btn-big ncap-btn-green" data-url="{:U('Deposit/status',array('id'=>$detail['id'],'status'=>2))}" onclick="status(this)">拒绝</a>
+                </if>
+            </dd>
+	      </dl> 
+        </div>
+      </div>
+      </form>
+  	</div>
+  </div>
+</div>
+<script type="text/javascript">
+
+    function status(me) {
+        $.ajax({
+            url: $(me).data('url'),
+            type:'post',
+            data:{},
+            dataType:'json',
+            success: function (res) {
+                if(res.status == 1){
+                    location.href=location.href
+                }else{
+                    layer.msg(res.msg, {icon: 2, time: 1000},function(){
+                        location.href= "{:U('Admin/Deposit/applyList')}"
+                    });
+                }
+            }
+        })
+    }
+
+function delfun() {
+	// 删除按钮
+	layer.confirm('确认删除？', {
+		btn: ['确定'] //按钮
+	}, function () {
+		console.log("确定");
+	}, function () {
+		console.log("取消");
+	});
+}
+
+ 
+</script>
+</body>
+</html>

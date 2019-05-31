@@ -1,0 +1,66 @@
+<include file="public/layout"/>
+<script src="__ROOT__/public/static/js/layer/laydate/laydate.js"></script>
+<body style="background-color: #FFF; overflow: auto;">
+<div class="page">
+    <div class="fixed-bar">
+        <div class="item-title"><a class="back" href="javascript:history.back();" title="返回列表"><i
+                class="fa fa-arrow-circle-o-left"></i></a>
+            <div class="subject">
+                <h3>编辑物流公司</h3>
+            </div>
+        </div>
+    </div>
+    <!--表单数据-->
+    <form method="post" id="handleposition" action="{:U('Express/expressUpdate')}">
+        <div class="ncap-form-default">
+            <dl class="row">
+                <dt class="tit">
+                    <label><em>*</em>名称：</label>
+                </dt>
+                <dd class="opt">
+                    <input type="hidden" name="add" value="1">
+                    <input type="text" name="name" value="{$data['name']}" />
+                    <span class="err" style="color:#F00; display:none;">名称不能为空</span>
+                    <p class="notic"></p>
+                </dd>
+            </dl>
+
+            <dl class="row">
+                <dt class="tit">
+                    <label><em>*</em>快递100编码：</label>
+                </dt>
+                <dd class="opt">
+                    <input type="hidden" name="id" value="{$data['id']}">
+                    <input type="text" name="code" value="{$data['code']}" />注：请认真填写正确的物流公司编码，该编码会影响快递单号查询
+                     <span class="err" style="color:#F00; display:none;">答案不能为空</span>
+                    <p class="notic"></p>
+                </dd>
+            </dl>
+            <dl class="row">
+                <dt class="tit">
+                    <label><em>*</em>快递鸟编码：</label>
+                </dt>
+                <dd class="opt">
+                    <input type="hidden" name="id" value="{$data['id']}">
+                    <input type="text" name="code2" value="{$data['code2']}" />注：请认真填写正确的物流公司编码，该编码会影响快递单号查询
+                    <span class="err" style="color:#F00; display:none;">答案不能为空</span>
+                    <p class="notic"></p>
+                </dd>
+            </dl>
+
+            <div class="bot">
+                <a href="JavaScript:void(0);" onclick="adsubmit()" class="ncap-btn-big ncap-btn-green" id="submitBtn1">保存</a>
+            </div>
+        </div>
+        <input type="hidden" name="act" value="{$act}">
+        <input type="hidden" name="ad_id" value="{$info.ad_id}">
+    </form>
+</div>
+<script>
+    function adsubmit() {
+        $('#handleposition').submit();
+    }
+
+</script>
+</body>
+</html>

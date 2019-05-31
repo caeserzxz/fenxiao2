@@ -1,0 +1,131 @@
+<include file="public/layout"/>
+<script src="__ROOT__/public/static/js/layer/laydate/laydate.js"></script>
+<body style="background-color: rgb(255, 255, 255); overflow: auto; cursor: default; -moz-user-select: inherit;">
+<div id="append_parent"></div>
+<div id="ajaxwaitid"></div>
+<div class="page">
+    <div class="fixed-bar">
+        <div class="item-title">
+            <div class="subject">
+                <h3>顶部轮转图设置</h3>
+            </div>
+        </div>
+    </div>
+    <!-- 操作说明 -->
+    <div id="explanation" class="explanation"
+         style="color: rgb(44, 188, 163); background-color: rgb(237, 251, 248); width: 99%; height: 100%;">
+        <div id="checkZoom" class="title"><i class="fa fa-lightbulb-o"></i>
+            <h4 title="提示相关设置操作时应注意的要点">操作提示</h4>
+            <span title="收起提示" id="explanationZoom" style="display: block;"></span>
+        </div>
+        <ul>
+            <li>可以添加或编辑、删除顶部轮转图</li>
+        </ul>
+    </div>
+    <div class="flexigrid">
+        <div class="mDiv">
+            <div class="ftitle">
+                <h3>轮转图列表</h3>
+                <h5>(共{$pager->totalRows}条记录)</h5>
+
+            </div>
+            <div title="刷新数据" class="pReload"><i class="fa fa-refresh"></i></div>
+            <div style="margin-left:15px;">
+                <button><a style="font-size:16px;" href="{:U('Banner/bannerAdd')}">添加顶部轮转图</a></button>
+            </div>
+        </div>
+
+        <div class="bDiv" style="height: auto;">
+            <div id="flexigrid" cellpadding="0" cellspacing="0" border="0">
+                <div class="content-container">
+                    <table cellpadding="0" cellspacing="0">
+                        <thead class="well">
+                        <tr>
+                            <th width="30%" style="font-weight:bold;font-size:14px;">路径</th>
+                            <th width="20%" style="font-weight:bold;font-size:14px;">图片</th>
+                            <th width="20%" style="font-weight:bold;font-size:14px;">状态</th>
+                            <th width="15%" style="font-weight:bold;font-size:14px;">操作</th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        <volist name="lists" id="vo">
+                            <tr>
+                                <td style="padding-top:10px;">{$vo.banner_path}</td>
+                                <td style="padding-top:10px;"><a target="_blank" href="{$vo.banner_path}"><img style="width:30%;height:15%;" src="{$vo.banner_path}"></a></td></td>
+                                <td style="padding-top:10px;">
+                                    <if $vo['is_show'] == 0>
+                                    <span>隐藏</span>
+                                    <elseif $vo['is_show'] == 1>
+                                    <span>显示</span>
+                                    </if>
+                                </td>
+
+                                <td style="padding-top:10px;">
+
+                                    <a class="btn btn-info btn-jump"
+                                       href="{:U('Banner/bannerUpdate',array('id'=>$vo.id,'update'=>1))}">
+                                        编辑
+                                    </a>
+                                    <a class="btn btn-info btn-jump" onclick="delfun(this)"
+                                       data-url="{:U('Banner/bannerDelete',array('id'=>$vo.id))}">
+                                        删除
+                                    </a>
+
+                                </td>
+                            </tr>
+                        </volist>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="iDiv" style="display: none;"></div>
+        </div>
+        <!--分页位置-->
+        {$page}
+    </div>
+</div>
+<script>
+
+
+    $(document).ready(function () {
+        // 表格行点击选中切换
+        $('#flexigrid > table>tbody >tr').click(function () {
+            $(this).toggleClass('trSelected');
+        });
+
+        // 点击刷新数据
+        $('.fa-refresh').click(function () {
+            location.href = location.href;
+        });
+        $('#start_time').layDate();
+        $('#end_time').layDate();
+    });
+
+    function delfun(obj) {
+        // 删除按钮
+        layer.confirm('确认删除？', {
+            btn: ['确定', '取消'] //按钮
+        }, function () {
+            $.ajax({
+                type: 'post',
+                url: $(obj).attr('data-url'),
+                data: {},
+                dataType: 'json',
+                success: function (data) {
+                    layer.closeAll();
+                    if (data.status == '1') {
+                        window.location.href = "{:U('Banner/bannerList')}";
+                    } else {
+                        layer.alert('删除失败', {icon: 2});  //alert('删除失败');
+                    }
+                }
+            })
+        }, function () {
+            layer.closeAll();
+        });
+    }
+
+</script>
+</body>
+</html>

@@ -1,0 +1,130 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+    <title>jquery实现多级树形分类可折叠菜单特效代码</title>
+
+
+
+    <!--图标样式-->
+
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/static/jquerytree/css/bootstrap.min.css" />
+
+
+
+    <!--主要样式-->
+
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/static/jquerytree/css/style.css" />
+
+
+
+    <script type="text/javascript" src="__PUBLIC__/static/jquerytree/js/jquery-1.7.2.min.js"></script>
+
+    <script type="text/javascript">
+
+        $(function(){
+
+            $('.tree li:has(ul)').addClass('parent_li').find(' > span').attr('title', 'Collapse this branch');
+
+            $('.tree li.parent_li > span').on('click', function (e) {
+
+                var children = $(this).parent('li.parent_li').find(' > ul > li');
+                var user_id=$(this).attr('name');
+
+                if (children.is(":visible")) {
+
+                    children.hide('fast'); //隐藏
+                    $(this).attr('title', 'Expand this branch').find(' > i').addClass('icon-plus-sign').removeClass('icon-minus-sign');
+
+                } else {
+
+                    $.ajax({
+                        url: 'admin/User/xiaji_tree',
+                        type: 'POST',
+                        data:{
+                            user_id:user_id,
+                        },
+                        success: function (data) {
+                            var html = '';
+                            $("#dd"+user_id).empty(html);
+                            console.log(data)
+                            for(var i in data){
+
+                                html +='<li>'
+                                html +='<span>用户id：'+data[i].user_id+'用户名：'+data[i].nickname+'</span>'
+                                html +='</li>';
+                            }
+                            $("#dd"+user_id).append(html);
+                        },
+                        error: function (data) {
+                            //tipTopShow("上传失败");
+                        }
+                    });
+                    children.show('fast'); //显示
+
+                    $(this).attr('title', 'Collapse this branch').find(' > i').addClass('icon-minus-sign').removeClass('icon-plus-sign');
+
+                }
+
+                e.stopPropagation();
+
+            });
+
+        });
+
+    </script>
+
+
+
+</head>
+
+<body>
+
+
+<div class="tree">
+
+    <ul>
+
+        <li>
+
+            <span><i class="icon-calendar"></i>用户ID：{$user_data['user_id']}—用户名：{$user_data.nickname}</span>
+
+            <ul>
+
+                <volist name="list" id="vo">
+
+                <li>
+
+                    <span class="badge badge-sdduccess" name="{$vo.user_id}"><i class="icon-minus-sign"></i>用户ID：{$vo.user_id}—用户名：{$vo.nickname}<br/> </span>
+
+                    <ul id="dd{$vo.user_id}">
+
+                        <!--<li>-->
+
+                            <!--<a href=""><span><i class="icon-time"></i> 8.00</span> &ndash; Changed CSS to accomodate...</a>-->
+
+                        <!--</li>-->
+
+                    </ul>
+
+                </li>
+                </volist>
+
+
+            </ul>
+
+        </li>
+
+
+    </ul>
+
+</div>
+
+
+</body>
+
+</html>

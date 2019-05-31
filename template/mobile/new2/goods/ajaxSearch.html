@@ -1,0 +1,118 @@
+<layout name="common/layout_nav" />
+	<style>
+		.keywords{
+			font-size: 0;
+			margin-top: 0.5rem;
+		}
+		.keywords span{
+			display: inline-block;
+			border-radius: 3px;
+			background-color: #fff;
+			border: 1px solid #e0e0e0;
+			padding: 5px 10px;
+			font-size: 0.5rem;
+			margin-right: 7px;
+			margin-bottom: 7px;
+		}
+		.weui-search-bar__label{
+			background-color: #fff;
+			text-align: left;
+		}
+		.weui-search-bar{
+			padding-top: 10px;
+			padding-bottom: 10px;
+		}
+		.weui-search-bar__label .weui-icon-search{
+			margin-left: 10px;
+		}
+		.weui-search-bar__form:after{
+			background-color: #fff;
+		}
+		.weui-search-bar{
+			box-shadow: 0 3px 10px rgba(0,0,0,0.02);
+		}
+		.weui-search-bar:after{
+			display: none;
+		}
+		.weui-search-bar__cancel-btn{
+			color: #323232;
+		}
+	</style>
+<div class="page">
+	<div class="page-hd">
+		<div class="header">
+			<div class="header-left">
+				<a href="javascript:history.back(-1);" class="left-arrow"></a>
+			</div>
+			<div class="header-title">{$web_title}</div>
+			<div class="header-right"><a href="#"></a> </div>
+		</div>
+	</div>
+	<div class="page-bd vux-1px-t">
+		<div class="weui-search-bar" id="searchBar">
+			<form class="weui-search-bar__form" action="{:U('Goods/search')}"  id="sourch_form">
+				<div class="weui-search-bar__box">
+					<i class="weui-icon-search" onclick="ajaxsecrch()"></i>
+					<input type="search" class="weui-search-bar__input" name="q" id="searchInput" placeholder="输入搜索关键词" required="">
+					<a href="javascript:"  class="weui-icon-clear" id="searchClear"></a>
+				</div>
+				<label class="weui-search-bar__label" id="searchText">
+					<i class="weui-icon-search"></i>
+					<span>输入搜索关键词</span>
+				</label>
+			</form>
+			<a href="javascript:" class="weui-search-bar__cancel-btn" id="searchCancel">取消</a>
+		</div>
+
+		<!--<div class="weui-cell">-->
+			<!--<div class="weui-cell__bd">-->
+				<!--<div class="fs10">最近搜索</div>-->
+				<!--<div class="keywords">-->
+					<!--<span>女装上秋</span>-->
+					<!--<span>眉笔</span>-->
+					<!--<span>护肤品</span>-->
+				<!--</div>-->
+			<!--</div>-->
+		<!--</div>-->
+
+		<div class="weui-cell">
+			<div class="weui-cell__bd">
+				<div class="fs10">热门搜索</div>
+				<div class="keywords">
+                    <foreach name="tpshop_config.hot_keywords" item="wd" key="k">
+                        <span><a href="{:U('Goods/search',array('q'=>$wd))}" <if condition="$k eq 0">class="ht"</if>>{$wd}</a></span>
+                    </foreach>
+
+					<!--<span>黄金</span>-->
+					<!--<span>银手镯</span>-->
+					<!--<span>小白鞋</span>-->
+					<!--<span>三只松鼠</span>-->
+					<!--<span>三只松鼠</span>-->
+					<!--<span>风衣</span>-->
+					<!--<span>百草味</span>-->
+					<!--<span>补水面膜</span>-->
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+<script>
+	$(function () {
+		weui.searchBar('#searchBar');
+	})
+
+
+    function ajaxsecrch(){
+        if($.trim($('#searchInput').val()) != ''){
+            $("#sourch_form").submit();
+        }else{
+            layer.open({content:'请输入搜索关键字',time:2});
+        }
+    }
+    $(function(){
+        $('#q').focus();
+    })
+</script>

@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,viewport-fit=cover">
+    <link rel="stylesheet" href="__STATIC__/assets_lyq/css/zpui.css"/>
+    <link rel="stylesheet" href="__STATIC__/assets_lyq/css/all.css"/>
+    <script src="__STATIC__/assets_lyq/js/page.js"></script>
+    <link rel="stylesheet" href="__STATIC__/assets_lyq/js/Swiper-4.0.7/swiper.min.css" />
+
+    <title>首页</title>
+</head>
+<body>
+<div class="page idnex">
+    <div class="page-bd">
+        <!-- 页面内容-->
+        <!--<div class="swiper-container banner-swiper" id="banner">-->
+            <!--<div class="swiper-wrapper">-->
+                <!--<volist name="banner" id="vo">-->
+                    <!--<div class="swiper-slide">-->
+                        <!--<if condition="$vo.article_id gt 0">-->
+                            <!--<a href="{:U('Article/articleDetail',array('article_id'=>$vo.article_id))}" class="proitem">-->
+                                <!--<div class="imgbox">-->
+                                    <!--<img src="{$vo['banner_path']}" alt=""/>-->
+                                <!--</div>-->
+                            <!--</a>-->
+                        <!--</if>-->
+                        <!--<if condition="$vo.goods_id gt 0">-->
+                            <!--<a href="{:U('Goods/goodsInfo',array('id'=>$vo.goods_id))}" class="proitem">-->
+                                <!--<div class="imgbox">-->
+                                    <!--<img src="{$vo['banner_path']}" alt=""/>-->
+                                <!--</div>-->
+                            <!--</a>-->
+                        <!--</if>-->
+                    <!--</div>-->
+                <!--</volist>-->
+            <!--</div>-->
+            <!--<div class="swiper-pagination"></div>-->
+        <!--</div>-->
+
+        <div class="top">
+            <form id="form" action="{:U('Index/index')}" method="post">
+            <div class="seachBox">
+                <img onclick="search()" src="__STATIC__/assets_lyq/images/selech01.png" alt="" />
+                <input type="text" name="goods_name" class="fs28 color_3" placeholder="商品名称搜索" />
+            </div>
+            </form>
+
+                <div class="search_inputbox">
+                    <input style="display: none;" class="weui-input" type="text" name="goods_name" placeholder="请输入商品名称搜索">
+                    <input type="hidden" name="hidden_goods_name" value="{$searchGoods}">
+                    <input style="display: none;" id="submitSearch" type="submit" value="搜索">
+                </div>
+
+
+        </div>
+        <!--<div class="weui-grids fourlist">-->
+            <!--<volist name="articleList" id="vo1" key="k">-->
+
+            <!--<a href="{$vo1.url}" class="weui-grid">-->
+                <!--<div class="weui-grid__icon">-->
+                    <!--<img src="{$vo1.img_path}" alt="" />-->
+                <!--</div>-->
+                <!--<p class="weui-grid__label fs26">-->
+                    <!--{$vo1.title}-->
+                <!--</p>-->
+            <!--</a>-->
+
+            <!--</volist>-->
+        <!--</div>-->
+        <div class="swiperBox">
+            <div class="swiper-container swiperBox swiper1">
+                <div class="swiper-wrapper">
+                    <volist name="banner" id="vo">
+                        <div class="swiper-slide">
+                            <if condition="$vo.goods_id gt 0">
+                                <a href="{:U('Goods/goodsInfo',array('id'=>$vo.goods_id))}" class="proitem">
+                                    <img src="{$vo['banner_path']}" alt="" />
+                                </a>
+                            <else />
+                                <img src="{$vo['banner_path']}" alt="" />
+                            </if>
+                        </div>
+                    </volist>
+                </div>
+                <div class="swiper-pagination pagination1"></div>
+            </div>
+        </div>
+
+        <!--<div class="weui-grids fivelist">-->
+            <!--<volist name="getClass" id="vo" key="k">-->
+
+            <!--<a href="{:U('Mobile/Category/goodsList',array('parent_id'=>$vo[id]))}" class="weui-grid">-->
+                <!--<div class="weui-grid__icon">-->
+                    <!--<img src="{$vo.image}" alt="" />-->
+                <!--</div>-->
+                <!--<p class="weui-grid__label fs26">-->
+                    <!--{$vo.name}-->
+                <!--</p>-->
+            <!--</a>-->
+
+            <!--</volist>-->
+        <!--</div>-->
+
+        <div class="goodslsit">
+            <div class="title fs28 color_3">新品首发</div>
+            <div class="row">
+                <volist name="new_goods" id="vo">
+                <div class="block">
+                    <a href="{:U('Mobile/Goods/goodsInfo',array('id'=>$vo[goods_id]))}" class="pro_img">
+
+                    <img src="{$vo.original_img}" alt="" />
+                    <p class="fs26 color_3 textline_1">
+                        {$vo.goods_name}
+                    </p>
+                    <div class="fs30 color_r fw_b">￥{$vo.shop_price}</div>
+                    </a>
+                </div>
+                </volist>
+            </div>
+            <div class="list">
+
+                <volist name="index_goods" id="vo">
+                    <div class="block">
+                        <a href="{:U('Mobile/Goods/goodsInfo',array('id'=>$vo[goods_id]))}" class="pro_img">
+                        <img src="{$vo.original_img}" alt="" />
+                        <p class="fs26 color_3 textline_2">
+                            {$vo.goods_name}
+                        </p>
+                        <div class="fs30 color_r fw_b">￥{$vo.shop_price}</div>
+                        </a>
+                    </div>
+                </volist>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="bottom-tabbar-wrapper">
+        <div class="bottom-tabbar">
+
+            <if condition="$Request.controller eq 'Index'">
+                <a href="{:U('Index/index')}" class="bottom-tabbar__item active">
+                    <else \>
+                        <a href="{:U('Index/index')}" class="bottom-tabbar__item">
+            </if>
+            <span class="icon" style="width:0.19rem;height:0.19rem">
+            <img src="__STATIC__/n_assets/images/bottom_icon01.png"/>
+            <img class="lhimg" src="__STATIC__/n_assets/images/bottom_icon01_lh.png"/>
+        </span>
+            <p class="label">首页</p>
+            </a>
+            <if condition="$Request.controller eq 'Share'">
+                <a href="{:U('Share/index')}" class="bottom-tabbar__item active">
+                    <else \>
+                        <a href="{:U('Share/index')}" class="bottom-tabbar__item ">
+            </if>
+            <span class="icon">
+            <img src="__STATIC__/n_assets/images/bottom_icon02.png"/>
+            <img class="lhimg" src="__STATIC__/n_assets/images/bottom_icon02_lh.png"/>
+        </span>
+            <p class="label">分享</p>
+            </a>
+            <!--<if condition="$Request.controller eq 'Goods'">-->
+                <!--<a href="{:U('Goods/categoryList')}" class="bottom-tabbar__item active">-->
+                    <!--<else \>-->
+                        <!--<a href="{:U('Goods/categoryList')}" class="bottom-tabbar__item ">-->
+            <!--</if>-->
+            <!--<span class="icon" style="width:0.19rem;height:0.19rem">-->
+            <!--<img src="__STATIC__/n_assets/images/tabbar_icon02.png"/>-->
+            <!--<img class="lhimg" src="__STATIC__/n_assets/images/tabbar_icon02_lh.png"/>-->
+        <!--</span>-->
+            <!--<p class="label">分类</p>-->
+            <!--</a>-->
+            <if condition="$Request.controller eq 'User' && $Request.action eq 'userNotice'">
+                <a href="{:U('User/newsNotice')}" class="bottom-tabbar__item active">
+                    <else \>
+                        <a href="{:U('User/newsNotice')}" class="bottom-tabbar__item ">
+            </if>
+            <span class="icon">
+            <img src="__STATIC__/n_assets/images/bottom_icon03.png"/>
+            <img class="lhimg" src="__STATIC__/n_assets/images/bottom_icon03_lh.png"/>
+        </span>
+            <p class="label">公告</p>
+            </a>
+            <if condition="$Request.controller eq 'Cart'">
+                <a href="{:U('Cart/index')}" class="bottom-tabbar__item active">
+                    <else \>
+                        <a href="{:U('Cart/index')}" class="bottom-tabbar__item ">
+            </if>
+            <span class="icon" style="width:0.19rem;height:0.19rem">
+            <img src="__STATIC__/n_assets/images/bottom_icon04.png"/>
+            <img class="lhimg" src="__STATIC__/n_assets/images/bottom_icon04_lh.png"/>
+        </span>
+            <p class="label">购物车</p>
+            </a>
+
+            <if condition="$Request.controller eq 'User' && $Request.action neq 'userNotice'">
+                <a href="{:U('User/index')}" class="bottom-tabbar__item active">
+                    <else \>
+                        <a href="{:U('User/index')}" class="bottom-tabbar__item">
+            </if>
+            <span class="icon" style="width:0.19rem;height:0.19rem">
+            <img src="__STATIC__/n_assets/images/bottom_icon05.png"/>
+            <img class="lhimg" src="__STATIC__/n_assets/images/bottom_icon05_lh.png"/>
+        </span>
+            <p class="label">我的</p>
+            </a>
+        </div>
+    </div>
+</div>
+
+<script src="__STATIC__/assets_lyq/js/lib/jquery-2.1.4.js"></script>
+<script src="__STATIC__/assets_lyq/js/jquery-weui.min.js"></script>
+<script src="__STATIC__/assets_lyq/js/lib/fastclick.js"></script>
+<script src="__STATIC__/js/layer.js"  type="text/javascript" ></script>
+<script>
+    $(function() {
+        FastClick.attach(document.body);
+    });
+</script>
+<script src="__STATIC__/assets_lyq/js/Swiper-4.0.7/swiper.min.js"></script>
+<script>
+    $(function() {
+        var swiper1 = createSwiper(1);
+        var subscribe = {$subscribe};
+        if(subscribe==2){
+            showQrCode('__STATIC__/images/qrcode_nxr.png');
+        }
+
+    });
+
+    function showQrCode(qr_url) {
+
+        layer.open({
+            type: 1,
+            title: false,       //不显示标题栏
+            closeBtn: false,
+            area: '260px;',
+            shade: 0.8,
+            id: 'LAY_layuipro', //设定一个id，防止重复弹出
+            // btn: ['下次关注'],
+            btnAlign: 'c',
+            moveType: 1,       //拖拽模式，0或者1
+            content: '<div style="padding: 52px; line-height: 27px; font-weight: 100; font-size: 16px"><center>长按识别关注公众号</center><img style="height:150px;" src="' + qr_url + '"></div>',
+            success: function(layero){
+            }
+        });
+    }
+    function createSwiper(index, val) {
+        var swiper = new Swiper(".swiper" + index, {
+            pagination: {
+                el: ".pagination" + index
+            },
+            paginationClickable: true,
+            observer: true,
+            observeParents: true,
+            loop: true,
+            autoplay: {
+                delay: 1500,
+                stopOnLastSlide: false,
+                disableOnInteraction: false
+            },
+            onSlideChangeEnd: function(swiper) {
+                swiper.update(); //swiper更新
+            }
+        });
+        return swiper;
+    }
+
+    function search(){
+        var searchVal=$(" input[ name='goods_name' ] ").val();
+        $("#form").submit();
+    }
+</script>
+</body>
+</html>

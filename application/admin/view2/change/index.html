@@ -1,0 +1,389 @@
+<include file="public/layout" />
+<body style="background-color: rgb(255, 255, 255); overflow: auto; cursor: default; -moz-user-select: inherit;">
+<div id="append_parent"></div>
+<div id="ajaxwaitid"></div>
+<div class="page">
+    <div class="fixed-bar">
+        <div class="item-title">
+            <div class="subject">
+                <h3>兑水管理</h3>
+                <h5>网站兑水活动索引与管理</h5>
+            </div>
+        </div>
+    </div>
+    <!-- 操作说明 -->
+    <!--<div id="explanation" class="explanation" style="color: rgb(44, 188, 163); background-color: rgb(237, 251, 248); width: 99%; height: 100%;">-->
+    <!--<div id="checkZoom" class="title"><i class="fa fa-lightbulb-o"></i>-->
+    <!--<h4 title="提示相关设置操作时应注意的要点">操作提示</h4>-->
+    <!--<span title="收起提示" id="explanationZoom" style="display: block;"></span>-->
+    <!--</div>-->
+    <!--<ul>-->
+    <!--<li>同一个品牌可以添加多次.</li>-->
+    <!--<li>比如卖笔记本下面一个苹果品牌. 卖手机下面也有苹果牌,卖箱包下面也有苹果牌.</li>      -->
+    <!--</ul>-->
+    <!--</div>-->
+    <div class="flexigrid">
+        <div class="mDiv">
+            <div class="ftitle">
+                <h3>已兑水列表</h3>
+                <h5>(共{$pageObj->totalRows}条记录)</h5>
+            </div>
+            <a href=""><div title="刷新数据" class="pReload"><i class="fa fa-refresh"></i></div></a>
+            <form id="search-form2" class="navbar-form form-inline"  method="post" action="{:U('Admin/Change/index')}">
+                <!--<div class="sDiv">-->
+                    <!--<div class="sDiv2">-->
+                        <!--<input type="text" class="qsbox" id="input-order-id" placeholder="输入订单号或下单人" name="key_word">-->
+                        <!--<input type="submit" class="btn" value="搜索">-->
+                    <!--</div>-->
+                <!--</div>-->
+
+                <div class="sDiv">
+                    配送状态 :
+                    <div class="sDiv2">
+                        <select name="is_deliver" class="select sDiv3" >
+                            <option value="" <if condition="$returnWhere['is_deliver'] eq 3">selected</if>>请选择</option>
+                            <option value="0" <if condition="$returnWhere['is_deliver'] eq 0">selected</if>>待发货</option>
+                            <option value="1" <if condition="$returnWhere['is_deliver'] eq 1">selected</if>>已发货</option>
+                            <option value="2" <if condition="$returnWhere['is_deliver'] eq 2">selected</if>>已收货</option>
+                        </select>
+                    </div>
+                    <div class="sDiv2">
+                        <select onchange="getCity(this)" id="province" name="province" >
+                            <option value="0">选择省份</option>
+                            <volist name="province" id="vo">
+                                <option value="{$vo.id}" <if condition="$returnWhere['province'] eq $vo.id">selected</if>>{$vo.name}</option>
+                            </volist>
+                        </select>
+                        <select onchange="getArea(this)" id="city" name="city">
+                            <option value="0">选择城市</option>
+                            <volist name="city" id="vo">
+                                <option value="{$vo.id}" <if condition="$returnWhere['city'] eq $vo.id">selected</if>>{$vo.name}</option>
+                            </volist>
+                        </select>
+                        <select id="district" name="district" >
+                            <option value="0">选择区域</option>
+                            <volist name="district" id="vo">
+                                <option value="{$vo.id}" <if condition="$returnWhere['district'] eq $vo.id">selected</if>>{$vo.name}</option>
+                            </volist>
+                        </select>
+                    </div>
+                    <div class="sDiv">
+                        <div class="sDiv2">
+                            <input type="text" class="qsbox" id="input-order-id" placeholder="输入订单号或下单人" name="key_word" value="{$returnWhere['key_word']}">
+                            <input type="submit" class="btn" value="搜索">
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="hDiv">
+            <div class="hDivBox">
+                <table cellspacing="0" cellpadding="0">
+                    <thead>
+                    <tr>
+                        <th class="sign" axis="col0" onclick="checkAllSign(this)">
+                            <div style="width: 24px;"><i class="ico-check"></i></div>
+                        </th>
+                        <th align="left" abbr="article_title" axis="col3" class="">
+                            <div style="text-align: center; width: 50px;" class="">ID</div>
+                        </th>
+                        <th align="left" abbr="article_title" axis="col3" class="">
+                            <div style="text-align: center; width: 150px;" class="">订单编号</div>
+                        </th>
+                        <th align="left" abbr="article_title" axis="col3" class="">
+                            <div style="text-align: center; width: 100px;" class="">下单人</div>
+                        </th>
+                        <th align="left" abbr="article_title" axis="col3" class="">
+                            <div style="text-align: center; width: 100px;" class="">图像</div>
+                        </th>
+                        <th align="left" abbr="article_title" axis="col3" class="">
+                            <div style="text-align: center; width: 150px;" class="">收货人</div>
+                        </th>
+                        <th align="left" abbr="article_title" axis="col3" class="">
+                            <div style="text-align: center; width: 320px;" class="">详细地址</div>
+                        </th>
+                        <th align="center" abbr="article_show" axis="col5" class="">
+                            <div style="text-align: center; width: 50px;" class="">总数量</div>
+                        </th>
+                        <th align="center" abbr="article_show" axis="col5" class="">
+                            <div style="text-align: center; width: 80px;" class="">消费总水币</div>
+                        </th>
+                        <th align="center" abbr="article_time" axis="col6" class="">
+                            <div style="text-align: center; width: 150px;" class="">兑水时间</div>
+                        </th>
+                        <th align="center" abbr="article_time" axis="col6" class="">
+                            <div style="text-align: center; width: 100px;" class="">配送状态</div>
+                        </th>
+                        <th align="center" axis="col1" class="handle">
+                            <div style="text-align: center; width: 150px;">操作</div>
+                        </th>
+                        <th style="width:100%" axis="col7">
+                            <div></div>
+                        </th>
+                    </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+        <form action="{:U('Admin/change/exportExchageOrder')}"  id="export">
+            <input type="hidden" name="ids" id="export_ids" value="">
+        <div class="tDiv">
+            <div class="tDiv2">
+                <div class="fbutton">
+                    <a href="javascript:exportReport()">
+                        <div class="add">
+                            <span><i class="fa fa-plus"></i>导出数据</span>
+                        </div>
+                    </a>
+                </div>
+                <div class="fbutton">
+                    <a href="javascript:;" onclick="publicHandleAll('del')">
+                        <div class="add" title="批量删除">
+                            <span>批量删除</span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div style="clear:both"></div>
+        </div>
+        </form>
+        <div class="bDiv" style="height: auto;">
+            <div id="flexigrid" cellpadding="0" cellspacing="0" border="0" data-url="{:U('Admin/Change/delOrder')}">
+                <table>
+                    <tbody>
+                    <volist name="orderInfo" id="list">
+                        <tr data-id="{$list[id]}">
+                            <td class="sign">
+                                <div style="width: 24px;"><i class="ico-check"></i></div>
+                            </td>
+                            <td align="left" class="">
+                                <div style="text-align: center; width: 50px;">{$list.id}</div>
+                            </td>
+                            <td align="left" class="">
+                                <div style="text-align: center; width: 150px;">{$list.order_sn}</div>
+                            </td>
+                            <td align="left" class="">
+                                <div style="text-align: center; width: 100px;">{$list.nickname}</div>
+                            </td>
+                            <td align="left" class="">
+                                <div style="text-align: center; width: 100px;">
+                                    <img width="40" height="30" src="{$list.head_pic}"/>
+                                </div>
+                            </td>
+                            <td align="left" class="">
+                                <div style="text-align: center; width: 150px;">{$list.consignee_info}</div>
+                            </td>
+                            <td align="left" class="">
+                                <div style="text-align: center; width: 320px;">{$list.address}</div>
+                            </td>
+                            <td align="left" class="">
+                                <div style="text-align: center; width: 50px;">{$list.goods_num}</div>
+                            </td>
+                            <td align="left" class="">
+                                <div style="text-align: center; width: 80px;">{$list.total_coin}</div>
+                            </td>
+                            <td align="left" class="">
+                                <div style="text-align: center; width: 150px;">{$list.create_time}</div>
+                            </td>
+                            <td align="left" class="">
+                                <!--<div style="text-align: center; width: 100px;">{$list.is_deliver ?'已发货':'<span style="color: red;">待发货</span>'}</div>-->
+                                <div style="text-align: center; width: 100px;">
+                                    <if condition="$list.is_deliver eq 0">
+                                        <span style="color: red">{$list.deliver_status}</span>
+                                    </if>
+                                    <if condition="$list.is_deliver eq 1">
+                                       <span style="color: blue">{$list.deliver_status}</span>
+                                    </if>
+                                    <if condition="$list.is_deliver eq 2">
+                                        <span style="color: yellowgreen">{$list.deliver_status}</span>
+                                    </if>
+                                </div>
+                            </td>
+                            <td align="center" class="handle">
+                                <div style="text-align: center; width: 150px;">
+                                    <if condition="$list.is_deliver eq 1">
+                                        <a class="btn alter green" href="javascript:void(0)" id="{$list.id}"><i class="fa fa-search"></i>确认收货</a>
+                                    </if>
+                                    <!--<a href="{:U('Admin/Change/deliver',array('id'=>$list['id']))}" class="btn blue" style="display: {$list.is_deliver?'none':''}"><i class="fa fa-pencil-square-o" ></i>点击发货</a>-->
+                                    <if condition="$list.is_deliver neq 2">
+                                    <a href="{:U('Admin/Change/deliver',array('id'=>$list['id']))}" class="btn blue"><i class="fa fa-pencil-square-o" ></i>{$list.is_deliver ?'修改':'发货'}</a>
+                                    </if>
+                                    <a class="btn green" href="{:U('Change/detail',array('id'=>$list['id']))}"><i class="fa fa-list-alt"></i>查看详情</a>
+                                    <a class="btn red"  href="javascript:void(0)"  onclick="publicHandle('{$list[\'id\']}','del')" ><i class="fa fa-trash-o"></i>删除</a>
+                                </div>
+                            </td>
+                            <td align="" class="" style="width: 100%;">
+                                <div>&nbsp;</div>
+                            </td>
+                        </tr>
+                    </volist>
+                    </tbody>
+                </table>
+            <!--分页位置--> {$show}
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+
+    $(document).ready(function(){
+
+        // 表格行点击选中切换
+        $(document).on('click','#flexigrid > table>tbody >tr',function(){
+            $(this).toggleClass('trSelected');
+            var checked = $(this).hasClass('trSelected');
+            $(this).find('input[type="checkbox"]').attr('checked',checked);
+        });
+
+    });
+
+    /**
+     * 获取全选元素
+     * @param type
+     * @returns {boolean}
+     */
+    function publicHandleAll(type){
+            var ids = '';
+            $('#flexigrid .trSelected').each(function(i,o){
+                ids += $(o).data('id')+',';
+            });
+            if(ids == ''){
+                layer.msg('至少选择一项', {icon: 2, time: 2000});
+                return false;
+            }
+            AdminDelAll(ids,type); //调用删除函数
+        }
+
+    /**
+     * 执行批量删除操作
+     * @param ids
+     * @param handle_type
+     * @constructor
+     */
+        function AdminDelAll(ids,handle_type){
+            layer.confirm('确认当前操作？', {
+                    btn: ['确定', '取消'] //按钮
+                }, function () {
+                    // 确定
+                    $.ajax({
+                        url: "{:U('Admin/Change/delAllOrder')}",
+                        type:'post',
+                        data:{ids:ids,type:handle_type},
+                        dataType:'JSON',
+                        success: function (data) {
+                            layer.closeAll();
+                            if (data.status == 1){
+                                layer.msg(data.msg, {icon: 1, time: 2000},function(){
+                                    location.href = data.url;
+                                });
+                            }else{
+                                layer.msg(data.msg, {icon: 2, time: 2000});
+                            }
+                        }
+                    });
+                }, function (index) {
+                    layer.close(index);
+                }
+            );
+        }
+
+
+    /**
+     * 导出订单
+     */
+    function exportReport(){
+        var ids = '';
+        $('#flexigrid .trSelected').each(function(i,o){
+            ids += $(o).data('id')+',';
+        });
+        if(ids == ''){
+            layer.msg('至少选择一项', {icon: 2, time: 2000});
+            return false;
+        }
+        $('#export_ids').val(ids);
+        $('#export').submit();
+    }
+
+
+    /**
+     * 获取城市
+     * @param t  省份select对象
+     */
+    function getCity(t){
+        $('#province').children('option').first().hide();//隐藏请选择
+        var parent_id = $(t).val();
+        if(!parent_id > 0){
+            return;
+        }
+        $('#city').empty();
+        $('#district').empty().html('<option value="0">选择地区</option>');
+        var url = '/index.php?m=Home&c=Api&a=getRegion&level=2&parent_id='+ parent_id;
+        $.ajax({
+            type : "GET",
+            url  : url,
+            error: function(request) {
+                alert("服务器繁忙, 请联系管理员!");
+                return;
+            },
+            success: function(v) {
+                v = '<option value="0">选择城市</option>'+ v;
+                $('#city').empty().html(v);
+            }
+        });
+    }
+
+    /**
+     * 获取地区
+     * @param t  城市select对象
+     */
+    function getArea(t){
+        $('#city').children('option').first().hide();//隐藏请选择
+        var parent_id = $(t).val();
+        if(!parent_id > 0){
+            return;
+        }
+        var url = '/index.php?m=Home&c=Api&a=getRegion&level=3&parent_id='+ parent_id;
+        $.ajax({
+            type : "GET",
+            url  : url,
+            error: function(request) {
+                alert("服务器繁忙, 请联系管理员!");
+                return;
+            },
+            success: function(v) {
+                v = '<option value="0">选择区域</option>'+ v;
+                $('#district').empty().html(v);
+            }
+        });
+    }
+
+
+    //订单确认
+    $('.alter').click(function () {
+        var order_id = this.id;
+        layer.confirm('确定收货？', {
+            btn: ['确定', '取消'] //按钮
+        }, function () {
+            // 确定
+            $.ajax({
+                url: "{:U('Admin/Change/alterStatus')}",
+                type:'post',
+                data:{order_id:order_id},
+                dataType:'JSON',
+                success: function (data) {
+                    if(data.status){
+                        layer.alert('已确认收货', {icon: 1},function () {
+                            window.location.href = "{:U('Admin/Change/index')}";
+                        });
+                    }else{
+                        layer.alert('网络繁忙,请稍后再试...', {icon: 2});
+                    }
+                }
+            });
+        })
+    });
+
+
+</script>
+</body>
+</html>

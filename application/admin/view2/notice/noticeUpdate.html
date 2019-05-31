@@ -1,0 +1,45 @@
+<include file="public/layout"/>
+<script src="__ROOT__/public/static/js/layer/laydate/laydate.js"></script>
+<body style="background-color: #FFF; overflow: auto;">
+<div class="page">
+    <div class="fixed-bar">
+        <div class="item-title"><a class="back" href="javascript:history.back();" title="返回列表"><i
+                class="fa fa-arrow-circle-o-left"></i></a>
+            <div class="subject">
+                <h3>发送系统通知</h3>
+            </div>
+        </div>
+    </div>
+    <!--表单数据-->
+    <form method="post" id="handleposition" action="{:U('Notice/noticeUpdate')}">
+        <div class="ncap-form-default">
+            <dl class="row">
+                <dt class="tit">
+                    <label><em>*</em>内容：</label>
+                </dt>
+                <dd class="opt">
+                    <input type="hidden" name="id" value="{$data['id']}">
+                    <textarea rows="10" cols="200" style="width:80%;"
+                              name="content">{$data['content']}</textarea>
+                    <span class="err" id="err_ad_name" style="color:#F00; display:none;">消息通知不能为空</span>
+                    <p class="notic"></p>
+                </dd>
+            </dl>
+
+
+            <div class="bot">
+                <a href="JavaScript:void(0);" onclick="adsubmit()" class="ncap-btn-big ncap-btn-green" id="submitBtn1">保存</a>
+            </div>
+        </div>
+        <input type="hidden" name="act" value="{$act}">
+        <input type="hidden" name="ad_id" value="{$info.ad_id}">
+    </form>
+</div>
+<script>
+    function adsubmit() {
+        $('#handleposition').submit();
+    }
+
+</script>
+</body>
+</html>

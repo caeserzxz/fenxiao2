@@ -1,0 +1,171 @@
+<layout name="common/layout_nav" title="身份证认证" />
+<style>
+    .card_size{
+        width: auto;
+        height: auto;
+        width: 42.8%;
+        height: 27%;
+    }
+</style>
+<body>
+<div class="page" style="overflow:auto;margin-bottom: 3rem;">
+    <div class="page-hd"    >
+        <div class="header">
+            <div class="header-left">
+                <a href="{:U('userinfo')}" class="left-arrow"></a>
+            </div>
+            <div class="header-title">身份证认证</div>
+            <div class="header-right"><a href="#"></a> </div>
+        </div>
+    </div>
+
+    <form id="add_comment" method="post" enctype="multipart/form-data">
+        <!--上传图片-s-->
+        <div class="weui-cells mt0 vux-1px-t" style="text-align: center">
+            <label>
+                <div class="shcph" id="fileList0">
+                    <empty name="$userIDcardInfo['positive_path']">
+                        <img  class="uploaderFiles1 card_size"  src="__STATIC__/images/camera.png">
+                        <else />
+                        <img class="uploaderFiles1 card_size" style="width:290px;height:150px;" src="{$userIDcardInfo['positive_path']}">
+                    </empty>
+                </div>
+                <input  type="file" accept="image/*" name="comment_img_file[]" id="uploaderInput1" style="display:none">
+                <div class="fs10 text-muted mt10">请上传身份证正面照</div>
+            </label>
+        </div>
+        <div class="weui-cells mt0 vux-1px-t" style="text-align: center">
+            <label>
+                <div class="shcph" id="fileList1">
+
+                    <empty name="$userIDcardInfo['reverse_path']">
+                        <img class="uploaderFiles2 card_size" src="__STATIC__/images/camera.png">
+                        <else />
+                        <img class="uploaderFiles2 card_size" style="width:290px;height:150px;" src="{$userIDcardInfo['reverse_path']}">
+                    </empty>
+                </div>
+                <input  type="file" accept="image/*" name="comment_img_file[]" id="uploaderInput2" style="display:none">
+                <div class="fs10 text-muted mt10">请上传身份证反面照</div>
+            </label>
+        </div>
+        <!--上传图片-e-->
+        <!--传递所需参数-->
+        <input type="hidden" name="user_id" value="{$user_id}">
+        <!--传递所需参数-->
+        <div class="weui-btn-area layermcont">
+
+            <if condition="$userIDcardInfo['status'] neq 1">
+                <a  class="weui-btn weui-btn_primary" disabled onclick="tijiao()">保存</a>
+            </if>
+            <if condition="$userIDcardInfo['status'] eq 1">
+                <a  class="weui-btn weui-btn_primary" style="border:1px solid grey;background: grey" href="{:U('User/userinfo')}">返回</a>
+            </if>
+
+        </div>
+    </form>
+
+</div>
+<script src="__STATIC__/layer/layer.js"  ></script>
+<script>
+
+</script>
+<script>
+
+    //log上传
+    var tupian1 = "";
+    $("#uploaderInput1").change(function () {
+        var html = '';
+        var formData = new FormData();
+        formData.append('file', $('#uploaderInput1')[0].files[0]);  //添加图片信息的参数
+        formData.append('sizeid',123);  //添加其他参数
+        $.ajax({
+            url: '/mobile/user/upload',
+            type: 'POST',
+            cache: false,       //上传文件不需要缓存
+            data: formData,
+            processData: false, // 告诉jQuery不要去处理发送的数据
+            contentType: false, // 告诉jQuery不要去设置Content-Type请求头
+            success: function (data) {
+                $(".uploaderFiles1").attr('src',data);
+                tupian1 = data;
+            },
+            error: function (data) {
+                //tipTopShow("上传失败");
+            }
+        });
+    });
+
+    //log上传
+    var tupian2 = "";
+    $("#uploaderInput2").change(function () {
+        var html = '';
+        var formData = new FormData();
+        formData.append('file', $('#uploaderInput2')[0].files[0]);  //添加图片信息的参数
+        formData.append('sizeid',123);  //添加其他参数
+        $.ajax({
+            url: '/mobile/user/upload',
+            type: 'POST',
+            cache: false,       //上传文件不需要缓存
+            data: formData,
+            processData: false, // 告诉jQuery不要去处理发送的数据
+            contentType: false, // 告诉jQuery不要去设置Content-Type请求头
+            success: function (data) {
+                $(".uploaderFiles2").attr('src',data);
+
+                tupian2 = data;
+            },
+            error: function (data) {
+                //tipTopShow("上传失败");
+            }
+        });
+    });
+
+
+    //下一页,提交
+    function tijiao()
+    {
+        //全部都有值才提交
+        if(tupian1 && tupian2)
+        {
+
+            $.ajax({
+                url: '/mobile/user/upIdcard',
+                type: 'POST',
+                data:{
+                    positive_path:tupian1,
+                    reverse_path:tupian2,
+                    status:1,
+                },
+                success: function (data) {
+                    if(data.status=='200')
+                    {
+                        layer.msg('提交成功', {
+                            icon: 1,
+                            time: 1000 //2秒关闭（如果不配置，默认是3秒）
+                        }, function(){
+                            window.location.href = "{:url('/mobile/user/index')}";
+                        });
+
+                    }
+                    else
+                    {
+
+                        layer.msg('提交失败');
+                    }
+
+                },
+
+            });
+        }
+        else
+        {
+            layer.msg('请上传图片');
+
+        }
+
+    }
+
+
+</script>
+</body>
+</html>

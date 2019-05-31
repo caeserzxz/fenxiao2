@@ -1,0 +1,111 @@
+<if condition="$count gt 0">
+    <foreach name="commentlist" item="v" key="k">
+    <div class="weui-cells">
+        <div class="weui-cell">
+            <div class="weui-cell__hd">
+                <img class="avatar" src="{$v['head_pic']|default='__STATIC__/images/user68.jpg'}" alt="">
+            </div>
+            <div class="weui-cell__bd">
+                <if condition="$v['is_anonymous'] eq 1">
+                <div class="text-muted">匿名用户</div>
+                <else />
+                <div class="text-muted">{$v['username']}</div>
+                </if>
+                <!--<div class="text-muted">粉紫色-M</div>-->
+            </div>
+            <div class="weui-cell__ft fs8 "><span class="text-muted">{$v.add_time|date='Y-m-d H:i',###}</span></div>
+        </div>
+        <div class="weui-cell vcenter">
+            <span class="text-muted">商品评分</span>
+
+                                    <span class="starts">
+                                        {$v.service_rank}
+                                        <!--<img src="__STATIC__/assets/images/start1.png" alt="">-->
+                                        <!--<img src="__STATIC__/assets/images/start1.png" alt="">-->
+                                        <!--<img src="__STATIC__/assets/images/start1.png" alt="">-->
+                                        <!--<img src="__STATIC__/assets/images/start1.png" alt="">-->
+                                        <!--<img src="__STATIC__/assets/images/start2.png" alt="">-->
+                                    </span>
+        </div>
+        <div class="weui-cell">{$v['content']|htmlspecialchars_decode}</div>
+        <div class="weui-cell proimgs">
+            <ul class="jd-slider-container gallery">
+                <foreach name="v['img']" key="key" item="v2">
+                    <li class="proimg">
+                        <dd><a href="{$v2}"><img src="{$v2}" width="100px" heigth="100px"></a></dd>
+                    </li>
+                </foreach>
+            </ul>
+            <!--<span class="proimg" style="background-image: url(__STATIC__/assets/images/proimg.jpg)"></span>-->
+            <!--<span class="proimg" style="background-image: url(__STATIC__/assets/images/proimg.jpg)"></span>-->
+            <!--<span class="proimg" style="background-image: url(__STATIC__/assets/images/proimg.jpg)"></span>-->
+        </div>
+        <div class="weui-cell">
+            <foreach name="replyList[$v['comment_id']]" item="reply" key="k">
+            <div class="yhzbox text-muted">{$reply['username']}回复：{$reply['content']}</div>
+            </foreach>
+        </div>
+    </div>
+    </foreach>
+<else/>
+    <script>
+        $('.getmore').hide();
+    </script>
+    <!--没有内容时-s-->
+    <div class="comment_con p">
+        <div class="score enkecor">此商品暂无评论</div>
+    </div>
+    <!--没有内容时-e-->
+</if>
+
+<if condition="($count gt $current_count) AND (count($commentlist) eq $page_count)">
+    <div class="getmore" style="font-size:.32rem;text-align:center;color:#888;padding:.25rem .24rem .4rem; clear:both">
+        <a href="javascript:void(0)" onClick="ajaxSourchSubmit();">点击加载更多</a>
+    </div>
+    <elseif condition="($count elt $current_count AND $count gt 0)" />
+    <div class="score enkecor">已显示完所有评论</div>
+    <else />
+</if>
+
+
+<link href="__STATIC__/css/photoswipe.css" rel="stylesheet" type="text/css">
+<script src="__STATIC__/js/klass.min.js"></script>
+<script src="__STATIC__/js/photoswipe.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var gallery_a = $(".gallery a");
+        if(gallery_a.length > 0){
+            $(".gallery a").photoSwipe({
+                enableMouseWheel: false,
+                enableKeyboard: false,
+                allowUserZoom: false,
+                loop:false
+            });
+        }
+    });
+     var page = {$Request.param.p};
+     function ajaxSourchSubmit() {
+         page += 1;
+         $.ajax({
+             type: "GET",
+             url: "{:U('Mobile/Goods/ajaxComment',array('goods_id'=>$goods_id,'commentType'=>$commentType),'')}"+"/p/" + page,
+             success: function (data) {
+                 $('.getmore').hide();
+                 if ($.trim(data) != ''){
+                     $(".comments").append(data);
+                 }
+             }
+         });
+     }
+     function ajax_sourch_submit_hide(){
+         $('.getmore').hide();
+     }
+
+     //点赞
+     function hde(){
+         setTimeout(function(){
+             $('.alert').hide();
+         },1200)
+     }
+
+ </script>

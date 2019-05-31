@@ -1,0 +1,68 @@
+<layout name="common/layout_nav" />
+<div class="page">
+    <div class="page-hd">
+        <div class="header">
+            <div class="header-left">
+                <a href="javascript:history.back(-1);" class="left-arrow"></a>
+            </div>
+            <div class="header-title">商品分类</div>
+            <div class="header-right"><a href="#"></a> </div>
+        </div>
+    </div>
+    <div class="page-bd vux-1px-t">
+        <div class="category-left category1">
+            <ul>
+                <foreach name="goods_category_tree" item="vo" key="k">
+                    <if condition="$vo[level] eq 1">
+                        <li>
+                            <a href="javascript:void(0);" <if condition="$m eq 0"></if> data-id="{$m++}">{$vo['mobile_name']|getSubstr=0,12}</a>
+                        </li>
+                    </if>
+                </foreach>
+            </ul>
+        </div>
+        <div class="category-right category2">
+
+            <foreach name="goods_category_tree" key="kk" item="vo">
+                <div class="branchList" >
+                    <div>
+                        <a href="{:U('Mobile/Goods/goodsList',array('id'=>$vo[id]))}" class="golist-btn">查看{$vo.mobile_name}类商品列表</a>
+                    </div>
+                <foreach name="vo.tmenu" item="v2" key="k2">
+                <div class="divder">
+                    <span >{$v2['name']}</span>
+                </div>
+                <ul class="goods-list">
+                    <foreach name="v2.sub_menu" item="v3">
+                    <li class="goods-list__item" style="text-align: center;line-height: 20px;">
+                        <a href="{:U('Mobile/Goods/goodsList',array('id'=>$v3[id]))}">
+                        <img src="{$v3['image']|default='__STATIC__/images/zy.png'}"/>
+                        <p>{$v3['name']}</p>
+                    </a></li>
+                    </foreach>
+                </ul>
+                </foreach>
+            </div>
+            </foreach>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        //点击切换2 3级分类
+        var array=new Array();
+        $('.category1 li').each(function(){
+            array.push($(this).position().top-0);
+        });
+        $('.branchList').eq(0).show().siblings().hide();
+        $('.category1 li').click(function() {
+            var index = $(this).index() ;
+            console.log(index)
+            $('.category1').delay(200).animate({scrollTop:array[index]},300);
+            $(this).addClass('active').siblings().removeClass();
+            $('.branchList').eq(index).show().siblings().hide();
+            $('.category2').scrollTop(0);
+        });
+    });
+</script>

@@ -1,0 +1,110 @@
+<include file="public/layout"/>
+<script src="__ROOT__/public/static/js/layer/laydate/laydate.js"></script>
+<body style="background-color: rgb(255, 255, 255); overflow: auto; cursor: default; -moz-user-select: inherit;">
+<div id="append_parent"></div>
+<div id="ajaxwaitid"></div>
+<div class="page">
+    <div class="fixed-bar">
+        <div class="item-title">
+            <div class="subject">
+                <h3>意见反馈列表</h3>
+            </div>
+        </div>
+    </div>
+    <!-- 操作说明 -->
+    <div id="explanation" class="explanation"
+         style="color: rgb(44, 188, 163); background-color: rgb(237, 251, 248); width: 99%; height: 100%;">
+        <div id="checkZoom" class="title"><i class="fa fa-lightbulb-o"></i>
+            <h4 title="提示相关设置操作时应注意的要点">操作提示</h4>
+            <span title="收起提示" id="explanationZoom" style="display: block;"></span>
+        </div>
+        <ul>
+            <li>查看用户的意见反馈信息</li>
+        </ul>
+    </div>
+    <div class="flexigrid">
+        <div class="mDiv">
+            <div class="ftitle">
+                <h3>意见反馈列表</h3>
+                <h5>(共{$pager->totalRows}条记录)</h5>
+            </div>
+            <div title="刷新数据" class="pReload"><i class="fa fa-refresh"></i></div>
+            <form class="navbar-form form-inline" id="search-form" action="" method="post"
+                  onsubmit="return check_form();">
+                <input type="hidden" name="id" value="1">
+                &nbsp
+                &nbsp
+                &nbsp
+
+                <div class="sDiv">
+                    <select style="width: 100px; height: auto" name="user_type" id="user_type" class="select">
+                        <option value="">所有分类</option>
+                        <option value="1">会员</option>
+                        <option value="2">健康大使</option>
+                        <option value="3">总代</option>
+                        <option value="4">大区经理</option>
+                    </select>
+                    <div class="sDiv2">
+                        <input type="text" size="30" name="phone" value="" placeholder="手机号码模糊查询" class="qsbox">
+                        <input type="submit" class="btn" value="搜索">
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="bDiv" style="height: auto;">
+            <div id="flexigrid" cellpadding="0" cellspacing="0" border="0">
+                <div class="content-container">
+                    <table cellpadding="0" cellspacing="0">
+                        <thead class="well">
+                        <tr>
+                            <th width="5%"  style="font-weight:bold;font-size:14px;">id</th>
+                            <th width="5%"  style="font-weight:bold;font-size:14px;">用户id</th>
+                            <th width="5%"  style="font-weight:bold;font-size:14px;">用户等级</th>
+                            <th width="10%"  style="font-weight:bold;font-size:14px;">手机号码</th>
+                            <th width="50%" style="font-weight:bold;font-size:14px;">内容</th>
+                            <th width="10%" style="font-weight:bold;font-size:14px;">图片</th>
+                            <th width="8%" style="font-weight:bold;font-size:14px;">反馈时间</th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        <volist name="lists" id="vo">
+                            <tr>
+                                <td style="padding-top:10px;">{$vo.id}</td>
+                                <td style="padding-top:10px;">{$vo.user_id}</td>
+                                <td style="padding-top:10px;">
+                                    <if condition="$vo.user_type eq 0">会员
+                                    <elseif condition="$vo.user_type eq 1"/>健康大使
+                                    <elseif condition="$vo.user_type eq 2"/>总代
+                                    <elseif condition="$vo.user_type eq 3"/>大区经理
+                                    <else condition="$vo.user_type eq 3"/>
+                                    </if>
+                                </td>
+                                <td style="padding-top:10px;">{$vo.phone}</td>
+                                <td style="padding-top:10px;">{$vo.content}</td>
+                                <td style="padding-top:10px;width:10%;height:5%;">
+                                    <a target="_blank" href="{$vo.img}">
+                                        <img style="width:10%;height:5%;" src="{$vo.img}">
+                                    </a>
+                                </td>
+                                <td style="padding-top:10px;">{$vo.create_time|date="Y-m-d H:i",###}</td>
+                            </tr>
+                        </volist>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="iDiv" style="display: none;"></div>
+        </div>
+        <!--分页位置-->
+        {$page}
+    </div>
+</div>
+<script>
+
+
+
+</script>
+</body>
+</html>

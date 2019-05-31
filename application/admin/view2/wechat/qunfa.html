@@ -1,0 +1,133 @@
+<include file="public/layout" />
+ 
+<style type="text/css">
+html, body {
+	overflow: visible;
+}
+</style>  
+<body style="background-color: #FFF; overflow: auto;">
+<div id="toolTipLayer" style="position: absolute; z-index: 9999; display: none; visibility: visible; left: 95px; top: 573px;"></div>
+<div id="append_parent"></div>
+<div id="ajaxwaitid"></div>
+<div class="page">
+  <div class="fixed-bar">
+    <div class="item-title"><a class="back" href="javascript:history.back();" title="微信公众号配置"><i class="fa fa-arrow-circle-o-left"></i></a>
+      <div class="subject">
+        <h3>群发消息</h3>
+        <h5>群发消息</h5>
+      </div>
+    </div>
+  </div>
+  <form   id="handlepost" action="">    
+    <div class="ncap-form-default">
+      <!-- <dl class="row">
+        <dt class="tit">
+          <label><em>*</em>ID</label>
+        </dt>
+        <dd class="opt">
+          
+        </dd>
+      </dl> -->
+
+      <dl class="row">
+        <dt class="tit">
+          <label><em>*</em>群发文本类型</label>
+        </dt>
+        <dd class="opt">    
+            <select style="height:25px;" name="is_on_sale" id="is_on_sale" class="select"> 
+            	<option  value="2"></option>
+            	<option id="c1" value="1">文本</option> 
+            	<!-- <option id='c2' value="0">图文</option>           -->
+	            
+	            
+       			</select>
+        </dd>
+      </dl>
+      
+      <dl class="row"  id='tex' hidden>
+        <dt class="tit">
+          <label><em>*</em>群发文本类型</label>
+        </dt>
+        <dd class="opt">     
+          <textarea style="width:300px; height:100px"  id="text" name="text" title=""></textarea>       
+          <span class="err"></span>
+          <p class="notic"></p>
+        </dd>
+      </dl>
+
+			<!-- <dl class="row" id="mpnews" hidden>
+        <dt class="tit">
+          <label><em>*</em>图文类型</label>
+        </dt>
+        <dd class="opt">                
+          	<input type="text" name="mpnews" id="mpnew"  value="回复图文信息请填写media_id" class="input-txt">
+          	<span class="err"></span>
+          	<p class="notic"></p>
+        </dd>
+                  
+      </dl>   -->    
+      <div class="bot"><a href=""  class="ncap-btn-big ncap-btn-green" id="submitBtn">确认提交</a></div>
+    </div>
+  </form>
+</div>
+<script type="text/javascript">
+  
+$(document).ready(function(){
+	
+
+	$("#submitBtn").click(function(){
+      $.ajax({
+            url  : 'admin/Wechat/_qunfa',
+            type : 'post',
+            data : $('#handlepost').serialize(),
+            success : function(data) 
+            {
+                //alert(data);
+                if(data=='success')
+                {
+
+                  alert("发送成功");                     
+                }
+                else
+                {
+                  alert("发送失败"); 
+                }
+            }
+      });    
+	});
+	
+	 
+});
+
+
+
+
+$("#is_on_sale").click(function(){
+	var t =$("#is_on_sale").attr('value')
+	if(t==1)
+	{
+		//$('#mpnews').hide();
+  	$('#tex').show();
+		
+	}
+	// if(t==0)
+	// {
+	// 	$('#tex').hide();
+	// 	//$('#mpnews').show();
+
+	// }
+	
+});
+
+// $("#mpnew").focus(function(){
+//   $(this).attr("value","");
+// });
+
+// $("#mpnew").blur(function(){
+
+//   $(this).attr("value","回复图文信息请填写media_id");
+// });
+
+</script>
+</body>
+</html>

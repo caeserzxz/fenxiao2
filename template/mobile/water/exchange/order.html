@@ -1,0 +1,232 @@
+<extend name="layout/page"/>
+<block name="pageBody">
+
+  <link rel="stylesheet" href="_STATIC__/Swiper-4.0.7/swiper.min.css"/>
+  <style>
+    .hdpro_cells .weui-media-box{
+      width:3.433333rem;
+    }
+    input:disabled{
+      background-color: #fff;
+    }
+  </style>
+
+  <!-- 页面内容-->
+  <div class="detail_content chongz_content">
+    <div class="detail_panel">
+      <h3 class="h3_tit">确认收货信息：</h3>
+      <a href="{:url('User/address_list',array('source'=>'exchange'))}">
+        <div class="weui-cells mt0">
+          <div class="weui-cell weui-cell_access">
+            <div class="weui-cell__hd">
+              <img class="icon_map_gray" src="__STATIC__/images/icon_map_gray.png" alt="">
+            </div>
+            <div class="weui-cell__bd">
+              <div><span id="consignee">{$fullAdd['consignee']}</span> <span id="mobile">{$fullAdd['mobile']}</span></div>
+              <div class="text-gray fs24 mt10" id="fulladdress">{$fullAdd['fulladdress']}</div>
+            </div>
+            <div class="weui-cell__ft"></div>
+          </div>
+        </div>
+      </a>
+    </div>
+    <form action="">
+      <div class="detail_panel mt30">
+        <h3 class="h3_tit">选择兑换水产品： <span class="kysb">当前可用水币：<b><span id="able_water_coin">{$user_water_coin}</span></b></span></h3>
+        <!--地址id-->
+        <input type="hidden" name="address_id" value="{$fullAdd['address_id']}" id="address">
+        <div class="weui-cells weui-cells_checkbox hdpro_cells">
+
+          <volist name="list" id="vo">
+            <div class="weui-cell">
+              <div class="weui-cell__hd">
+                <label class="weui-check__label" for="s1{$vo['goods_id']}">
+                  <input type="checkbox" class="weui-check" name="ids[]" id="s1{$vo['goods_id']}" value="{$vo['goods_id']}">
+                  <i class="weui-icon-checked"></i>
+                </label>
+              </div>
+              <div class="weui-cell__bd">
+                <div class="weui-flex">
+                  <a class="weui-flex__item" href="{:U('mobile/Goods/goodsInfo',array('id'=>$vo['goods_id']))}">
+                    <div class="weui-media-box weui-media-box_appmsg">
+                      <div class="weui-media-box__hd">
+                        <img class="weui-media-box__thumb" src="{$vo['original_img']}">
+                      </div>
+                      <div class="weui-media-box__bd">
+                        <h4 class="weui-media-box__title">{$vo['goods_name']}</h4>
+                        <!--<p class="weui-media-box__desc">18.9L * 10桶</p>-->
+                      </div>
+                    </div>
+                  </a>
+                  <!--<div class="jiahao">+</div>-->
+                  <!--<div class="weui-flex__item">-->
+                  <!--<div class="weui-media-box weui-media-box_appmsg">-->
+                  <!--<div class="weui-media-box__hd">-->
+                  <!--<img class="weui-media-box__thumb" src="__STATIC__/images/proimg1.jpg">-->
+                  <!--</div>-->
+                  <!--<div class="weui-media-box__bd">-->
+                  <!--<h4 class="weui-media-box__title">恒大冰泉恒大冰泉</h4>-->
+                  <!--<p class="weui-media-box__desc">400ml(12瓶) * 1箱</p>-->
+                  <!--</div>-->
+                  <!--</div>-->
+                  <!--</div>-->
+                </div>
+                <div class="weui-flex count-wrap">
+                  <div class="weui-flex__item">
+                    <div class="suiprice">兑换所需水币：<span style="color: #fc715c;" class="water_coin">{$vo['water_coin']}</span></div>
+                  </div>
+                  <div>
+                    <div class="count">
+                      <a class="count_btn count_minus"></a>
+                      <input class="count_number" type="number" value="1" name="num[]" disabled="disabled"/>
+                      <a class="count_btn count_plus"></a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </volist>
+
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div class="weui-flex bottom_btn">
+    <div class="weui-flex__item"><span>应付水币：</span><span class="price"><b id="total">0</b></span></div>
+    <div class="weui-flex__item">
+      <a href="javascript:;" id="qdbtn" class="weui-btn weui-btn_primary">确认提交</a>
+    </div>
+  </div>
+
+  <script>
+
+      $(function () {
+
+          $("#qdbtn").on('click', function () {
+              $.modal({
+                  title: "确认兑水",
+                  text: "确定提交该兑水订单？<p class='modal_p'>确认后将自动扣除相应水币</p>",
+                  buttons: [
+                      { text: "取消", onClick: function(){ console.log(1)} },
+                      { text: "确定", className: "okbtn", onClick: function(){
+
+                          var data = $("form").not($('.not_submit')).serialize();
+
+                          if($('#address_id').val() == 0){
+                              $.alert('请先填写地址信息');
+                              return false;
+                          }
+
+                          //这个进行判断处理
+                          if($(":checked").length== 0){
+                              $.alert('请选择兑水产品');
+                              return false;
+                          }
+                          var neededWaterCoin = parseInt($('#total').html());//需要的金额
+                          var abledWaterCoin  = parseInt($('#able_water_coin').html());//能用的水币
+                          if(neededWaterCoin > abledWaterCoin){
+                              $.alert('水币不足');
+                              return false;
+                          }
+                          $.ajax({
+                              type: 'POST',
+                              url: "{:U('Exchange/createLog')}",
+                              data: data,
+                              dataType: 'json',
+                              success: function (data) {
+                                  if(data.status){
+                                      $.alert(data.message);
+                                      //执行跳转
+                                      window.location = "{:U('Exchange/index')}";
+                                  }else{
+                                      $.alert(data.message);
+                                  }
+                              }
+                          });
+
+                      } },
+                  ]
+              });
+          });
+
+          //点击的时候给相应的复选框增加checked样式
+          $(":checkbox").click(function () {
+              if(typeof ($(this).attr('checked')) === 'undefined'){
+                  $(this).attr('checked','checked');
+                  $(this).parent().parent().next().find('.count_number').removeAttr('disabled');
+                  getTotal();
+              }else{
+                  $(this).removeAttr('checked');
+                  $(this).parent().parent().next().find('.count_number').attr('disabled','disabled');
+                  getTotal();
+              }
+          });
+
+
+          //点击+按钮数量+1
+          $('.count_plus').click(function () {
+              var t = $(this).prev();
+              t.val(parseInt(t.val())+1);
+              getTotal();
+          });
+
+          //点击+按钮数量-1
+          $('.count_minus').click(function () {
+              var t = $(this).next();
+              parseInt(t.val())<=1?t.val(parseInt(1)):t.val(parseInt(t.val()) - 1);
+              getTotal();
+          });
+
+          //计算总价格
+          function getTotal() {
+              var allWaterCoin = 0;//总水币
+              var obj;//对象
+              var num;//选中的数量
+              var water_coin;//水币
+              //获取所有选中的复选框
+              if($(":checked").length){
+                  $(":checked").each(function(k){
+                      obj = $(this).parent().parent().next();
+                      num = parseInt(obj.find('.count_number').val());
+                      water_coin = parseInt(obj.find('.water_coin').html());
+
+                      allWaterCoin += num * water_coin;
+                      //写入一共需要多少水币
+                      $('#total').html(allWaterCoin);
+                  });
+              }else{
+                  $('#total').html(0);
+              }
+          }
+
+      });
+      $(document).ready(function(){
+          //页面一加载获取地址栏信息(选择了地址就更改地址)
+//          var str = location.pathname;
+//          var newStr = str.split('/')[5].split('.')[0];
+          var newStr = "{$Request.param.address_id}";
+
+          if(newStr){
+              //修改地址id
+              $('#address').val(newStr);
+              //发送ajax
+              $.ajax({
+                  type: 'POST',
+                  url: "{:U('/Mobile/Exchange/getAddress')}",
+                  data: {'address_id':newStr},
+                  dataType: 'json',
+                  success: function (data) {
+                      if(data.status){
+                          console.log(333333333);
+                          //替换地址
+                          $('#fulladdress').html(data.data.fulladdress);
+                          $('#consignee').html(data.data.consignee);
+                          $('#mobile').html(data.data.mobile);
+                      }
+                  }
+              });
+          }
+      });
+  </script>
+</block>

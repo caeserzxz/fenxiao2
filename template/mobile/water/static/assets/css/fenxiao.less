@@ -1,0 +1,123 @@
+.topbox{
+  padding: 1rem 0;
+  background: url(../images/fxtopbg.png);
+  background-size: cover;
+}
+.topbox .avatar {
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 50%;
+}
+.fansbox{
+  padding: 0;
+  align-items: stretch;
+
+}
+.fansbox .weui-cell__hd{
+  width: 4rem;
+  border-right: 1px solid #eeeeee;
+}
+.fansbox ul{
+  list-style: none;
+  margin:0;
+  padding: 0;
+}
+.fansbox li{
+  position: relative;
+  padding:0.5rem 0.5rem;
+  border-bottom: 1px solid #eee;
+  text-align: center;
+  p{
+    color: #949494;
+  }
+  &.active:after{
+    content: "";
+    position: absolute;
+    left:0;
+    top:50%;
+    height: 30px;
+    width: 4px;
+    background-color: #f8584f;
+    margin-top: -15px;
+    border-radius: 4px;
+  }
+}
+.fansbox .weui-grids:before,.fansbox .weui-grids:after,.fansbox .weui-grid:before,.fansbox .weui-grid:after{
+  display: none;
+}
+.fansbox .weui-grids img{
+  width: 100%;
+}
+.fansbox .weui-grid{
+  text-align: center;
+}
+.fansbox .weui-grid:active{
+  background-color: rgba(0,0,0,0);
+}
+
+.fansbox{
+  .weui-cell__bd{
+    padding: 0.5rem;
+  }
+  .searchbox{
+    position: relative;
+    border-radius: 30px;
+    height: 1.5rem;
+    border: 1px solid #ebebeb;
+    overflow: hidden;
+    input{
+      border: none;
+      position: absolute;
+      left: 0px;
+      top: 0;
+      bottom: 0;
+      right: 0;
+      width:100%;
+      border-radius: 30px;
+      outline: none;
+      text-indent: 40px;
+    }
+    .search_icon{
+      z-index:999;
+      position: absolute;
+      width: 30px;
+      top: 0;
+      bottom:4px;
+      left:0;
+      background: url(../images/icon_search.png) no-repeat right center;
+      background-size: 14px;
+    }
+  }
+  .grid_avatar{
+    position: relative;
+    width: 2rem;
+    height: 2rem;
+    margin: 0 auto;
+    span{
+      position: absolute;
+      bottom: -6px;
+      left: 5px;
+      right: 5px;
+      text-align: center;
+      background-color: #77d7ad;
+      color: #fff;
+      border-radius: 1rem;
+      font-size: 0.4rem;
+    }
+    span.not{
+      background-color: #949494;
+    }
+    img{
+      border-radius: 50%;
+    }
+  }
+  .grid_text{
+    margin-top:0.5rem;
+  }
+}
+
+.panel_h{
+  height:15rem;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+}

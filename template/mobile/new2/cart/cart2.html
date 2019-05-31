@@ -1,0 +1,710 @@
+<include file="common/header" title="填写订单" body="g4"/>
+<include file="common/header_nav" title="填写订单" href="{:U('mobile/Cart/index')}"/>
+<script src="__STATIC__/js/style.js" type="text/javascript" charset="utf-8"></script>
+<script src="__STATIC__/js/swipeSlide.min.js" type="text/javascript" charset="utf-8"></script>
+
+<style>
+    .weui-badge {
+        border-radius: 3px;
+    }
+    .weui-textarea{
+        border: 1px solid #eee;
+        padding: 8px;
+        box-sizing: border-box;
+    }
+    .yhzbox{
+        background-color: #fbfbfb;
+        padding: 10px;
+        position: relative;
+        border-radius: 5px;
+        margin-top: -0.8rem;
+    }
+    .yhzbox:after{
+        content: "";
+        position: absolute;
+        width: 0;
+        height: 0;
+        left:15px;
+        bottom: 100%;
+        border-width: 8px;
+        border-style: dotted;
+        border-color: transparent transparent #fbfbfb transparent;
+    }
+    .yhzbox .badge{
+        border: 1px solid #f29b76;
+        color: #f29b76;
+        border-radius: 2px;
+        padding: 0 4px;
+    }
+    .coupon_check{
+        display: none;
+    }
+    .coupon_act{
+        display: inline-block;
+    }
+</style>
+
+<div class="page-bd ">
+    <div class="weui-cells mt0 vux-1px-t">
+        <form name="cart2_form" id="cart2_form" method="post">
+            <!--立即购买才会用到-s-->
+            <input type="hidden" name="action" value="{$Request.param.action}">
+            <input type="hidden" name="goods_id" value="{$Request.param.goods_id}">
+            <input type="hidden" name="item_id" value="{$Request.param.item_id}">
+            <input type="hidden" name="goods_num" value="{$Request.param.goods_num}">
+            <!--立即购买才会用到-e-->
+            <a href="{:U('Mobile/User/address_list',array('source'=>'cart2'))}" class="weui-cell weui-cell_access">
+            <div class="weui-cell__bd">
+                <div class="fs11"><span>{$address.consignee}</span> <span>{$address.mobile}</span></div>
+                <div class="fs11 text-gray">{$address.address}</div>
+            </div>
+            <div class="weui-cell__ft"></div>
+            <input type="hidden" value="{$address.address_id}" name="address_id" /> <!--收货地址id-->
+        </a>
+        <!--<div id="selecttime" class="weui-cell weui-cell_access">
+            <div class="weui-cell__bd">收货时间</div>
+            <div class="weui-cell__ft"><span class="text-muted showres">不限收货时间</span></div>
+        </div>-->
+    </div>
+
+
+    <div class="weui-panel weui-panel_access">
+        <!--<div class="weui-panel__hd">
+            <div class="fs11"><span class="weui-badge" style="margin-left: 5px;">官方自营</span> <span>赢在移动自营</span>
+            </div>
+        </div>-->
+        <!--商品信息-s-->
+        <volist name="cartList" id="cart">
+            <div class="weui-panel__bd">
+                <div class="weui-media-box weui-media-box_appmsg mymedia">
+                    <div class="weui-media-box__hd">
+                        <img class="weui-media-box__thumb" src="{$cart[goods_id]|goods_thum_images=100,100}" alt="">
+                    </div>
+                    <div class="weui-media-box__bd">
+                        <h4 class="fs11">{$cart[goods_name]}</h4>
+                        <p class="fs9 text-muted">{$cart[spec_key_name]}</p>
+                    </div>
+                    <div class="weui-media-box__ft">
+                        <div><span class="fs10">￥</span><b class="fs12">{$cart[goods_fee]}</b></div>
+                        <div class="fs9 text-muted tr">x{$cart[goods_num]}</div>
+                    </div>
+                </div>
+
+            </div>
+        </volist>
+
+        <div class="weui-panel__ft">
+            <div class="weui-cell weui-cell_link fs11">
+                <div class="weui-cell__bd">订单运费</div>
+                <div class="weui-cell__ft"><span class="text-muted" id="postFee">0</span></div>
+            </div>
+            <div class="weui-cell weui-cell_access weui-cell_link fs11 takeoutps">
+                <div class="weui-cell__bd">
+                    <div>支持配送</div>
+                </div>
+                <div class="weui-cell__ft"><span class="text-muted" id="postname">不选择，则按默认配送方式</span></div>
+            </div>
+            <!--<div class="information_dr">
+                <div class="maleri30">
+                    <div class="invoice list7">
+                        <div class="myorder p">
+                            <div class="content30">
+                                <a class="takeoutps" href="javascript:void(0)">
+                                    <div class="order">
+                                        <div class="fl">
+                                            <span>支持配送</span>
+                                        </div>
+                                        <div class="fr">
+                                            <span id="postname" style="line-height: 1.2rem;">不选择，则按默认配送方式</span>
+                                            <i class="Mright"></i>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>-->
+            <div class="weui-cell weui-cell_access weui-cell_link fs11">
+                <div class="weui-cell__bd">
+                    <div>可使用卡券</div>
+                </div>
+                <div class="weui-cell__ft"><span class="text-muted">{:count($userCartCouponList)}张</span></div>
+            </div>
+            <div class="weui-cell tbornone" style="padding-top:0px ">
+                <div class="weui-cell__bd">
+                    <volist name="userCartCouponList" id="userCoupon" key="k">
+                        <div class="fs9 yhzbox" style="margin-top: 0px" onclick="checkCoupon(this)"  data-couponid="{$userCoupon[id]}" data-conponname="{$userCoupon.coupon[name]}">
+                            <span class="badge">优惠券</span> <b>￥{:round($userCoupon.coupon[money],0)}</b>
+                            <span class="text-muted">[满{$userCoupon.coupon[condition]}元可用]</span></span>
+                            <span style="right: 0px;position: absolute;padding-right: 5px;" class="coupon_check">
+                            <img src="__STATIC__/images/ico-checked-sign.png" style="width: 15px">
+                        </span>
+                        </div>
+                    </volist>
+
+                </div>
+            </div>
+            <input type="hidden" name="coupon_id"  value=""/>
+
+        </div>
+    </div>
+    <div class="weui-cells weui-cells_checkbox cardbox">
+
+        <label class="weui-cell tbornone after-left__0 weui-check__label" for="user_money">
+            <div class="weui-cell__hd">
+                <input type="checkbox" class="weui-check pay_other" name="user_money" id="user_money" data-value="{$user['user_money']}">
+                <i class="weui-icon-checked"></i>
+            </div>
+            <div class="weui-cell__bd">
+                <div class="fs11">可用余额支付</div>
+                <div class="fs9 text-muted">当前可用余额￥{$user['user_money']}</div>
+            </div>
+            <div><span>￥</span><b>{$user['user_money']}</b></div>
+        </label>
+
+        <label class="weui-cell after-left__0 weui-check__label" for="pay_other">
+            <div class="weui-cell__hd">
+                <!--<input type="hidden" name="pay_points" class="pay_sub" />-->
+                <input type="checkbox" id="pay_other" class="weui-check pay_other"  name="pay_points" data-value="{$user['pay_points']}">
+                <i class="weui-icon-checked"  ></i>
+            </div>
+            <div class="weui-cell__bd">
+                <div class="fs11">可用积分抵扣</div>
+                <div class="fs9 text-muted">可用积分抵扣</div>
+            </div>
+            <div><span>￥</span><b>{$user['pay_points']}</b></div>
+        </label>
+        <div class=" myorder-2 p" id="paypwd_view", style="display: none">
+            <div class="content30">
+                <label>
+                    <div class="incorise" style="padding-left: 1rem;padding-bottom: 0.5rem">
+                        <span>支付密码：</span>
+                        <!--解决google浏览器识别text+password,自动填充已保存的账户密码-->
+                        <input type="password" id="paypwd" name="paypwd"  placeholder="请输入支付密码"/>
+                        <if condition="empty($user['paypwd'])">
+                            <a class="go-set-password" href="{:U('Mobile/User/paypwd')}">去设置支付密码?</a>
+                        </if>
+                    </div>
+                </label>
+            </div>
+        </div>
+    </div>
+    <div class="weui-cells">
+        <div class="weui-cell">
+            <div class="weui-cell__bd">
+                <label class="weui-label">购买备注</label>
+                <div class="mt5"><textarea class="weui-textarea tapassa"  onkeyup="checkfilltextarea('.tapassa','50')" name="user_note" rows="" cols=""  placeholder="请留言"></textarea></div>
+            </div>
+        </div>
+    </div>
+    <div class="fixed-bottom2 ">
+        <div class="weui-flex">
+            <div class="weui-flex__item fs10 ">
+                <div><span class="text-muted">合计</span><span class="text-red">￥</span><b class="fs15 text-red" id="payables">{$cartPriceInfo['total_fee']}</b></div>
+            </div>
+            <div class="weui-flex__item">
+                <a href="javascript:void(0)" onclick="submit_order()" class="weui-btn weui-btn_primary">提交订单</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mask-filter-div"></div>
+<!--配送弹窗-s-->
+<div class="losepay closeorder " style="display: none;">
+    <div class="maleri30">
+        <div class="l_top">
+            <span>配送方式</span>
+            <em class="turenoff"></em>
+        </div>
+        <div class="resonco">
+
+            <foreach name="shippingList" item="v"  key="k">
+                <label >
+                    <div class="radio">
+                            <span class='che <if condition="$k eq 0">check_t</if>' postname='{$v.name}'>
+                                <i></i>
+                                <input type="radio" id="{$v.code}" name="shipping_code" id="{$v.code}" value="{$v.code}" style="display: none;" <if condition="$k eq 0"> checked="checked" </if> onclick="ajax_order_price()" class="c_checkbox_t" />
+                                <span>{$v.name}</span>
+                                <!--<span>￥{$v.freight}</span>-->
+                            </span>
+                    </div>
+                </label>
+            </foreach>
+        </div>
+    </div>
+    <div class="submits_de bagrr" >确认</div>
+</div>
+<!--配送弹窗-e-->
+</form>
+<script>
+
+
+    function toogle(id){
+        condition=$(id).attr('data');
+        //个人
+        if(condition=='geren'){
+            $('#monad').hide();
+        }
+        //单位
+        if(condition=='danwei'){
+            invoice_title=$('#invoice_title').val();
+            $('#monad').show();
+        }
+
+        invoice_title=$(id).find('input').attr('value');
+        //不开发票
+        if(condition=='noincorise'){
+//                $('#monad,#invoice').hide();
+//                $(".invoice_title").html("不开发票");
+        }
+        $("input[type='radio']").each(function(){
+            if($(this).is(":checked")){
+                if($(this).val()=="个人"){
+                    invoice_title = "个人";
+                    taxpayer      = "";
+                    str           = "个人";
+                }
+                if($(this).val()=='不开发票'){
+                    invoice_title="";
+                    taxpayer="";
+                    invoice_desc='不开发票';
+                    str="不开发票";
+                }
+                if($(this).val()=="单位"){
+                    invoice_title = $("#invoice_title").val();
+                    taxpayer      = $("#taxpayer").val();
+                    str           = "单位";
+                }
+                if($(this).val()=='明细'){
+                    invoice_desc="明细";
+                }
+            }
+        });
+        if($("#detail").is(":checked")){
+            str+=" - 明细";
+        }
+        if(str=="不开发票"){
+            $(".invoice_title").html(str);
+        }else{
+            $(".invoice_title").html("纸质（"+str+"）");
+        }
+    }
+
+    $(document).on("click","input[type='radio']",function(){
+        toogle(this);
+    });
+    function save_invoice(){
+        var str="";
+        var invoice_title;
+        var taxpayer;
+        var invoice_desc;
+        var res="y";
+        $("input[type='radio']").each(function(){
+            if($(this).is(":checked")){
+                if($(this).val()=="个人"){
+                    invoice_title = "个人";
+                    taxpayer      = "";
+                    str           = "个人";
+                }
+                if($(this).val()=='不开发票'){
+                    invoice_title="个人";
+                    taxpayer="";
+                    invoice_desc='不开发票';
+                    str="不开发票";
+                }
+                if($(this).val()=="单位"){
+                    if( $("#invoice_title").val()==""){
+                        layer.open({content:'请输入单位名称',time:2});
+                        res="n";
+                        return false;
+                    }
+                    invoice_title = $("#invoice_title").val();
+                    taxpayer      = $("#taxpayer").val();
+                    str           = $("#invoice_title").val();
+                }
+                if($(this).val()=='明细'){
+                    invoice_desc="明细";
+                }
+            }
+        });
+        if($("#detail").is(":checked")){
+            str+=" - 明细";
+        }
+        if(str=="不开发票"){
+            $(".invoice_title").html(str);
+        }else{
+            $(".invoice_title").html("纸质（"+str+"）");
+        }
+
+        if(res!="n"){
+            var data = {invoice_title: invoice_title, taxpayer: taxpayer, invoice_desc: invoice_desc};
+            $.post("{:U('Cart/save_invoice')}", data, function(json) {
+                var data = eval("(" + json + ")");
+                $("#invoice").hide()
+            });
+        }
+
+    }
+
+    function get_invoice(){
+        var str="";
+        $.get("{:U('Cart/invoice')}", function(json) {
+            var data = eval("(" + json + ")");
+            if (data.status > 0) {
+
+                if(data.result.invoice_title==""){
+                    $('#monad').hide();
+
+                }else{
+                    $('#invoice_title').val(data.result.invoice_title);
+                    $("#invoice_desc").val(data.result.invoice_desc);
+                    $("#taxpayer").val(data.result.taxpayer);
+                    str="纸质（"+data.result.invoice_title+"-明细）";
+                    $("#danwei").attr("checked","checked");
+                }
+                if(data.result.invoice_title=="个人"){
+                    $("#geren").attr("checked","checked");
+                    $('#invoice_title').val("");
+                    $("#invoice_desc").val("");
+                    $("#taxpayer").val("");
+                    $('#monad').hide();
+                    $(".invoice_title").html("纸质（个人-明细）");
+                    str="纸质（个人-明细）";
+                }
+                if (data.result.invoice_desc == "不开发票") {
+                    $('#invoice_title').val("");
+                    $("#invoice_desc").val(data.result.invoice_desc);
+                    $("#taxpayer").val("");
+                    $("#noincorises").attr("checked","checked");
+                    str="不开发票";
+                }else{
+//                        $('#monad,#invoice').show();
+                    $("#detail").attr("checked","checked");
+                }
+                $(".invoice_title").html(str);
+
+            }else{
+                $("#geren").attr("checked","checked");
+                $('#monad').hide();
+                $("#noincorises").attr("checked","checked");
+            }
+        });
+    }
+
+
+</script>
+<script>
+    $(function () {
+
+        $("#selecttime").on('click', function (e) {
+            // 单列picker
+            weui.picker([
+                {
+                    label: '只限双休日收货',
+                    value: 0
+                },
+                {
+                    label: '只限工作日收货',
+                    value: 1
+                },
+                {
+                    label: '共组日/双休日/节假日均可收货',
+                    value: 3
+                },
+                {
+                    label: '不限收货时间',
+                    value: 3
+                }
+
+            ], {
+                className: 'custom-classname',
+                defaultValue: [3],
+                onChange: function (result) {
+                    console.log(result)
+                },
+                onConfirm: function (result) {
+                    console.log(result)
+                    $("#selecttime").find('.showres').html(result[0].label);
+                },
+                id: 'singleLinePicker'
+            });
+        });
+    });
+
+
+    $(document).ready(function(){
+
+        showPostName();
+        //显示隐藏支付密码
+        $(document).on('change', '#pay_other,#user_money', function() {
+            var user_money = $.trim($('#user_money').val());
+            var pay_points = $.trim($('#pay_other').val());
+            if ((user_money !== '' && user_money >0) || (pay_points !== '' || pay_points >0)) {
+                $('#paypwd_view').show();
+            } else {
+                $('#paypwd_view').hide();
+            }
+        });
+        //有使用余额，积分就得用密码
+        if($('#user_money').val() > 0 || $('#pay_points').val() > 0){
+            $('#paypwd_view').show();
+        }
+        $('.radio .che').bind('click',function(){
+            //选择配送方式
+            $(this).addClass('check_t')
+                    .parent().parent().siblings('label').find('.che').removeClass('check_t');
+            //选择配送方式显示到支持配送栏
+            showPostName()
+        });
+        ajax_order_price(); // 计算订单价钱
+    });
+
+    //显示选择的物流公司
+    function showPostName(){
+        $('#postname').text($('.radio .check_t').attr('postname'));
+    }
+
+    //兑换优惠券
+    function wield(){
+        var couponCode = $('#couponCode').val();
+        if(couponCode !=''){
+            $.ajax({
+                type : "POST",
+                url:'/index.php?m=Home&c=Cart&a=cartCouponExchange&t='+Math.random(),
+                data : {coupon_code:couponCode},
+                dataType: "json",
+                success: function(data){
+                    if(data.status != 1){
+                        showErrorMsg(data.msg);
+                        // 登录超时
+                        if(data.status == -100){
+                            location.href ="{:U('Mobile/User/login')}";
+                            return false;
+                        }
+                    }else{
+                        showErrorMsg(data.msg);
+                        window.location.href=''
+                    }
+                }
+            });
+        }else{
+            showErrorMsg('请输入兑换码！');
+        }
+    }
+    // 获取订单价格
+    function ajax_order_price()
+    {
+        $.ajax({
+            type : "POST",
+            url:'/index.php?m=Mobile&c=Cart&a=cart3&act=order_price&t='+Math.random(),
+            data : $('#cart2_form').serialize(),
+            dataType: "json",
+            success: function(data){
+                if(data.status == -3 || data.status == -4){
+                    showErrorMsg(data.msg);
+                    refresh_price(data);
+                    $('.submit_price a').addClass("disable");
+                }else if(data.status != 1){
+                    //执行有误
+                    $('#coupon_div').show();
+                    showErrorMsg(data.msg);
+                    // 登录超时
+                    if(data.status == -100){
+                        location.href ="{:U('Mobile/User/login')}";
+                        return false;
+                    }
+                }else{
+                    $('.submit_price a').removeClass("disable");
+                    refresh_price(data);
+                }
+
+            }
+        });
+    }
+
+    function refresh_price(data){
+        $("#balance").text(data.result.balance);// 余额
+        $("#pointsFee").text(data.result.pointsFee);// 积分支付
+        $("#order_prom_amount").text(data.result.order_prom_amount);// 订单 优惠活动
+        $("#postFee").text(data.result.postFee); // 物流费
+        if(data.result.couponFee == null){
+            $("#couponFee").text(0);// 优惠券
+        }else{
+            $("#couponFee").text(data.result.couponFee);// 优惠券
+        }
+        $("#payables").text(data.result.payables);// 应付
+    }
+
+    // 提交订单
+    ajax_return_status = 1; // 标识ajax 请求是否已经回来 可以进行下一次请求
+    function submit_order() {
+        if($('.submit_price a').hasClass("disable")){
+            return;
+        }
+        if (ajax_return_status == 0)
+            return false;
+        ajax_return_status = 0;
+        $.ajax({
+            type: "POST",
+            url: "{:U('Mobile/Cart/cart3')}",//+tab,
+            data: $('#cart2_form').serialize() + "&act=submit_order",// 你的formid
+            dataType: "json",
+            success: function (data) {
+                if (data.status != '1') {
+                    showErrorMsg(data.msg);  //执行有误
+                    // 登录超时
+                    if (data.status == -100)
+                        location.href = "{:U('Mobile/User/login')}";
+
+                    ajax_return_status = 1; // 上一次ajax 已经返回, 可以进行下一次 ajax请求
+
+                    return false;
+                }
+                $("#postFee").text(data.result.postFee); // 物流费
+                if(data.result.couponFee == null){
+                    $("#couponFee").text(0);// 优惠券
+                }else{
+                    $("#couponFee").text(data.result.couponFee);// 优惠券
+                }
+                $("#balance").text(data.result.balance);// 余额
+                $("#pointsFee").text(data.result.pointsFee);// 积分支付
+                $("#payables").text(data.result.payables);// 应付
+                $("#order_prom_amount").text(data.result.order_prom_amount);// 订单 优惠活动
+                showErrorMsg('订单提交成功，跳转支付页面!');
+                location.href = "/index.php?m=Mobile&c=Cart&a=cart4&order_id=" + data.result;
+            }
+        });
+    }
+
+    $(function(){
+        get_invoice();
+        //显示配送弹窗
+        $('.takeoutps').click(function(){
+            cover()
+            $('.mask-filter-div').show();
+            $('.losepay').show();
+        })
+        //关闭选择物流
+        $('.turenoff').click(function(){
+            undercover()
+            $('.mask-filter-div').hide();
+            $('.losepay').hide();
+        })
+
+        $('.submits_de').click(function(){
+            $('.mask-filter-div').hide();
+            $('.losepay').hide();
+        })
+
+        //显示隐藏使用发票信息
+        $('.invoiceclickin').click(function(){
+            get_invoice();
+            $('#invoice').toggle(300);
+        })
+//        //显示隐藏使用余额/积分
+//        $('.remain').click(function(){
+//            $('#balance-li').toggle(300);
+//        })
+    })
+
+    //优惠券
+    $(function(){
+        $(document).on('click','.coupon_click',function(){
+            cover();
+            $('.coupongg').show();
+            $('html,body').addClass('ovfHiden');
+            var coupon_length = {:count($userCartCouponList)};
+            if(coupon_length == 0){
+                $('.soldout_cp').show();
+                $('.no_get_coupon').hide();
+            }else{
+                $('.no_get_coupon').show();
+                $('.soldout_cp').hide();
+            }
+        })
+    })
+
+    //关闭优惠券弹窗
+    function closer(){
+        undercover();
+        $('.newchoosecar').hide();
+        $('html,body').removeClass('ovfHiden');
+    }
+
+    //选择优惠券
+    function checkCoupon(obj){
+
+        $(obj).find('.coupon_check').toggleClass('coupon_act');
+        $(obj).siblings('div').find('.coupon_check').removeClass('coupon_act');
+
+        if($(obj).find('.coupon_check').hasClass('coupon_act')){
+            //var conponname = $(obj).data('conponname');
+            var couponid = $(obj).data('couponid');
+          //  $('.counpn_name').text(conponname); //优惠券名称显示出来
+            $("input[name^='coupon_id']").val(couponid);  //优惠券ID写到隐藏表单
+        }else{
+            $("input[name^='coupon_id']").val('');  //优惠券ID写到隐藏表单
+           // $('.counpn_name').text('未使用');
+        }
+        ajax_order_price();
+    }
+
+
+    $(document).on('click','.pay_other',function(){
+        var i = $(this);//控制的input
+        var attr = i.attr('checked');
+
+        if(attr)
+        {
+            i.attr('checked',false);
+            i.val(0);
+        }else{
+            i.attr('checked',true);
+            i.val($(this).attr('data-value'));
+
+        }
+
+
+        $.ajax({
+            type : "POST",
+            url:'/index.php?m=Mobile&c=Cart&a=cart3&act=order_price&t='+Math.random(),
+            data : $('#cart2_form').serialize(),
+            dataType: "json",
+            success: function(data){
+                if(data.status == -3 || data.status == -4){
+                    showErrorMsg(data.msg);
+                    refresh_price(data);
+                    $('.submit_price a').addClass("disable");
+                }else if(data.status != 1){
+                    i.attr('checked',false);
+                    i.val(0);
+                    //执行有误
+                    $('#coupon_div').show();
+                    showErrorMsg(data.msg);
+                    // 登录超时
+                    if(data.status == -100){
+                        location.href ="{:U('Mobile/User/login')}";
+                        return false;
+                    }
+                }else{
+                    $('.submit_price a').removeClass("disable");
+                    refresh_price(data);
+                }
+
+            }
+        });
+        /*i.toggleClass('check');
+        if(i.hasClass('check'))
+        {
+            i.val($(this).attr('data-value'));
+        }else{
+            i.val(0);
+        }*/
+
+    })
+
+
+</script>
+

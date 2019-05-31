@@ -1,0 +1,35 @@
+<layout name="common/layout_nav" title="绑定手机" />
+<body>
+<div class="page">
+    <div class="page-hd">
+        <div class="header">
+            <div class="header-left">
+                <a href="{:U('userinfo')}" class="left-arrow"></a>
+            </div>
+            <div class="header-title">信息</div>
+            <div class="header-right"><a href="#"></a> </div>
+        </div>
+    </div>
+    <div>
+        <div>
+            订单信息：
+            <volist name="notice" id="vn">
+                <div>
+                    {$vn[content]}
+                </div>
+            </volist>
+        </div>
+    </div>
+    <div>
+        系统信息：
+        <volist name="noticeOrder" id="vo">
+            <div>
+                {$vo[content]}
+            </div>
+        </volist>
+    </div>
+</div>
+</div>
+
+</body>
+</html>

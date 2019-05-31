@@ -1,0 +1,43 @@
+<include file="public/header" title="查看物流信息" body="f3"/>
+<include file="public/header_nav" title="查看物流信息" href="javascript:history.back(-1)"/>
+<link href="__PUBLIC__/static/css/page.css" rel="stylesheet" type="text/css">
+
+<div class="rule-sign">
+    <div class="fl_addextra fl">
+        <!-- <p><span class="gray">运单编号：</span><span>{$delivery[invoice_no]}</span></p>
+         <p><span class="gray">国内承运人：</span><span>{$delivery[shipping_name]}</span></p>-->
+        <p><span class="gray">快递编号：</span><span>{$order[send_number]}</span></p>
+    </div>
+    <!--<div class="fr_extra fr">-->
+    <!--<a class="tuid sueye" href="javascript:void(0);">我要催单</a>-->
+    <!--</div>-->
+
+</div>
+<div class="rule-sign">
+    <h5>物流跟踪记录：</h5>
+    <volist name="logistics" id="data">
+        <p>{$data[AcceptStation]}{$data[AcceptTime]}</p>
+        <hr/>
+    </volist>
+</div>
+
+<script type="text/javascript">
+    function getSign(){
+        console.log(123);
+        $.ajax({
+            url: '/mobile/User/userSign',
+            type: 'POST',
+            cache: false,
+            success: function (data) {
+//                return false;
+                layer.open({content: data.msg, time: 4});
+                window.location.reload();//页面刷新
+            },
+            error: function (data) {
+                //tipTopShow("上传失败");
+            }
+        });
+    }
+</script>
+</body>
+</html>

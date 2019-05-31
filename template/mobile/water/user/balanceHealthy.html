@@ -1,0 +1,257 @@
+<layout name="common/n_layout_nav"/>
+
+<title> 功德 </title>
+</head>
+<style>
+    .mask-filter-div {
+        display: none;
+        position: fixed;
+        max-width: 16rem;
+        margin: 0 auto;
+        width: 100%;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        z-index: 12;
+        background: rgba(0,0,0,0.4)
+    }
+    .weui-popup__modal {
+        width: 100%;
+        position: absolute;
+        z-index: 100;
+        bottom: 0;
+        border-radius: 0;
+         opacity: 1;
+        color: #3d4145;
+        -webkit-transition-duration: .3s;
+        transition-duration: .3s;
+        height: 100%;
+        background: #EFEFF4;
+        -webkit-transform: translate3d(0, 100%, 0);
+        transform: translate3d(0, 100%, 0);
+        -webkit-transition-property: opacity, -webkit-transform;
+        transition-property: opacity, -webkit-transform;
+        transition-property: transform, opacity;
+        transition-property: transform, opacity, -webkit-transform;
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
+</style>
+<body>
+<div class="page">
+    <div class="page-hd">
+        <div class="header bor-1px-b">
+            <div class="header-left">
+                <a href="javascript:history.go(-1)" class="left-arrow"></a>
+            </div>
+            <div class="header-title">功德</div>
+            <div class="header-right">
+                <a href="#"></a>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-bd">
+        <!-- 页面内容-->
+        <div class="fxs tc">
+            <div class="ff fs68 text-white pt10">
+                {$userInfo.gongde}
+                <if condition="$userInfo.yongjin eq 0">
+                    0
+                </if>
+            </div>
+            <div class="fs30 fw600 text-white">余额</div>
+            <div class="income mt20">
+                <a href="{:U('Mobile/User/incomeDetail')}">收入明细</a>
+            </div>
+        </div>
+
+        <table>
+            <tr>
+                <th>月份</th>
+                <th>销售奖</th>
+                <th>上荐奖</th>
+                <th>合计</th>
+                <th>状态</th>
+            </tr>
+            <if condition="$result.totalMonth neq 0">
+                <tr>
+                    <td><span class="month">本月佣金</span></td>
+                    <td>￥{$result.distributionMonth}</td>
+                    <td>￥{$result.commendMonth}</td>
+                    <td>￥{$result.totalMonth}</td>
+                    <td></td>
+                </tr>
+            </if>
+            <if condition="$result.totalMonth eq 0">
+                <tr>
+                    <td><span class="month">本月佣金</span></td>
+                    <td>￥0</td>
+                    <td>￥0</td>
+                    <td>￥0</td>
+                    <td></td>
+                </tr>
+            </if>
+
+            <volist name="gdList" id="vo">
+                <tr>
+                    <td><span class="month">待发佣金</span></td>
+                    <td>￥{$vo.sales_money}</td>
+                    <td>￥{$vo.top_money}</td>
+                    <td>￥{$vo.total_money}</td>
+                    <td>
+                        <if condition="$vo['status'] eq 0||$vo['status'] eq 2">
+                            <!--<a href="{:U('Mobile/User/getGd',array('gd_id'=>$vo[id]))}" style="color: red" id="collect">-->
+
+                            <span style="color: red" id="collect" onclick="collect({$vo.id})">
+                                待收
+                            </span>
+                        </if>
+                        <if condition="$vo['status'] eq 1">
+                            <span style="color:rgba(66, 62, 64, 0.48)">
+                                已结
+                            </span>
+                        </if>
+
+                    </td>
+                </tr>
+            </volist>
+
+        </table>
+
+    </div>
+    <!--提示1-->
+    <div id="tishi1" class="weui-popup__container popup-center alert_box">
+        <div class="weui-popup__overlay"></div>
+        <div class="weui-popup__modal" style="border: 1px solid #808080">
+            <div class="toolbar">
+                <div class="toolbar-inner">
+                    <a href="javascript:;" class="picker-button close-popup"><img src="../assets/images/icon_del1.png" alt=""></a>
+                    <h1 class="title">提示</h1>
+                </div>
+            </div>
+            <div class="modal-content">
+                <div class="c_bd2 pb80">
+                    <p class="fs28">
+                        代理商支付功德佣金了吗？
+                    </p>
+                </div>
+
+                <div class="btns">
+                    <a href="###" id="return1" class="weui-btn weui-btn_plain-default w240 color1">返回</a>
+                    <a href="###" id="sure1" class="weui-btn weui-btn_primary w240">确认收到</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--提示2-->
+    <div id="tishi2" class="weui-popup__container popup-center alert_box">
+        <div class="weui-popup__overlay"></div>
+        <div class="weui-popup__modal" style="border: 1px solid #808080">
+            <div class="toolbar">
+                <div class="toolbar-inner">
+                    <a href="javascript:;" class="picker-button close-popup"><img src="../assets/images/icon_del1.png" alt=""></a>
+                    <h1 class="title">提示</h1>
+                </div>
+            </div>
+            <div class="modal-content">
+                <div class="c_bd2 pb80">
+                    <p class="fs28">
+                        确认收到了么？
+                    </p>
+                </div>
+
+                <div class="btns">
+                    <a href="###" id="return2" class="weui-btn weui-btn_plain-default w240 color1">取消</a>
+                    <a href="###" id="sure2" class="weui-btn weui-btn_primary w240">确认</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--结果-->
+    <div id="result" class="weui-popup__container popup-center alert_box">
+        <div class="weui-popup__overlay"></div>
+        <div class="weui-popup__modal" style="border: 1px solid #808080">
+            <div class="toolbar">
+                <div class="toolbar-inner">
+                    <a href="javascript:;" class="picker-button close-popup"><img src="../assets/images/icon_del1.png" alt=""></a>
+                    <h1 class="title">提示</h1>
+                </div>
+            </div>
+            <div class="modal-content">
+                <div class="c_bd2 pb80">
+                    <p class="fs28" id="result_html" style="align-content: center">
+                    </p>
+                </div>
+
+                <div class="btns">
+                    <a href="###" id="sure3" class="weui-btn weui-btn_primary w240" >确认</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+</body>
+<script src="__STATIC__/n_assets/js/lib/jquery-2.1.4.js"></script>
+<script src="__STATIC__/n_assets/js/jquery-weui.min.js"></script>
+<script src="__STATIC__/n_assets/js/lib/fastclick.js"></script>
+<script src="__STATIC__/js/lib/lodash.min.js"></script>
+<script src="__STATIC__/js/style.js" type="text/javascript" charset="utf-8"></script>
+<script src="__STATIC__/js/swipeSlide.min.js" type="text/javascript" charset="utf-8"></script>
+<script>
+    function showErrorMsg(msg){
+        layer.open({content:msg,time:11002});
+    }
+    $(function() {
+        FastClick.attach(document.body);
+    });
+    function collect(data){
+        cover()
+        $('#tishi1').show();
+        $('#return1').click(function(){
+            $('#tishi1').hide();
+        })
+        $('#sure1').click(function(){
+            cover()
+            $('#tishi2').show();
+        })
+        $('#return2').click(function(){
+            $('#tishi2').hide();
+            $('#tishi1').hide();
+        })
+        $('#sure2').click(function(){
+            var gd_id=data;
+            var url = "{:U('Mobile/User/getGd')}";
+            $.ajax({
+                type : "POST",
+                url: url,
+                data : {gd_id:gd_id},
+                dataType: "json",
+                success: function(data){
+//                    console.log(data);
+//                    return false;
+                    if(data.status==1){
+                        $("#result_html").html(data.msg);
+                        $("#result").show();
+
+                    }else{
+                        showErrorMsg(data.msg);
+                        window.location.href="{:U('Mobile/User/balanceHealthy')}"
+                    }
+                }
+            });
+        })
+
+        $("#sure3").on('click', function () {
+            $('#result').hide();
+            $('#tishi2').hide();
+            $('#tishi1').hide();
+            location.href ="{:U('Mobile/User/balanceHealthy')}";
+        });
+    }
+
+</script>

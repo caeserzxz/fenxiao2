@@ -1,0 +1,274 @@
+<include file="public/layout"/>
+<script src="__ROOT__/public/static/js/layer/laydate/laydate.js"></script>
+<body style="background-color: rgb(255, 255, 255); overflow: auto; cursor: default; -moz-user-select: inherit;">
+<div id="append_parent"></div>
+<div id="ajaxwaitid"></div>
+<div class="page">
+    <div class="fixed-bar">
+        <div class="item-title">
+            <div class="subject">
+                <h3>会员佣金列表</h3>
+            </div>
+        </div>
+    </div>
+    <!-- 操作说明 -->
+    <div id="explanation" class="explanation"
+         style="color: rgb(44, 188, 163); background-color: rgb(237, 251, 248); width: 99%; height: 100%;">
+        <div id="checkZoom" class="title"><i class="fa fa-lightbulb-o"></i>
+            <h4 title="提示相关设置操作时应注意的要点">操作提示</h4>
+            <span title="收起提示" id="explanationZoom" style="display: block;"></span>
+        </div>
+        <ul>
+            <li>查看佣金流水</li>
+        </ul>
+    </div>
+    <div class="flexigrid">
+        <div class="mDiv">
+            <div class="ftitle">
+                <h3>佣金流水列表</h3>
+                <h5></h5>
+            </div>
+            <div title="刷新数据" class="pReload"><i class="fa fa-refresh"></i></div>
+            <!--<form class="navbar-form form-inline" id="search-form" action="" method="post" onsubmit="return check_form();">-->
+            <form class="navbar-form form-inline" id="search-form" action="{:U('Admin/user/export_user')}" method="post" >
+                <!--<input type="hidden" name="id" value="1">-->
+
+                <div class="sDiv">
+                    <div class="sDiv2" style="margin-right: 10px;">
+                        <input type="text" size="30" id="start_time" name="start_time" value="{$start_time}"
+                               placeholder="起始时间" class="qsbox">
+                        <input type="button" class="btn" value="起始时间">
+                    </div>
+                    <div class="sDiv2" style="margin-right: 10px;">
+                        <input type="text" size="30" id="end_time" name="end_time" value="{$end_time}"
+                               placeholder="截止时间" class="qsbox">
+                        <input type="button" class="btn" value="截止时间">
+                    </div>
+                    <div class="sDiv2">
+                        <select name="user_type" id="user_type" class="select sDiv3" style="margin-right:5px;margin-left:5px">
+                            <option value="">身份</option>
+                            <option value="0">粉丝</option>
+                            <option value="1">会员</option>
+                            <option value="2">高级会员</option>
+                            <option value="3">钻石会员</option>
+                        </select>
+                    </div>
+                    <div class="sDiv2">
+                        <select name="type" id="type" class="select sDiv3" style="margin-right:5px;margin-left:5px">
+                            <option value="">事项类型</option>
+                            <option value="1">收入</option>
+                            <option value="2">支出</option>
+                        </select>
+                    </div>
+                    <div class="sDiv2" style="margin-right: 10px;">
+                        <input type="text" size="30" id="user_id" name="user_id" value="{$user_id}"
+                               placeholder="用户ID" class="qsbox">
+                        <input type="button" class="btn" value="用户ID">
+                    </div>
+                    <div class="sDiv2">
+                        <input type="text" size="30" id="mobile" name="mobile" value="" placeholder="手机号" class="qsbox">
+                        <input type="button" onclick="ajax_get_table()" class="btn" value="搜索">
+                    </div>
+                    <!--<div class="sDiv2">
+                        <input type="text" size="30" name="desc" value="" placeholder="描述模糊查询" class="qsbox">
+                        <input type="submit" class="btn" value="搜索">
+                    </div>-->
+                </div>
+            </form>
+        </div>
+        <div class="tDiv">
+            <div class="fbutton">
+                <a href="javascript:exportReport()">
+                    <div class="add" title="选定行数据导出excel文件,如果不选中行，将导出列表所有数据">
+                        <span><i class="fa fa-plus"></i>导出数据</span>
+                    </div>
+                </a>
+            </div>
+            <div class="tDiv2">
+                <!--<div class="fbutton">-->
+                <!--<a href="{:U('User/add_user')}">-->
+                <!--<div class="add" title="添加会员">-->
+                <!--<span><i class="fa fa-plus"></i>添加会员</span>-->
+                <!--</div>-->
+                <!--</a>-->
+                <!--</div>-->
+                <!--  <div class="fbutton">
+                      <a href="{:U('User/export_user')}">
+                          <div class="add" title="导出会员">
+                              <span><i class="fa fa-share"></i>导出会员</span>
+                          </div>
+                      </a>
+                  </div>-->
+                <!--<div class="fbutton">-->
+                <!--<a onclick="send_message();">-->
+                <!--<div class="add" title="发送站内信">-->
+                <!--<span><i class="fa fa-send"></i>发送站内信</span>-->
+                <!--</div>-->
+                <!--</a>-->
+                <!--</div>-->
+                <!--<div class="fbutton">-->
+                <!--<a onclick="send_mail();">-->
+                <!--<div class="add" title="发送邮件">-->
+                <!--<span><i class="fa fa-send-o"></i>发送邮件</span>-->
+                <!--</div>-->
+                <!--</a>-->
+                <!--</div>-->
+            </div>
+            <div style="clear:both"></div>
+        </div>
+        <div class="bDiv" style="height: auto;">
+            <div id="flexigrid" cellpadding="0" cellspacing="0" border="0">
+                <div class="content-container">
+                    <table cellpadding="0" cellspacing="0">
+                        <thead class="well">
+                        <tr>
+                            <th width="8%"  style="font-weight:bold;font-size:14px;">ID</th>
+                            <th width="10%"  style="font-weight:bold;font-size:14px;">身份</th>
+                            <th width="10%"  style="font-weight:bold;font-size:14px;">用户ID</th>
+                            <th width="10%" style="font-weight:bold;font-size:14px;">手机号</th>
+                            <th width="10%" style="font-weight:bold;font-size:14px;">昵称</th>
+                            <th width="10%" style="font-weight:bold;font-size:14px;">事项类型</th>
+                            <th width="10%" style="font-weight:bold;font-size:14px;">金额</th>
+                            <th width="10%" style="font-weight:bold;font-size:14px;">描述</th>
+                            <th width="8%" style="font-weight:bold;font-size:14px;">时间</th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        <volist name="lists" id="vo">
+                            <tr>
+                                <td style="padding-top:10px;">{$vo.id}</td>
+                                <td style="padding-top:10px;">{$vo.user_type}</td>
+                                <td style="padding-top:10px;">{$vo.user_id}</td>
+                                <td style="padding-top:10px;">{$vo.mobile}</td>
+                                <td style="padding-top:10px;">{$vo.nickname}</td>
+                                <!--<td style="padding-top:10px;">{$vo.money > 0 ?'收入': '支出'}</td>-->
+                                <td style="padding-top:10px;"><if condition="$vo['money'] gt '0'"><span >收入</span><else><span style="color: red">支出</span></else></if></td>
+                                <td style="padding-top:10px;">{$vo.money}</td>
+                                <td style="padding-top:10px;">{$vo.desc}</td>
+                                <td style="padding-top:10px;">{$vo.create_time|date="Y-m-d
+                                    H:i",###}</td>
+
+                            </tr>
+                        </volist>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="iDiv" style="display: none;"></div>
+        </div>
+        <!--分页位置-->
+        {$page}
+    </div>
+</div>
+<script>
+
+
+    $(document).ready(function () {
+        // 表格行点击选中切换
+        $('#flexigrid > table>tbody >tr').click(function () {
+            $(this).toggleClass('trSelected');
+        });
+
+        // 点击刷新数据
+        $('.fa-refresh').click(function () {
+            location.href = location.href;
+        });
+        $('#start_time').layDate();
+        $('#end_time').layDate();
+    });
+
+    function delfun(obj) {
+        // 删除按钮
+        layer.confirm('确认删除？', {
+            btn: ['确定', '取消'] //按钮
+        }, function () {
+            $.ajax({
+                type: 'post',
+                url: $(obj).attr('data-url'),
+                data: {act: 'del', level_id: $(obj).attr('data-id')},
+                dataType: 'json',
+                success: function (data) {
+                    layer.closeAll();
+                    if (data) {
+                        $(obj).parent().parent().parent().remove();
+                    } else {
+                        layer.alert('删除失败', {icon: 2});  //alert('删除失败');
+                    }
+                }
+            })
+        }, function () {
+            layer.closeAll();
+        });
+    }
+
+    function check_form() {
+        var start_time = $.trim($('#start_time').val());
+        var end_time = $.trim($('#end_time').val());
+        if (start_time == '' ^ end_time == '') {
+            layer.alert('请选择完整的时间间隔', {icon: 2});
+            return false;
+        }
+
+        return true;
+    }
+
+    // ajax 抓取页面
+    function ajax_get_table1(tab,page){
+        var user_id = $.trim($('#user_id').val());
+        var type = $.trim($('#type').val());
+        var user_type  = $.trim($('#user_type').val());
+        var mobile     = $.trim($('#search_key2').val());
+        var start_time = $.trim($('#start_time').val());
+        var end_time   = $.trim($('#end_time').val());
+
+        //构造特殊账户查询条件
+        if($("#super_account").is(":checked")){//选中
+            $("#super_account").val();
+        }
+        var nickname = $.trim($('#nickname').val());
+
+        cur_page = page; //当前页面 保存为全局变量
+        $.ajax({
+            type : "POST",
+            url:"/index.php/Admin/user/ajaxcommissionList/",//+tab,
+            data : {
+                type:type,
+                user_id:user_id,
+                user_type:user_type,
+                mobile:mobile,
+                nickname:nickname,
+                start_time:start_time,
+                end_time:end_time,
+                p:page,
+            },// 你的formid
+            success: function(data){
+                console.log(data);
+                $("#ajax_return").html('');
+                $("#ajax_return").append(data);
+            }
+        });
+    }
+
+    //ajax 抓取页面
+    function ajax_get_table(tab,page){
+        cur_page = page; //当前页面 保存为全局变量
+        $.ajax({
+            type : "POST",
+            url:"/index.php/Admin/user/commissionList/"+page,//+tab,
+            data : $('#'+tab).serialize(),// 你的formid
+            success: function(data){
+                $("#flexigrid").html('');
+                $("#flexigrid").append(data);
+
+                // 表格行点击选中切换
+                $('#flexigrid > table>tbody >tr').click(function(){
+                    $(this).toggleClass('trSelected');
+                });
+
+            }
+        });
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,37 @@
+<include file="public/header" title="签到" body=""/>
+<div class="panel1-sign">
+    <div class="user-sign">
+        <i><img src="__STATIC__/images/user-photo3.png" alt="" /></i>
+        <span>{$user['nickname']}</span>
+    </div>
+    <div class="integral-sign">
+        <span>本月已获：<span id="benyue"><notempty name="$info['thismonth']">{$info['thismonth']}<else/>0</notempty></span>分</span>
+        <span>累计总积分：<span id="cumtrapz"><notempty name="$info['cumtrapz']">{$info['cumtrapz']}<else/>{$cumtrapz|default="0"}</notempty></span>分</span>
+    </div>
+    <notempty name="$tab">
+<!--        <div class="click-sign" id="click-sign"></div>-->
+
+        <div class="click-sign" id="click-sign">
+            <span id="cgspan">+10积分</span>
+        </div>
+
+        <else/>
+        <div class="click-sign clicked-sign" id="click-sign">
+
+        </div>
+    </notempty>
+    <p class="continuity-sign">
+        本月已连续签到 <i > <span id="lianxuday"> <notempty name="$info">{$info['signcount']}<else/>0</notempty></i> </span>天，<span class="c-7">连续签到{$config['sign_signcount']}天即得{$jifen}积分</span><span  class="c-20">连续签到20天即得200积分</span>
+    </p>
+</div>
+<div class="panel2-sign">
+
+</div>
+<div class="rule-sign">
+    <h5>签到规则：</h5>
+    <p>1.用户每日签到可获取积分奖励，连续签到相应天数可额外获得积分奖励；</p>
+    <p>2.签到送积分活动长期有效；</p>
+    <p>3.本活动最终解释权归商家所有。</p>
+</div>
+</body>
+</html>

@@ -1,0 +1,188 @@
+<script type="text/x-template" id="vue-component-list-template">
+    <div class="vue-list">
+
+        <div class="vue-item" v-for="(item, key, index) of list" :key="primaryKey && item[primaryKey]">
+            <slot name="listItem" :data="item" :key-name="key" :index="index"></slot>
+        </div>
+
+        <slot name="loadingTip" v-if="loading">
+            <div class="weui-loadmore">
+                <i class="weui-loading"></i>
+                <span class="weui-loadmore__tips">正在加载</span>
+            </div>
+        </slot>
+
+        <template v-else-if="ended">
+
+            <slot name="endedTip" v-if="list.length">
+                <div class="weui-loadmore weui-loadmore_line">
+                    <a href="javascript:" @click.prevent="onForceLoadMore">
+                        <span class="weui-loadmore__tips">我是有底线的</span>
+                    </a>
+                </div>
+            </slot>
+
+            <slot name="noDataTip" v-else>
+                <div class="weui-loadmore weui-loadmore_line">
+                    <a href="javascript:" @click.prevent="onForceLoadMore">
+                        <span class="weui-loadmore__tips">暂无数据</span>
+                    </a>
+                </div>
+            </slot>
+        </template>
+
+        <slot name="loadMoreTip" v-else-if="manualLoad">
+            <div class="weui-loadmore">
+                <a href="javascript:" @click.prevent="onForceLoadMore">
+                    <span class="weui-loadmore__tips">加载更多</span>
+                </a>
+            </div>
+        </slot>
+    </div>
+</script>
+
+<script type="text/javascript">
+    'use strict';
+
+    Vue.component('list', {
+        props: {
+            // 获取列表方法
+            getList: {
+                type: Function,
+                required: true,
+            },
+            // 列表项目主键（必须是唯一值
+            primaryKey: {
+                type: String,
+                required: false,
+            },
+            // 是否不分页
+            noInfinity: {
+                type: Boolean,
+                required: false,
+                default: false,
+            },
+            // 项目组件名，用来筛选项目引用
+            itemComponentName: {
+                type: String,
+                required: false,
+            },
+            // 是否显示触发手动加载的按钮
+            manualLoad: {
+                type: Boolean,
+                required: false,
+                default: false,
+            },
+            // 滚动的元素，用来触发加载下页 可以是选择器
+            scrollElement: {
+                type: [Element, String],
+                required: false,
+            },
+            // 加载下页的触发距离
+            scrollDistance: {
+                type: Number,
+                required: false,
+            },
+        },
+        template: '#vue-component-list-template',
+
+        data: function() {
+            return {
+                list: [],
+                page: 0,
+                loading: false,
+                ended: false,
+            };
+        },
+        watch: {
+            list: function (value) {
+                this.$emit('change', {
+                    list: value,
+                });
+            },
+        },
+
+        mounted: function () {
+        },
+
+        methods: {
+
+            // 加载更多
+            loadMore: function (options) {
+                options = $.extend({}, options);
+
+                var data = this.$data;
+
+                if (options.init) {
+                    data.list = [];
+                    data.page = 0;
+                    data.ended = false;
+
+                } else if (this.noInfinity) {
+                    data.list = [];
+                }
+
+                if (data.loading || (!this.noInfinity && data.ended && !options.force)) {
+                    // 正在加载 或者 已加载所有 并且 不强制加载
+                    return;
+                }
+
+                data.loading = true;
+
+                // 加载数据
+                var getListOptions = {
+                    finish: this.getListFinish,
+                };
+
+                if (!this.noInfinity) {
+                    getListOptions.page = data.page;
+                }
+
+                this.getList(getListOptions);
+            },
+
+            // 列表获取回调
+            getListFinish: function (options) {
+                options = $.extend({}, options);
+                var data = this.$data;
+
+                // 增加数据
+                data.list = data.list.concat(options.newList);
+
+                // 是否已加载到底
+                data.ended = Boolean(options.ended);
+
+                if (!data.ended) {
+                    data.page += 1;
+                }
+
+                data.loading = false;
+            },
+
+            // 手动点击加载
+            onForceLoadMore: function () {
+
+                this.loadMore({
+                    force: true,
+                });
+            },
+
+            // 返回列表项目引用
+            getItemsRefs: function() {
+                if (!this.itemComponentName) {
+                    return this.$children;
+                }
+                var refs = [];
+
+                for (var i in this.$children) {
+                    // 筛选指定组件
+                    if (this.$children[i].$options._componentTag === this.itemComponentName) {
+                        refs.push(this.$children[i]);
+                    }
+                }
+
+                return refs;
+            },
+        },
+    });
+</script>

@@ -1,0 +1,112 @@
+
+<script type="text/x-template" id="vue-component-list-template">
+    <div class="vue-list">
+
+        <div class="vue-list-item" v-for="(item, key, index) of list" :key="primaryKey && item[primaryKey]">
+            <slot name="listItem" :data="item" :key-name="key" :index="index"></slot>
+        </div>
+
+        <div class="weui-loadmore" v-if="loading">
+            <i class="weui-loading"></i>
+            <span class="weui-loadmore__tips">正在加载</span>
+        </div>
+        <div class="weui-loadmore weui-loadmore_line" v-else-if="ended">
+            <a href="javascript:" @click.prevent="onForceLoadMore">
+                <span class="weui-loadmore__tips" v-if="list.length">我是有底线的</span>
+                <span class="weui-loadmore__tips" v-else>暂无数据</span>
+            </a>
+        </div>
+
+    </div>
+</script>
+
+<script type="text/javascript">
+    'use strict';
+
+    Vue.component('list', {
+        props: {
+            getList: {
+                type: Function,
+                required: true,
+            },
+            primaryKey: {
+                type: String,
+                required: false,
+            },
+            onChange: {
+                type: Function,
+                required: false,
+            },
+        },
+        template: '#vue-component-list-template',
+
+        data: function() {
+            return {
+                list: [],
+                page: 0,
+                loading: false,
+                ended: false,
+            };
+        },
+
+        mounted: function() {
+            if (this.onChange) {
+                this.$watch('list', this.onChange);
+            }
+        },
+
+        methods: {
+
+            // 加载更多
+            loadMore: function (options) {
+                options = $.extend({}, options);
+
+                var data = this.$data;
+
+                if (options.init) {
+                    data.list = [];
+                    data.page = 0;
+                    data.ended = false;
+                }
+
+                if (data.loading || (data.ended && !options.force)) {
+                    return;
+                }
+
+                data.loading = true;
+
+                // 加载数据
+                this.getList({
+                    page: data.page,
+                    finish: this.getListFinish,
+                });
+            },
+
+            // 列表获取回调
+            getListFinish: function (options) {
+                options = $.extend({}, options);
+                var data = this.$data;
+
+                // 增加数据
+                data.list = data.list.concat(options.newList);
+
+                // 是否已加载到底
+                data.ended = Boolean(options.ended);
+
+                if (!data.ended) {
+                    data.page += 1;
+                }
+
+                data.loading = false;
+            },
+
+            // 手动点击加载
+            onForceLoadMore: function () {
+
+                this.loadMore({
+                    force: true,
+                });
+            },
+        },
+    });
+</script>

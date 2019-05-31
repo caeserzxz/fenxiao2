@@ -1,0 +1,270 @@
+<include file="public/layout"/>
+<body style="background-color: rgb(255, 255, 255); overflow: auto; cursor: default; -moz-user-select: inherit;">
+
+<script type="text/javascript" src="__PUBLIC__/static/js/moment.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/static/js/daterangepicker.min.js"></script>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/static/css/daterangepicker.css"/>
+
+<style>
+    span.type-virtual {
+        background-color: #3598DC;
+        line-height: 16px;
+        color: #FFF;
+        display: inline-block;
+        height: 16px;
+        padding: 1px 4px;
+        margin-right: 2px;
+        box-shadow: inset 1px 1px 0 rgba(255, 255, 255, 0.25);
+        cursor: default;
+    }
+</style>
+
+<div id="append_parent"></div>
+<div id="ajaxwaitid"></div>
+
+<div class="page">
+    <div class="fixed-bar">
+        <div class="item-title">
+            <div class="subject">
+                <h3>理财管理 - 已完成</h3>
+                <h5></h5>
+            </div>
+        </div>
+    </div>
+
+    <!--<div id="explanation" class="explanation" style="color: rgb(44, 188, 163); background-color: rgb(237, 251, 248); width: 99%; height: 100%;">-->
+        <!--<div id="checkZoom" class="title"><i class="fa fa-lightbulb-o"></i>-->
+            <!--<h4 title="提示相关设置操作时应注意的要点">操作提示</h4>-->
+            <!--<span title="收起提示" id="explanationZoom" style="display: block;"></span>-->
+        <!--</div>-->
+        <!--<ul>-->
+            <!--<li></li>-->
+        <!--</ul>-->
+    <!--</div>-->
+
+    <div class="flexigrid">
+        <div class="mDiv">
+            <!--<div class="ftitle">-->
+                <!--<h3></h3>-->
+                <!--<h5></h5>-->
+            <!--</div>-->
+            <a href="">
+                <div title="刷新数据" class="pReload"><i class="fa fa-refresh"></i></div>
+            </a>
+            <form class="navbar-form form-inline" id="search-form">
+                <input type="hidden" name="t" value="finished"/>
+                <input type="hidden" name="order_field" value="id"/>
+                <input type="hidden" name="order_direction" value="desc"/>
+
+                <div class="sDiv">
+                    <div class="sDiv2">
+                        <select class="select" name="time_type" title="选择时间范围类型">
+                            <foreach name="$timeTypeList" key="index" item="item">
+                                <option value="{$index}">{$item}</option>
+                            </foreach>
+                        </select>
+                        <input type="text" class="qsbox" id="search-date" placeholder="时间范围" style="width: 150px;">
+                        <input type="hidden" name="start_time">
+                        <input type="hidden" name="end_time">
+                        <input type="text" class="qsbox" id="money" name="money" placeholder="金额" style="width: 150px;">
+                        <input type="submit" class="btn" value="搜索">
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="hDiv">
+            <div class="hDivBox">
+                <table cellspacing="0" cellpadding="0">
+                    <thead>
+                    <tr>
+                        <th class="sign">
+                            <div onclick="checkAllSign(this)"><i class="ico-check"></i></div>
+                        </th>
+                        <!--<th>-->
+                            <!--<div style="width: 166px;">操作</div>-->
+                        <!--</th>-->
+                        <th data-field="id">
+                            <div style="width: 60px;">ID</div>
+                        </th>
+                        <th data-field="user_id">
+                            <div style="width: 60px;">用户ID</div>
+                        </th>
+                        <th data-field="user_nickname">
+                            <div style="width: 100px;">用户昵称</div>
+                        </th>
+                        <th data-field="user_level_name">
+                            <div style="width: 100px;">用户等级</div>
+                        </th>
+                        <th data-field="user_mobile">
+                            <div style="width: 100px;">用户手机号</div>
+                        </th>
+                        <th data-field="amount">
+                            <div style="width: 100px;">金额（元）</div>
+                        </th>
+                        <th data-field="regular_month">
+                            <div style="width: 100px;">理财周期</div>
+                        </th>
+                        <th data-field="status">
+                            <div style="width: 100px;">状态</div>
+                        </th>
+                        <th data-field="amount_status">
+                            <div style="width: 100px;">本金状态</div>
+                        </th>
+                        <th data-field="start_time">
+                            <div style="width: 100px;">开始日期</div>
+                        </th>
+                        <th data-field="end_time">
+                            <div style="width: 100px;">结束日期</div>
+                        </th>
+                        <th data-field="user_money">
+                            <div style="width: 100px;">分红佣金</div>
+                        </th>
+                        <th data-field="pay_points">
+                            <div style="width: 100px;">分红积分</div>
+                        </th>
+
+                        <th>
+                            <div>操作</div>
+                        </th>
+                    </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+        <div class="tDiv">
+            <div class="tDiv2">
+                <!--<div class="fbutton">-->
+                    <!--<a href="javascript:" onclick="publicHandleAll('del')">-->
+                        <!--<div class="add" title="批量删除">-->
+                            <!--<span>批量删除</span>-->
+                        <!--</div>-->
+                    <!--</a>-->
+                <!--</div>-->
+            </div>
+            <div style="clear:both"></div>
+        </div>
+        <div class="bDiv" style="height: auto;">
+            <div id="flexigrid" cellpadding="0" cellspacing="0" border="0" data-list-url="{:U('getList')}" data-url="{:U('doOperation')}"></div>
+        </div>
+    </div>
+</div>
+<script>
+    'use strict';
+
+    var currentPage = 1,// 当前页码
+        $flexigrid = $('#flexigrid'),
+        $searchForm = $('#search-form');
+
+    $(document).ready(function () {
+
+        getTable(1);
+
+        // 搜索
+        $searchForm.on('submit', function (event) {
+            event.preventDefault();
+            getTable(1);
+        });
+
+        // 表头点击
+        $('.hDivBox').on('click', 'table > thead > tr > th', function () {
+            var field = $(this).data('field');
+            if (!field) {
+                return;
+            }
+            sort(field);
+        });
+
+        // 表格行点击选中切换
+        $flexigrid.on('click', 'table > tbody > tr', function () {
+            $(this).toggleClass('trSelected');
+            var checked = $(this).hasClass('trSelected');
+            $(this).find('input[type="checkbox"]').attr('checked', checked);
+        });
+
+        // 点击分页列表
+        $flexigrid.on('click', ".pagination a", function () {
+            var page = parseInt($(this).data('p'), 10);
+            getTable(page);
+        });
+
+        $searchForm.find('#search-date').daterangepicker({
+            // startDate: 'YYYY-MM-DD',
+            // endDate: 'YYYY-MM-DD',
+
+            showDropdowns: true,
+            opens: 'left',
+            ranges: {
+                '今天': [moment(), moment()],
+                '昨天': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                '至7天前': [moment().subtract(6, 'days'), moment()],
+                '至30天前': [moment().subtract(29, 'days'), moment()],
+                '本月': [moment().startOf('month'), moment().endOf('month')],
+                '上月': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+            },
+            locale: {
+                format: "YYYY-MM-DD",
+                separator: " - ",
+                applyLabel: "确定",
+                cancelLabel: "取消",
+                fromLabel: "从",
+                toLabel: "到",
+                customRangeLabel: "自定义",
+                weekLabel: "周",
+                daysOfWeek: ['日', '一', '二', '三', '四', '五', '六'],
+                monthNames: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+                firstDay: 1,
+            },
+            showCustomRangeLabel: false,
+            alwaysShowCalendars: true,
+            autoUpdateInput: false,
+
+        }, function (startTime, endTime) {
+            var startDateText = startTime.format('YYYY-MM-DD');
+            var endDateText = endTime.format('YYYY-MM-DD');
+            $searchForm.find('input#search-date').val(startDateText + ' - ' + endDateText);
+            $searchForm.find('input[name="start_time"]').val(startDateText);
+            $searchForm.find('input[name="end_time"]').val(endDateText);
+        });
+    });
+
+    function sort(field) {
+        if (!field) {
+            return;
+        }
+        $searchForm.find('input[name="order_field"]').val(field);
+        var direction = $searchForm.find('input[name="order_direction"]').val() === 'desc' ? 'asc' : 'desc';
+        $searchForm.find('input[name="order_direction"]').val(direction);
+
+        getTable(1);
+    }
+
+    function getTable(page) {
+        var url = $flexigrid.data('listUrl'),
+            data;
+        page = parseInt(page, 10);
+        if (!url || !page) {
+            return;
+        }
+        url = new URI(url);
+        url.search({p: page});
+
+        // 附加参数
+        data = $searchForm.serialize();
+
+        $.ajax({
+            type: "GET",
+            url: url,
+            data: data,
+
+            success: function (data) {
+                $flexigrid.html('');
+                $flexigrid.append(data);
+                currentPage = page; // 当前页面 保存为全局变量
+            },
+        });
+    }
+</script>
+</body>
+
+<include file="public/layout_footer"/>

@@ -1,0 +1,106 @@
+<layout name="common/layout_nav" title="身份证号认证" />
+<body>
+<div class="page">
+    <div class="page-hd">
+        <div class="header">
+            <div class="header-left">
+                <a href="{:U('userinfo')}" class="left-arrow"></a>
+            </div>
+            <div class="header-title">身份证号认证</div>
+            <div class="header-right"><a href="#"></a> </div>
+        </div>
+    </div>
+    <div class="page-bd">
+        <div class="weui-cells mt0 vux-1px-t">
+            <div class="weui-cell"  style="padding-top: 2rem; padding-bottom: 0rem;">
+                <div class="weui-cell__bd">
+                    <div class="weui-flex jgflex">
+                        <div  class="weui-flex__item"><input id="real_name" value="{$userInfo.real_name}" class="weui-input" style="font-size: 0.8rem; font-weight: normal;" type="text" placeholder="请输入您的真实姓名" onBlur="checkMobilePhone(this.value);"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="weui-cells mt0 vux-1px-t">
+            <div class="weui-cell"  style="padding-top: 1rem; padding-bottom: 2rem;">
+                <div class="weui-cell__bd">
+                    <div class="weui-flex jgflex">
+                        <div  class="weui-flex__item"><input id="number" value="{$userInfo.id_card}" class="weui-input" style="font-size: 0.8rem; font-weight: normal;" type="text" placeholder="请输入您的身份证号码" onBlur="checkMobilePhone(this.value);"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="weui-btn-area layermcont">
+            <if condition="$userIDcardInfo['status'] neq 1">
+                <a  class="weui-btn weui-btn_primary" disabled onclick="sendcode(this)">保存</a>
+            </if>
+            <if condition="$userIDcardInfo['status'] eq 1">
+                <a  class="weui-btn weui-btn_primary" style="border:1px solid grey;background: grey" href="{:U('User/userinfo')}">返回</a>
+            </if>
+        </div>
+    </div>
+</div>
+<script>
+    $(function () {
+        $('#number').on('input propertychange',function () {
+            console.log($(this).val().length);
+            if($(this).val().length>10){
+                $('.weui-btn').css('background-color','')
+            }else{
+                $('.weui-btn').css('background-color','#c7c7c7')
+            }
+
+        })
+    });
+</script>
+<script>
+    //身份证认证
+    function sendcode(obj){
+        var tel = $.trim($('#number').val());
+        var real_name = $.trim($('#real_name').val());
+        var url="{:U('Mobile/User/idcardAuth')}";
+        var user_id = "{$user_id}";
+        if(real_name == ''){
+            showErrorMsg('请输入您的真实姓名！');
+            return false
+        }
+        if(tel == ''){
+            showErrorMsg('请输入您的身份证号码！');
+            return false
+        }
+
+        $.ajax({
+            url : url,
+            type:'post',
+            dataType:'json',
+            data:{id_card:tel,user_id:user_id,real_name:real_name},
+            success:function(res){
+                if(res.code==1){
+//                    console.log(res);
+//                    return false;
+                    //成功
+                    showErrorMsg(res.msg);
+//                   console.log("{:U('User/userinfo')}");
+//                    return false;
+                    window.location.href="{:U('User/userinfo')}";
+                    //countdown(obj);
+                }else{
+                    //失败
+                    showErrorMsg(res.msg);
+                    $(obj).text('请刷新再试！');
+                    $(obj).attr('id','fetchcode');
+                }
+            }
+        })
+    }
+    /**
+     * 提示弹窗
+     * @param msg
+     */
+    function showErrorMsg(msg){
+        layer.open({content:msg,time:11002});
+    }
+</script>
+</body>
+</html>

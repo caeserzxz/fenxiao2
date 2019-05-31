@@ -1,0 +1,191 @@
+<layout name="common/layout_nav"/>
+<link rel="stylesheet" type="text/css" href="__STATIC__/assets/weui/weui.css">
+<link rel="stylesheet" type="text/css" href="__STATIC__/assets/css/comm.css">
+<link rel="stylesheet" type="text/css" href="__STATIC__/assets/css/fenxiao.css">
+<link href="__PUBLIC__/static/css/page.css" rel="stylesheet" type="text/css">
+
+<style>
+    .panel_h {
+        height: auto;
+    }
+</style>
+<script type="text/javascript">
+    $(document).ready(function () {
+        search();
+    })
+</script>
+<div class="page">
+    <div class="page-hd">
+        <div class="header">
+            <div class="header-left">
+                <a href="javascript:history.go(-1)" class="left-arrow"></a>
+            </div>
+            <div class="header-title">团队成员</div>
+            <div class="header-right"><a href="#"></a></div>
+        </div>
+    </div>
+    <div class="page-bd">
+        <div class="weui-cells vux-1px-t tc mt0">
+            <div class="topbox" style="background-position-y: bottom;">
+                <div><img class="avatar" src="{$user['head_pic']|default='__STATIC__/images/user68.jpg'}"></div>
+
+                <div class="fs12 mt5">{$user['nickname']}</div>
+            </div>
+        </div>
+        <div class="weui-cells mb10">
+            <div class="weui-cell fansbox">
+                <div class="weui-cell__hd" style="width: 3rem">
+                    <ul>
+
+                        <li id="team" class="active" onclick="search(this, true)">
+                            <div>
+                                所有粉丝
+                                <p>{$count}人</p>
+                            </div>
+                        </li>
+                        <li id="team1" onclick="search(this, true)" data-type="{$item['level_id']}">
+                            <div>
+                                第一层
+                                <p>{$count1}人</p>
+                            </div>
+                        </li>
+                        <li id="team2" onclick="search(this, true)" data-type="{$item['level_id']}">
+                            <div>
+                                第二层
+                                <p>{$count2}人</p>
+                            </div>
+                        </li>
+
+                    </ul>
+                </div>
+                <div class="weui-cell__bd">
+                    <div id="tab" class="search">
+                        <volist name="list" id="c">
+                            <div class="weui-grids" style="float: left; width: 33.3%">
+                                <div class="weui-grid" style="text-align: center;width: 100%;">
+                                    <div class="grid_avatar"><img src="{$c['head_pic']}" alt="">
+                                    </div>
+                                    <div class="grid_text" style="width: 100%; text-align: center;">
+                                        <if condition="$c.user_type eq 0">
+                                            粉丝
+                                            <elseif condition="$c.user_type eq 1" />
+                                            会员
+                                            <elseif condition="$c.user_type eq 2" />
+                                            代理
+                                        </if>
+                                        ID:{$c['user_id']}
+                                    </div>
+                                    <p>{$c['mobile']}</p>
+                                </div>
+                            </div>
+                        </volist>
+                        {$page}
+                    </div>
+                    <div id="tab1" class="search" style="display: none">
+                        <volist name="list1" id="c">
+                            <div class="weui-grids" style="float: left; width: 33.3%">
+                                <div class="weui-grid" style="text-align: center;width: 100%;">
+                                    <div class="grid_avatar"><img src="{$c['head_pic']}" alt="">
+                                    </div>
+                                    <div class="grid_text" style="width: 100%; text-align: center;">
+                                        <if condition="$c.user_type eq 0">
+                                            粉丝
+                                            <elseif condition="$c.user_type eq 1" />
+                                            会员
+                                            <elseif condition="$c.user_type eq 2" />
+                                            代理
+                                        </if>
+                                        ID:{$c['user_id']}
+                                    </div>
+                                    <p>{$c['mobile']}</p>
+
+                                </div>
+                            </div>
+                        </volist>
+                        {$page1}
+                    </div>
+                    <div id="tab2" class="search" style="display: none">
+                        <volist name="list2" id="c">
+                            <div class="weui-grids" style="float: left; width: 33.3%">
+                                <div class="weui-grid" style="text-align: center;width: 100%;">
+                                    <div class="grid_avatar"><img src="{$c['head_pic']}" alt="">
+                                    </div>
+                                    <div class="grid_text" style="width: 100%; text-align: center;">
+                                        <if condition="$c.user_type eq 0">
+                                            粉丝
+                                            <elseif condition="$c.user_type eq 1" />
+                                            会员
+                                            <elseif condition="$c.user_type eq 2" />
+                                            代理
+                                        </if>
+                                        ID:{$c['user_id']}
+                                    </div>
+                                    <p>{$c['mobile']}</p>
+
+                                </div>
+                            </div>
+                        </volist>
+                        {$page2}
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="__STATIC__/assets/js/lib/jquery.min.2.1.3.js"></script>
+<script src="__STATIC__/assets/js/lib/weui.min.js"></script>
+<script src="__STATIC__/assets/js/comm.js"></script>
+<script>
+    function search(element, isSwitchType) {
+        var $element = $(element),
+                $account = $('#account'),
+                type = $element.data('type'),
+                account;
+
+        if (isSwitchType) {
+            // 切换标签
+            // 重置搜索
+            $account.val('');
+            account = '';
+
+        } else {
+            account = $account.val();
+        }
+
+        $element.addClass('active').siblings().removeClass('active');
+    }
+
+    $(function () {
+        $(".close_popup").on('click', function (e) {
+            $("#pop1").hide();
+        });
+    });
+
+
+    $('.close_popup').on('click', function () {
+        $('#pop1').hide();
+    });
+
+    $('#team').on('click', function () {
+        console.log(0);
+        $('#tab1').hide();
+        $('#tab1').hide();
+        $('#tab').show();
+    });
+    $('#team1').on('click', function () {
+        console.log(1);
+        $('#tab').hide();
+        $('#tab2').hide();
+        $('#tab1').show();
+    });
+    $('#team2').on('click', function () {
+        console.log(2);
+        $('#tab').hide();
+        $('#tab1').hide();
+        $('#tab2').show();
+    });
+
+</script>

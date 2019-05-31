@@ -1,0 +1,113 @@
+<include file="public/layout"/>
+<script src="__ROOT__/public/static/js/layer/laydate/laydate.js"></script>
+<body style="background-color: #FFF; overflow: auto;">
+<div class="page">
+    <div class="fixed-bar">
+        <div class="item-title">
+            <div class="subject">
+                <h3>配置图片</h3>
+            </div>
+        </div>
+    </div>
+    <!--表单数据-->
+    <form method="post" id="handleposition" action="{:U('user/qrcoder')}">
+        <div class="ncap-form-default">
+            <input type="hidden" name="add" value="1">
+
+            <dl class="row">
+                <dt class="tit">
+                    <label>客服二维码1</label>
+                </dt>
+                <dd class="opt">
+                    <div class="input-file-show">
+            <span class="show">
+                <a id="img_a" target="_blank" class="nyroModal" rel="gal" href="{$goodsInfo.original_img}">
+                    <i id="img_i" class="fa fa-picture-o" onMouseOver="layer.tips('<img src={$goodsInfo.original_img}>',this,{tips: [1, '#fff']});" onMouseOut="layer.closeAll();"></i>
+                </a>
+            </span>
+            <span class="type-file-box">
+                <input type="text" id="imagetext" name="original_img" value="{$goodsInfo.original_img}" class="type-file-text">
+                <input type="button" name="button" id="button1" value="选择上传..." class="type-file-button">
+                <input class="type-file-file" onClick="GetUploadify(1,'','goods','img_call_back')" size="30" hidefocus="true" nc_type="change_site_logo" title="点击前方预览图可查看大图，点击按钮选择文件并提交表单后上传生效">
+            </span>
+                    </div>
+                    <span class="err"></span>
+                    <p class="notic">请上传图片格式文件</p>
+                </dd>
+            </dl>
+            <dl class="row">
+                <dt class="tit">
+                    <label><em>*</em>原有图片：</label>
+                </dt>
+                <dd class="opt">
+                    <img src="{$pic}" style="width: 100px;height: 100px;">
+                    <p class="notic"></p>
+                </dd>
+            </dl>
+
+
+            <dl class="row">
+                <dt class="tit">
+                    <label>客服二维码2</label>
+                </dt>
+                <dd class="opt">
+                    <div class="input-file-show">
+            <span class="show">
+                <a id="tui_img_a" target="_blank" class="nyroModal" rel="gal" href="{$goodsInfo.tui_original_img}">
+                    <i id="tui_img_i" class="fa fa-picture-o" onMouseOver="layer.tips('<img src={$goodsInfo.tui_original_img}>',this,{tips: [1, '#fff']});" onMouseOut="layer.closeAll();"></i>
+                </a>
+            </span>
+                        <span class="type-file-box">
+                <input type="text" id="tui_imagetext" name="tui_original_img" value="{$goodsInfo.tui_original_img}" class="type-file-text">
+                <input type="button" name="button" id="tui_button1" value="选择上传..." class="type-file-button">
+                <input class="type-file-file" onClick="GetUploadify(1,'','goods','tui_img_call_back')" size="30" hidefocus="true" nc_type="change_site_logo" title="点击前方预览图可查看大图，点击按钮选择文件并提交表单后上传生效">
+            </span>
+                    </div>
+                    <span class="err"></span>
+                    <p class="notic">请上传图片格式文件</p>
+                </dd>
+            </dl>
+            <dl class="row">
+                <dt class="tit">
+                    <label><em>*</em>原有图片：</label>
+                </dt>
+                <dd class="opt">
+                    <img src="{$pic2}" style="width: 100px;height: 100px;">
+                    <p class="notic"></p>
+                </dd>
+            </dl>
+
+            <div class="bot">
+                <a href="JavaScript:void(0);" onclick="adsubmit()" class="ncap-btn-big ncap-btn-green" id="submitBtn1">保存</a>
+            </div>
+        </div>
+        <input type="hidden" name="act" value="{$act}">
+        <input type="hidden" name="ad_id" value="{$info.ad_id}">
+    </form>
+</div>
+<script>
+    function adsubmit() {
+        $('#handleposition').submit();
+    }
+
+
+
+    //方图
+    function img_call_back(fileurl_tmp)
+    {
+        $("#imagetext").val(fileurl_tmp);
+        $("#img_a").attr('href', fileurl_tmp);
+        $("#img_i").attr('onmouseover', "layer.tips('<img src="+fileurl_tmp+">',this,{tips: [1, '#fff']});");
+    }
+
+    //长方图
+    function tui_img_call_back(fileurl_tmp)
+    {
+        $("#tui_imagetext").val(fileurl_tmp);
+        $("#tui_img_a").attr('href', fileurl_tmp);
+        $("#tui_img_i").attr('onmouseover', "layer.tips('<img src="+fileurl_tmp+">',this,{tips: [1, '#fff']});");
+    }
+
+</script>
+</body>
+</html>

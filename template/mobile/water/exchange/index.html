@@ -1,0 +1,336 @@
+<extend name="layout/common"/>
+<block name="pageBody">
+
+  <include file="components/list"/>
+
+  <link rel="stylesheet" href="_STATIC__/Swiper-4.0.7/swiper.min.css"/>
+  <style>
+    .weui-loadmore_line .weui-loadmore__tips{background-color: rgba(255, 255, 255, 0)}
+  </style>
+
+  <!-- 页面内容-->
+  <div class="weui-panel__bd tx_wrap">
+    <div class="weui-media-box weui-media-box_appmsg txs">
+      <div class="weui-media-box__hd txs1">
+        <img class="weui-media-box__thumb" src="{$user['head_pic']}">
+      </div>
+      <div class="weui-media-box__bd txs2">
+        <p class="weui-media-box__desc">会员ID：{$user['user_id']}</p>
+        <p class="weui-media-box__desc">呢称：{$user['nickname']}</p>
+        <p class="weui-media-box__desc">{$deposit['deposit_msg']}</p>
+        <div class="btns">
+
+          <!--普通会员-->
+          <if condition='$user[level] eq 1'>
+            <span class="hybtn">
+              <img src="__STATIC__/images/icon_zs.png">
+              <span>会员</span>
+            </span>
+          <elseif condition='$user[level] eq 2'>
+            <span class="hybtn">
+              <img src="__STATIC__/images/icon_setvip.png">
+              <span>高级会员</span>
+            </span>
+          <else/>
+            <span class="hybtn">
+            <span>消费者</span>
+            </span>
+          </if>
+
+          <if condition="!empty($financial)">
+          <span class="hybtn" style="margin-left: 0.1rem;">
+            <span>股东</span>
+          </span>
+          </if>
+          <if condition="$user[is_sales] == 1">
+          <span class="hybtn" style="margin-left: 0.1rem;">
+            <span>业务员</span>
+          </span>
+          </if>
+          <p></p>
+          <if condition='!empty($payment) and $user[level] eq 3'>
+            <a href="{:U('Exchange/recharge_before',array('level'=>1))}" class="ljsjbtn">重新参与活动</a>
+            <else/>
+            <if condition='$user[level] eq 3'>
+              <a href="{:U('Exchange/recharge_before',array('level'=>1))}" class="ljsjbtn">立即升级</a>
+            </if>
+            <if condition='$user[level] eq 1'>
+              <a href="{:U('Exchange/recharge_before',array('level'=>2))}" class="ljsjbtn">立即升级</a>
+            </if>
+          </if>
+          <if condition='!empty($apply)'>
+            <a id="Revoke" class="ljsjbtn"><img src="__STATIC__/images/icon_back.png">撤销退款申请</a>
+          </if>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card-flex ssuic-card1">
+    <div>
+      <h3>{$user.water_coin}</h3>
+      <p>当前水币</p>
+    </div>
+    <div>
+      <img class="qbg_002" src="__STATIC__/images/qbg_002.png" alt="">
+    </div>
+  </div>
+  <div class="card-flex ssuic-card2">
+    <a href="{:U('Exchange/activity')}" class="flex_item">
+      <div class="icon">
+        <img src="__STATIC__/images/card_icon_01.png" alt="">
+      </div>
+      <p>活动详情</p>
+    </a>
+    <a href="javascript:;" id="sqbtn" class="flex_item">
+      <div class="icon">
+        <img src="__STATIC__/images/card_icon_02.png" alt="">
+      </div>
+      <p>申请退押</p>
+    </a>
+    <a href="{:U('Exchange/order')}" class="flex_item">
+      <div class="icon">
+        <img src="__STATIC__/images/card_icon_03.png" alt="">
+      </div>
+      <p>我要兑水</p>
+    </a>
+    <a href="{:U('Exchange/detailed')}" class="flex_item">
+      <div class="icon">
+        <img src="__STATIC__/images/card_icon_04.png" alt="">
+      </div>
+      <p>水币明细</p>
+    </a>
+  </div>
+
+  <div class="ssui_bottom">
+    <h3 class="h3_tit">我的兑水订单</h3>
+    <!--没有数据显示-->
+    <div class="nodeta" style="display: none">
+      <img src="__STATIC__/images/datares.png" alt="">
+      <p>亲，您近期没有兑换订单哦！</p>
+    </div>
+    <div class="weui-cells ssui_card_list" id="app">
+
+      <div is="list" ref="list" :get-list="getList" manual-load>
+
+        <div class="weui-cell" slot="listItem" slot-scope="item" :data="item.data">
+          <span class="icon_map"></span>
+          <div class="weui-cell__hd">
+            <p class="day" style="width: 3.25em">{{item.data.day}}日</p>
+            <p class="year" style="width: 3.25em">{{item.data.year}}</p>
+            <div style="width: 3.25em"><span class="psbtn">{{item.data.deliver_info}}</span></div>
+            <div class="mt30" style="width: 3.25em"><span class="psbtn" style="cursor:pointer;" :id="item.data.id" v-if="item.data.is_deliver == 1">确认收货</span></div>
+          </div>
+          <div class="weui-cell__bd">
+            <div class="hd_top">
+              <a :href="'{:U('mobile/Goods/goodsInfo')}?id='+part.goods_id" class="weui-media-box weui-media-box_appmsg" v-for="part in item.data.split">
+                <div class="weui-media-box__hd">
+                  <img class="weui-media-box__thumb" :src="part.info.original_img" alt="">
+                </div>
+                <div class="weui-media-box__bd">
+                  <h4 class="weui-media-box__title">{{part.info.goods_name}}</h4>
+                  <p class="weui-media-box__desc">{{part.num}}桶</p>
+                </div>
+              </a>
+            </div>
+            <div class="hd_bottom bor-1px-t">
+              <h4>收货信息：</h4>
+              <p class="username">{{item.data.address.consignee}}<span class="phonenum">{{item.data.address.mobile}}</span></p>
+              <div class="addr">{{item.data.address.fulladdress}}</div>
+              <div class="price">已付水币：<span>{{item.data.total_coin}}</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!--<div class="weui-cell" slot="loadMoreTip">-->
+          <!--<div class="ckmore"><a href="javascript:;" @click.prevent="$refs.list.loadMore">查看更多 <img-->
+                  <!--class="icon_arrowd" src="__STATIC__/images/icon_arrowd.png" alt=""></a></div>-->
+        <!--</div>-->
+
+      </div>
+
+    </div>
+  </div>
+    <script>
+        'use strict';
+
+        new Vue({
+            el: '#app',
+            data: {
+                list: [],
+            },
+
+            mounted: function () {
+                this.update();
+            },
+
+            methods: {
+
+                update: function () {
+                    this.$refs.list.loadMore({
+                        init: true,
+                    });
+                },
+
+                getList: function (options) {
+
+                    var list = [],
+                        item,
+                        ended = false;
+
+                    $.api.request("{:url('Exchange/getOrderInfo')}", {
+                        p: options.page + 1,
+
+                    }).fail(this.failHandler).done(function (res) {
+
+                        if (res.length) {
+
+                            for (var i in res) {
+                                item = res[i];
+
+                                list.push(item);
+                            }
+                        } else {
+                            ended = true;
+                        }
+
+                        options.finish({
+                            newList: list,
+                            ended: ended,
+                        });
+                    });
+                },
+            },
+        });
+    </script>
+
+    <script>
+        $(function () {
+            $("#sqbtn").on('click', function () {
+                $.modal({
+                    title: "申请退押",
+                    text: "确定申请退还押金？<p class='modal_p'>申请后将停止每月送返水币</p>",
+                    buttons: [
+                        {
+                            text: "取消", onClick: function () {
+                            console.log(1)
+                        }
+                        },
+                        {
+                            text: "确定", className: "okbtn", onClick: function () {
+                            $.ajax({
+                                type: 'POST',
+                                url: "{:U('Exchange/apply_deposit')}",
+                                data: {},
+                                dataType: 'json',
+                                success: function (res) {
+                                    if (res) {
+                                        $.modal({
+                                            title: "",
+                                            text: res.message,
+                                            buttons: [
+                                                {
+                                                    text: "OK，知道了", onClick: function () {
+                                                    location.href = window.location;
+                                                }
+                                                },
+                                            ]
+                                        });
+                                    }
+                                }
+                            });
+
+                        }
+                        },
+                    ]
+                });
+
+            });
+
+            $("#Revoke").on('click', function () {
+                $.modal({
+                    title: "撤销退押",
+                    text: "确定撤销退押？<p class='modal_p'>撤销后将恢复会员身份</p>",
+                    buttons: [
+                        {
+                            text: "取消", onClick: function () {
+                            console.log(1)
+                        }
+                        },
+                        {
+                            text: "确定", className: "okbtn", onClick: function () {
+                            var id = "{$apply['id']}";
+                            $.ajax({
+                                type: 'POST',
+                                url: "{:U('Exchange/Revoke')}",
+                                data: {id: id},
+                                dataType: 'json',
+                                success: function (res) {
+                                    if (res) {
+                                        $.modal({
+                                            title: "",
+                                            text: res.message,
+                                            buttons: [
+                                                {
+                                                    text: "OK，知道了", className: "okbtn", onClick: function () {
+                                                    location.href = window.location;
+                                                }
+                                                },
+                                            ]
+                                        });
+                                    }
+                                }
+                            });
+
+                        }
+                        },
+                    ]
+                });
+
+            });
+
+            //确认收货(为动态添加的元素绑定事件)
+            $(document).on("click",'.mt30 .psbtn ',function(){
+                var order_id = this.id;
+
+                $.modal({
+                    title: "确定收货",
+                    text: "确定要收货？<p class='modal_p'>确认后订单状态就会标为已完成</p>",
+                    buttons: [
+                        {
+                            text: "取消", onClick: function () {
+                        }
+                        },
+                        {
+                            text: "确定", className: "okbtn", onClick: function () {
+                            $.ajax({
+                                type: 'POST',
+                                url: "{:U('Exchange/alterStatus')}",
+                                data: {'order_id':order_id},
+                                dataType: 'json',
+                                success: function (res) {
+                                    if (res) {
+                                        $.modal({
+                                            title: "",
+                                            text: res.message,
+                                            buttons: [
+                                                {
+                                                    text: "OK，知道了", onClick: function () {
+                                                    location.href = window.location;
+                                                }
+                                                },
+                                            ]
+                                        });
+                                    }
+                                }
+                            });
+
+                        }
+                        },
+                    ]
+                });
+
+            });
+
+        });
+    </script>
+</block>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,viewport-fit=cover">
+    <link rel="stylesheet" href="__STATIC__/n_assets/css/zpui.css"/>
+    <link rel="stylesheet" href="__STATIC__/n_assets/css/all.css"/>
+    <script src="__STATIC__/n_assets/js/page.js"></script>
+    <link href="__STATIC__/n_assets/js/Swiper-4.0.7/swiper.min.css">
+    <link href="__PUBLIC__/static/css/page.css" rel="stylesheet" type="text/css">
+
+    <title>我的马克币</title>
+</head>
+<body>
+<body>
+<div class="page">
+    <div class="page-hd">
+        <div class="header bor-1px-b">
+            <div class="header-left">
+                <a href="{:U('User/index')}" class="left-arrow"></a>
+            </div>
+            <div class="header-title">我的马克币</div>
+            <div class="header-right">
+                <a href="#"></a>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-bd">
+        <!-- 页面内容-->
+        <div class="fxs">
+            <div class="mark">
+                <div class="fs30 text-white">我的马克币：<span class="ff fs48">{$user.makebi}</span></div>
+                <div class="fs28 mt10" style="color: rgba(255,255,255,0.8)">玩转马克币，更多玩法值得期待</div>
+            </div>
+
+        </div>
+        <div class="weui-cells mt0">
+            <div class="weui-cell">
+                <div class="weui-cell__bd hit_title fs28 fw600">
+                    获取更多的马克币
+                </div>
+            </div>
+
+            <volist name="config" id="vo">
+            <div class="weui-cell">
+                <div class="weui-cell__bd fs26">
+                    <p>{$vo.desc}</p>
+                </div>
+                <div class="weui-cell__ft">
+                    <a class="inline-btn" style="width:0.5rem;height:0.25rem;line-height:0.25rem;padding:0 0.06rem">+{$vo.value}</a>
+                </div>
+            </div>
+            </volist>
+
+        </div>
+        <div class="weui-cells">
+            <div class="weui-cell">
+                <div class="weui-cell__bd hit_title hit_title1 fs28 fw600">
+                    马克币记录
+                </div>
+            </div>
+
+            <volist name="lists" id="vo">
+            <div class="weui-cell">
+                <div class="weui-cell__bd">
+                    <div class="fs26">{$vo.desc}</div>
+                    <div class="fs22 text-muted mt10">{$vo.create_time|date="Y-m-d
+                        H:i",###}</div>
+                </div>
+                <div class="weui-cell__ft fs26 text-gray">
+                    <if $vo[money] gt '0'>
+                        +{$vo.money}
+                     <else />
+                        {$vo.money}
+                     </if>
+
+                </div>
+            </div>
+            </volist>
+
+        </div>
+
+        {$page}
+    </div>
+
+</div>

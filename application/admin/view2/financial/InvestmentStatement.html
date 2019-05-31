@@ -1,0 +1,272 @@
+<include file="public/layout" />
+<script type="text/javascript">
+    window.UEDITOR_Admin_URL = "__ROOT__/public/plugins/Ueditor/";
+    var URL_upload = "{$URL_upload}";
+    var URL_fileUp = "{$URL_fileUp}";
+    var URL_scrawlUp = "{$URL_scrawlUp}";
+    var URL_getRemoteImage = "{$URL_getRemoteImage}";
+    var URL_imageManager = "{$URL_imageManager}";
+    var URL_imageUp = "{$URL_imageUp}";
+    var URL_getMovie = "{$URL_getMovie}";
+    var URL_home = "{$URL_home}";    
+</script>
+
+<load href="__ROOT__/public/plugins/Ueditor/ueditor.config.js"/>
+<load href="__ROOT__/public/plugins/Ueditor/ueditor.all.js"/>
+<script src="__ROOT__/public/static/js/layer/laydate/laydate.js"></script>
+
+<style type="text/css">
+html, body {
+    overflow: visible;
+}
+#submitBtn {
+    
+    text-shadow: 0 -1px 0 rgba(0,0,0,0.10);
+    text-align: center;
+    width: 90px;
+    height: 40px;
+    cursor: pointer;
+    font: bold 15px/16px "microsoft yahei", arial; 
+    padding: 10px 10px;
+    border-width: 1px;
+    border-style: solid;
+    border-image: initial;
+    border-radius: 3px;
+    
+    
+
+}
+
+</style>  
+<body style="background-color: #FFF; overflow: auto;">
+<div id="toolTipLayer" style="position: absolute; z-index: 9999; display: none; visibility: visible; left: 95px; top: 573px;"></div>
+<div id="append_parent"></div>
+<div id="ajaxwaitid"></div>
+<div class="page">
+  <div class="fixed-bar">
+    <div class="item-title">
+      <div class="subject">
+        <h3>理财说明</h3>
+        
+      </div>
+    </div>
+  </div>
+  <form class="form-horizontal" action="{$uploadurl}" enctype="multipart/form-data" method="post">    
+    <div class="ncap-form-default">
+      <dl class="row">
+        <dt class="tit">
+          <label><em>*</em>标题</label>
+        </dt>
+        <dd class="opt">
+          <input type="text" value="{$res.title}" name="title" class="input-txt">
+          <span class="err"></span>
+          <p class="notic"></p>
+        </dd>
+      </dl>
+      
+      <!-- <dl class="row">
+        <dt class="tit">
+          <label><em>*</em>图片</label>
+        </dt>
+        <dd class="opt">
+          <img src="{$res['img']}"> 
+          
+        </dd>
+      </dl>  --> 
+      
+      <dl class="row">
+        <dt class="tit">
+          <label><em>*</em>内容</label>
+        </dt>
+        <dd class="opt">     
+
+            <textarea class="span12 ckeditor" id="post_content" name="content" title="">{$res.content}</textarea>    
+                
+                  
+          <span class="err"></span>
+          <p class="notic"></p>
+        </dd>
+      </dl>
+        <!-- <dl class="row">
+            <dt class="tit">
+                <label>图片上传</label>
+            </dt>
+            <dd class="opt">
+                <div class="input-file-show">
+                        <span class="show">
+                            <a id="img_a" class="nyroModal" rel="gal" href="{$info.thumb}">
+                                <i id="img_i" class="fa fa-picture-o" onmouseover="layer.tips('<img src={$info.thumb}>',this,{tips: [1, '#fff']});" onmouseout="layer.closeAll();"></i>
+                            </a>
+                        </span>
+                        <span class="type-file-box">
+                            <input type="file" name="image" /> 
+
+                        </span>
+                </div>
+                <span class="err"></span>
+                
+            </dd>
+        </dl> -->
+        <div class="bot "><input style="background-color: #4fc0e8;border-color: #3aa8cf; color: #FFF; font:20px; display: inline-block;" type="submit"   value="确定提交"   id="submitBtn"/></div>
+      <!-- <div class="bot"><a href="{$uploadurl}" class="ncap-btn-big ncap-btn-green" id="submitBtn">确认提交</a></div> -->
+    </div>
+        
+  </form>
+</div>
+<script type="text/javascript">
+    var editor;
+    $(function () {
+        //具体参数配置在  editor_config.js 中
+        var options = {
+            zIndex: 999,
+            initialFrameWidth: "70%", //初化宽度
+            initialFrameHeight: 300, //初化高度            
+            focus: false, //初始化时，是否让编辑器获得焦点true或false
+            maximumWords: 99999, removeFormatAttributes: 'class,style,lang,width,height,align,hspace,valign',//允许的最大字符数 'fullscreen',
+            pasteplain:false, //是否默认为纯文本粘贴。false为不使用纯文本粘贴，true为使用纯文本粘贴
+            autoHeightEnabled: true,
+            allowDivTransToP:false,
+            disabledTableInTable:false,
+         /*   autotypeset: {
+                mergeEmptyline: true,        //合并空行
+                removeClass: true,           //去掉冗余的class
+                removeEmptyline: false,      //去掉空行
+                textAlign: "left",           //段落的排版方式，可以是 left,right,center,justify 去掉这个属性表示不执行排版
+                imageBlockLine: 'center',    //图片的浮动方式，独占一行剧中,左右浮动，默认: center,left,right,none 去掉这个属性表示不执行排版
+                pasteFilter: false,          //根据规则过滤没事粘贴进来的内容
+                clearFontSize: false,        //去掉所有的内嵌字号，使用编辑器默认的字号
+                clearFontFamily: false,      //去掉所有的内嵌字体，使用编辑器默认的字体
+                removeEmptyNode: false,      //去掉空节点
+                                             //可以去掉的标签
+                removeTagNames: {"font": 1},
+                indent: false,               // 行首缩进
+                indentValue: '0em'           //行首缩进的大小
+            }*/
+        };
+        editor = new UE.ui.Editor(options);
+        editor.render("post_content");
+      
+        $('#publish_time').layDate(); 
+     
+    });
+    
+    // function checkForm(){
+    //  if($('input[name="title"]').val() == ''){
+    //      layer.alert("请填写文章标题！",{icon:2});
+    //      return false;
+    //  }
+    //  if($('#cat_id').val() == '' || $('#cat_id').val() == 0){
+ //            layer.alert("请选择文章类别！",{icon:2});
+    //      return false;
+    //  }
+    //  if($('#post_content').val() == ''){
+ //            layer.alert("请填写文章内容！",{icon:2});
+    //      return false;
+    //  }
+    //  $('#add_post').submit();
+    // }
+
+    <!-- 系统保留分类 start-->
+    var article_main_system_id = <?php echo json_encode($article_main_system_id); ?>;
+    $("#cat_id").change(function(){
+        var v = parseInt($(this).val());
+        if(jQuery.inArray(v, article_main_system_id) != -1){
+            layer.alert("系统保留分类，不允许在该分类添加文章！",{icon:2});
+            $(this).val(0);
+        }
+
+    });
+
+    $("#cat_id2").change(function(){
+        var v = parseInt($(this).val());
+        if(jQuery.inArray(v, article_main_system_id) != -1){
+            layer.alert("系统保留分类，不允许在该分类添加文章！",{icon:2});
+            $(this).val(0);
+        }
+
+    });
+
+    function img_call_back(fileurl_tmp)
+    {
+        $("#thumb").val(fileurl_tmp);
+        $("#img_a").attr('href', fileurl_tmp);
+        $("#img_i").attr('onmouseover', "layer.tips('<img src="+fileurl_tmp+">',this,{tips: [1, '#fff']});");
+    }var editor;
+    $(function () {
+        //具体参数配置在  editor_config.js 中
+        var options = {
+            zIndex: 999,
+            initialFrameWidth: "70%", //初化宽度
+            initialFrameHeight: 300, //初化高度            
+            focus: false, //初始化时，是否让编辑器获得焦点true或false
+            maximumWords: 99999, removeFormatAttributes: 'class,style,lang,width,height,align,hspace,valign',//允许的最大字符数 'fullscreen',
+            pasteplain:false, //是否默认为纯文本粘贴。false为不使用纯文本粘贴，true为使用纯文本粘贴
+            autoHeightEnabled: true
+         /*   autotypeset: {
+                mergeEmptyline: true,        //合并空行
+                removeClass: true,           //去掉冗余的class
+                removeEmptyline: false,      //去掉空行
+                textAlign: "left",           //段落的排版方式，可以是 left,right,center,justify 去掉这个属性表示不执行排版
+                imageBlockLine: 'center',    //图片的浮动方式，独占一行剧中,左右浮动，默认: center,left,right,none 去掉这个属性表示不执行排版
+                pasteFilter: false,          //根据规则过滤没事粘贴进来的内容
+                clearFontSize: false,        //去掉所有的内嵌字号，使用编辑器默认的字号
+                clearFontFamily: false,      //去掉所有的内嵌字体，使用编辑器默认的字体
+                removeEmptyNode: false,      //去掉空节点
+                                             //可以去掉的标签
+                removeTagNames: {"font": 1},
+                indent: false,               // 行首缩进
+                indentValue: '0em'           //行首缩进的大小
+            }*/
+        };
+        editor = new UE.ui.Editor(options);
+        editor.render("post_content");
+      
+        $('#publish_time').layDate(); 
+     
+    });
+    
+    function checkForm(){
+        if($('input[name="title"]').val() == ''){
+            layer.alert("请填写文章标题！",{icon:2});
+            return false;
+        }
+        if($('#cat_id').val() == '' || $('#cat_id').val() == 0){
+            layer.alert("请选择文章类别！",{icon:2});
+            return false;
+        }
+        if($('#post_content').val() == ''){
+            layer.alert("请填写文章内容！",{icon:2});
+            return false;
+        }
+        $('#add_post').submit();
+    }
+
+    <!-- 系统保留分类 start-->
+    var article_main_system_id = <?php echo json_encode($article_main_system_id); ?>;
+    $("#cat_id").change(function(){
+        var v = parseInt($(this).val());
+        if(jQuery.inArray(v, article_main_system_id) != -1){
+            layer.alert("系统保留分类，不允许在该分类添加文章！",{icon:2});
+            $(this).val(0);
+        }
+
+    });
+
+    $("#cat_id2").change(function(){
+        var v = parseInt($(this).val());
+        if(jQuery.inArray(v, article_main_system_id) != -1){
+            layer.alert("系统保留分类，不允许在该分类添加文章！",{icon:2});
+            $(this).val(0);
+        }
+
+    });
+    function img_call_back(fileurl_tmp)
+    {
+        $("#thumb").val(fileurl_tmp);
+        $("#img_a").attr('href', fileurl_tmp);
+        $("#img_i").attr('onmouseover', "layer.tips('<img src="+fileurl_tmp+">',this,{tips: [1, '#fff']});");
+    }
+    
+</script>
+</body>
+</html>

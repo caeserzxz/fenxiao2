@@ -1,0 +1,204 @@
+<include file="public/layout"/>
+<style>
+    .te_le .dataTables_paginate{float: left;}
+    .bot{float: right;padding: 15px 0}
+</style>
+<body style="background-color: rgb(255, 255, 255); overflow: auto; cursor: default; -moz-user-select: inherit;">
+<div class="page" style="padding: 0px 1% 0 1%; min-width: auto;">
+    <!-- 操作说明 -->
+    <div class="flexigrid">
+        <div class="mDiv">
+            <div class="ftitle">
+                <h3>用户列表</h3>
+                <h5>(共{$page->totalRows}条记录)</h5>
+            </div>
+            <!-- <div title="刷新数据" class="pReload"><i class="fa fa-refresh"></i></div> -->
+        </div>
+        <div class="hDiv">
+            <div class="hDivBox">
+                <table cellspacing="0" cellpadding="0">
+                    <thead>
+                    <tr>
+                        <th abbr="article_title" axis="col3" class="" align="left">
+                            <div style="text-align: center; width: 50px;" class="">ID</div>
+                        </th>
+                        <th abbr="article_time" axis="col6" class="" align="left">
+                            <div style="text-align: center; width: 250px;" class="">销售奖</div>
+                        </th>
+                        <th abbr="article_time" axis="col6" class="" align="left">
+                            <div style="text-align: center; width: 250px;" class="">上荐奖</div>
+                        </th>
+                        <th abbr="article_time" axis="col6" class="" align="left">
+                            <div style="text-align: center; width: 250px;" class="">总金额</div>
+                        </th>
+                        <th abbr="article_time" axis="col6" class="" align="left">
+                            <div style="text-align: center; width: 250px;" class="">审核状态</div>
+                        </th>
+                        <th abbr="article_time" axis="col6" class="" align="left">
+                            <div style="text-align: center; width: 250px;" class="">申请时间</div>
+                        </th>
+                        <th abbr="article_time" axis="col6" class="" align="left">
+                            <div style="text-align: center; width: 250px;" class="">打款时间</div>
+                        </th>
+                        <th abbr="article_time" axis="col6" class="" align="left">
+                            <div style="text-align: center; width: 250px;" class="">收款时间</div>
+                        </th>
+
+                    </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+        <div class="bDiv" style="height: auto;">
+            <div id="flexigrid" cellpadding="0" cellspacing="0" border="0">
+                <table>
+                    <tbody>
+
+                    <volist name="userList" id="list">
+                        <tr>
+
+                            <td class="" align="left">
+                                <div style="text-align: center; width: 50px;">{$list.user_id}</div>
+                            </td>
+                            <td class="" align="left">
+                                <div style="text-align: center; width: 250px;">{$list.sales_money}</div>
+                            </td>
+                            <td class="" align="left">
+                                <div style="text-align: center; width: 250px;">{$list.top_money}</div>
+                            </td>
+                            <td class="" align="left">
+                                <div style="text-align: center; width: 250px;">{$list.total_money}</div>
+                            </td>
+                            <td class="" align="left">
+                                <div style="text-align: center; width: 250px;">
+                                    <if condition="($list.status eq 0) "> 申请中,未收款
+                                        <elseif condition="$list.status eq 1"/>已收款
+                                        <else /> 已发放
+                                    </if>
+                            </td>
+                            <td class="" align="left">
+                                <div style="text-align: center; width: 250px;">
+                                    <if condition="($list.create_time neq null) ">
+                                        {:date('Y-m-d H:i:s',$list['create_time'])}
+                                    </if>
+                                </div>
+                            </td>
+                            <td class="" align="left">
+                                <div style="text-align: center; width: 250px;">
+                                    <if condition="($list.pay_time neq null) ">
+                                        {:date('Y-m-d H:i:s',$list['pay_time'])}
+                                    </if>
+                                </div>
+                            </td>
+                            <td class="" align="left">
+                                <div style="text-align: center; width: 250px;">
+                                    <if condition="($list.get_time neq null) ">
+                                        {:date('Y-m-d H:i:s',$list['get_time'])}
+                                    </if>
+                                </div>
+                            </td>
+
+                        </tr>
+
+                    </volist>
+                    </tbody>
+                </table>
+            </div>
+            <div class="iDiv" style="display: none;"></div>
+        </div>
+        <!--分页位置-->
+        <div class="te_le">
+           {$page}
+        </div>
+        <!--<div class="bot"><a onclick="select_users1();" class="ncap-btn-big ncap-btn-green">确认提交</a></div>-->
+    </div>
+</div>
+<script>
+    $(document).ready(function(){
+        $("input[type='radio']:checked").each(function(i,o){
+            var user_id = $(this).data('id');
+            $('#spec_user_id_'+user_id).show();
+        })
+    });
+
+    //用户对象
+    function GoodsItem(user_id, nickname, goods_image) {
+        this.user_id = user_id;
+        this.nickname = nickname;
+        //没有头像默认给一个头像
+        if(goods_image)
+        {
+        	this.goods_image = goods_image;
+        }
+        else
+        {
+        	var goods_image='/public/assets/images/swiper_img01.jpg';
+        	this.goods_image = goods_image;
+
+        }
+        
+        
+       
+    }
+    //商品对象
+    function GoodsSpecItem(item_id, key_name, store_count, price ,spec_img) {
+        this.item_id = item_id;
+        this.key_name = key_name;
+        this.store_count = store_count;
+        this.price = price;
+        this.spec_img = spec_img;
+    }
+    //单选框选中事件
+    $(function () {
+        $(document).on("click", '#flexigrid input', function (e) {
+            var user_id = $(this).data('id');
+            if($(this).is(':checked')){
+                $('#spec_user_id_'+user_id).show();
+            }else{
+                $('#spec_user_id_'+user_id).hide();
+            }
+        })
+    })
+    //规格按钮点击事件
+    $(function () {
+        $(document).on("click", '.specBtn', function (e) {
+            $(this).parent().find('a').css("color","#777").removeClass('ncap-btn-green');
+            $(this).css("color","#FFF").addClass('ncap-btn-green');
+        })
+    })
+
+    function select_users1()
+    {
+        var input = $("input[type='radio']:checked");
+        if (input.length == 0) {
+            layer.alert('请选择上级用户', {icon: 2}); //alert('请选择商品');
+            return false;
+        }
+        var user_id = input.data('id');
+        var name=input.data('name');
+        var img=input.data('img');
+        var spec = $('#spec_user_id_'+user_id);
+
+        
+
+        var goodsItem = null;
+        if(spec.length == 0){
+        	
+            goodsItem = new GoodsItem(input.data('id'), input.data('name'), input.data('img'), null);
+            //goodsArr.push(goodsItem);
+        	//alert(goodsItem);
+
+        }else{
+            var spec_a = spec.find('.ncap-btn-green');
+            if(spec_a.length == 0){
+                layer.alert('请选择上级用户', {icon: 2}); //alert('请选择商品');
+            }else{
+                var goodsSpecItem = new GoodsSpecItem(spec_a.data('item-id'),spec_a.data('key-name'),spec_a.data('store-count'),spec_a.data('price'),spec_a.data('spec-img'));
+                goodsItem = new GoodsItem(input.data('id'), input.data('name'), input.data('count'),input.data('price'), input.data('img'), goodsSpecItem);
+            }
+        }
+        window.parent.call_back(goodsItem);
+    }
+</script>
+</body>
+</html>

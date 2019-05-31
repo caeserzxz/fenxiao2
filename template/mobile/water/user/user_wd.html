@@ -1,0 +1,175 @@
+<include file="public/header" title="提现配置" body=""/>
+<include file="public/header_nav" title="提现配置" href="javascript:history.back(-1)"/>
+<link rel="stylesheet" type="text/css" href="__STATIC__/weui/weui.css">
+<script src="__STATIC__/weui/jquery-weui.min.js"></script>
+<style>
+	.weui-navbar__item{font-size: .64rem;}
+	.weui-navbar__item.weui-bar__item--on:after{
+		width: 60px;
+		height: 5px;
+	}
+	.loginsingup-input .lsu-recharge>span, .loginsingup-input .lsu-v-code>span{
+		font-size: 0.5rem;
+	}
+	.layermbox0 .layermchild{width: auto}
+</style>
+<input type="hidden" id="openid" value="{$user.openid}">
+		<div class="loginsingup-input ma-to-20" style="margin-top: 0; padding-top: .42667rem;">
+			<div class="weui-tab">
+				<div class="weui-navbar">
+					<a class="weui-navbar__item weui-bar__item--on" href="#tab1">
+						银行
+					</a>
+					<a class="weui-navbar__item" href="#tab2">
+						支付宝
+					</a>
+					<a class="weui-navbar__item" href="#tab3">
+						微信
+					</a>
+				</div>
+				<div class="weui-tab__bd">
+					<div id="tab1" class="weui-tab__bd-item weui-tab__bd-item--active">
+						<form method="post" id="returnform1">
+							<div class="content30">
+								<div class="lsu lsu-recharge">
+									<span>银行名称：</span>
+
+									<input type="text" name="bank_name" id="bank_name1" value="{$bank['bank_name']}" placeholder="如：工商银行">
+								</div>
+								<div class="lsu lsu-recharge">
+									<span>收款账号：</span>
+									<input type="text" name="bank_card" value="{$bank['bank_card']}" id="bank_card1" maxlength="18" placeholder="银行卡号" onKeyUp="this.value=this.value.replace(/[^\d]/g,'')">
+								</div>
+								<div class="lsu lsu-recharge">
+									<span>开 户 名：</span>
+									<input type="text" name="realname" id="realname1" value="{$bank['realname']}"  placeholder="持卡人姓名">
+								</div>
+								<div class="lsu-submit">
+									<input type="hidden" name="type" value="1" />
+									<input type="hidden" name="__token__" value="{$Request.token}" />
+									<input type="button" onclick="checkSubmit(1)" value="提交">
+								</div>
+							</div>
+						</form>
+					</div>
+					<div id="tab2" class="weui-tab__bd-item">
+						<form method="post" id="returnform2">
+							<div class="content30">
+								<div class="lsu lsu-recharge">
+									<span>支付宝名称：</span>
+									<input type="text" name="bank_name" id="bank_name2" value="{$zfb['bank_name']}" placeholder="如：白胡子">
+								</div>
+								<div class="lsu lsu-recharge">
+									<span>支付宝账号：</span>
+									<input type="text" name="bank_card" value="{$zfb['bank_card']}" id="bank_card2" maxlength="18" placeholder="支付宝账号" onKeyUp="this.value=this.value.replace(/[^\d]/g,'')">
+								</div>
+								<div class="lsu lsu-recharge">
+									<span>本人姓名：</span>
+									<input type="text" name="realname" id="realname2" value="{$zfb['realname']}" placeholder="如：张三">
+								</div>
+								<div class="lsu-submit">
+									<input type="hidden" name="type" value="2" />
+									<input type="hidden" name="__token__" value="{$Request.token}" />
+									<input type="button" onclick="checkSubmit(2)" value="提交">
+								</div>
+							</div>
+						</form>
+					</div>
+					<div id="tab3" class="weui-tab__bd-item">
+						<form method="post" id="returnform3">
+							<div class="content30">
+								<div class="lsu lsu-recharge">
+									<span>微信名称：</span>
+									<input type="text" name="bank_name" id="bank_name3" value="{$wx['bank_name']}" placeholder="如：白胡子">
+								</div>
+								<div class="lsu lsu-recharge">
+									<span>微信账号：</span>
+									<input type="text" name="bank_card" value="{$wx['bank_card']}" id="bank_card3" maxlength="18" placeholder="微信账号">
+								</div>
+								<div class="lsu lsu-recharge">
+									<span>本人姓名：</span>
+									<input type="text" name="realname" id="realname3" value="{$wx['realname']}" placeholder="如：张三">
+								</div>
+								<div class="lsu-submit">
+									<input type="hidden" name="type" value="3" />
+									<input type="hidden" name="__token__" value="{$Request.token}" />
+									<input type="button" onclick="checkSubmit(3)" value="提交">
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+<script type="text/javascript" charset="utf-8">
+
+    /**
+     * 提交表单
+     * */
+    function checkSubmit(type){
+
+        var bank_name = $.trim($('#bank_name'+type).val());
+        var bank_card = $.trim($('#bank_card'+type).val());
+        var realname = $.trim($('#realname'+type).val());
+
+        //验证码
+
+        if(bank_name == '' || bank_card == '' || realname==''){
+            showErrorMsg("所有信息为必填")
+            return false;
+        }
+        $.ajax({
+            type: "post",
+            url :"{:U('Mobile/User/user_wd')}",
+            dataType:'json',
+            data:$('#returnform'+type).serialize(),
+            success: function(data)
+            {
+                showErrorMsg(data.msg);
+                if(data.status == 1){
+                    window.location.href=window.location;;
+                } else {
+                    showErrorMsg(data.msg)
+                }
+            }
+        });
+    }
+
+    $(function(){
+    	$('input[name="atype"]').click(function(){
+    		var bankstr = $(this).val();
+    		if(bankstr =='微信'){
+    			if($('#openid').val() == ''){
+    				alert('请在用户中心账号绑定里先扫码绑定微信账号');
+    				return false;
+    			}
+    		}
+    		if(bankstr != '银行卡'){
+    			$('#bank_name').val(bankstr);
+    			$('#bank_name').attr('readonly','readonly');
+    			if(bankstr == '微信'){
+    				$('#bank_card').val($('#openid').val());
+    				$('#bank_card').attr('readonly','readonly');
+    			}else{
+    				$('#bank_card').val('');
+    				$('#bank_card').removeAttr('readonly');
+    			}
+    		}else{
+    			$('#bank_name').val('');
+    			$('#bank_name').removeAttr('readonly');
+    		}
+    	})
+    });
+    /**
+     * 提示弹窗
+     * @param msg
+     */
+    function showErrorMsg(msg){
+        layer.open({
+            content:msg,
+            time:3
+		});
+    }
+</script>
+	</body>
+</html>

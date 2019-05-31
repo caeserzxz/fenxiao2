@@ -1,0 +1,59 @@
+<extend name="layout/page"/>
+<block name="pageBody">
+
+  <link rel="stylesheet" href="_STATIC__/Swiper-4.0.7/swiper.min.css"/>
+
+    <!-- 页面内容-->
+    <div class="detail_content chongz_content">
+      <div class="detail_panel">
+        <h3 class="h3_tit blue_h3tit">升级说明：</h3>
+        <div class="weui-cell bor-1px-b"><span>参与活动：</span> <span class="jinge"><b>{$exchange_list.title}</b></span></div>
+        <!--<div class="text-gray ">参与活动：<span class="num_span">充值 <b>{$user_level.amount|substr=0,-3}</b> 送水活动</span></div>-->
+        <h3 class="h3_tit">活动规则：</h3>
+        <div class="weui-cells hdpro_cells">
+          <div class="weui-cell">
+            <div class="weui-cell__bd">
+              <p>1.充值成功后将每月返{$user_level.return_water_coin}水币，水币可用于兑换水产品。</p>
+              <p>2.可选兑的水产品如下：</p>
+            </div>
+          </div>
+          <volist name="exchange_list['list']" id="list">
+          <div class="weui-cell">
+            <div class="weui-cell__hd">
+              <span class="num">{$list.num}</span>
+            </div>
+            <div class="weui-cell__bd">
+              <div class="weui-flex">
+                <div class="weui-flex__item">
+                  <div class="weui-media-box weui-media-box_appmsg" style="width: 3rem;">
+                    <div class="weui-media-box__hd">
+                      <img class="weui-media-box__thumb" src="{$list.original_img}">
+                    </div>
+                    <div class="weui-media-box__bd" style="font-size: .173333rem; color: #000">
+                      {$list.goods_name}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="suiprice">兑换所需水币：<span>{$list.water_coin}</span></div>
+            </div>
+          </div>
+          </volist>
+          <div class="weui-cell">
+            <div class="weui-cell__bd">
+              <p>3.目前只接受派送深圳和广州，其他地区不派送。</p>
+              <p>4.充值押金可申请退押，发起申请后下个月退还。水币也会停止返送。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  <div class="weui-flex bottom_btn">
+    <div class="weui-flex__item"><span>升级应付：</span><span class="price">￥<b>{$user_level.amount}</b></span></div>
+    <div class="weui-flex__item">
+      <a href="{:U('Exchange/recharge',array('level_id'=>$user_level.level_id))}" class="weui-btn weui-btn_primary">立即参与</a>
+    </div>
+  </div>
+
+</block>

@@ -1,0 +1,114 @@
+
+
+项目数据库：liaoyanqing
+
+主体分工：
+    蒙：负责用户注册，商品套餐，订单流程
+    泽坚：负责供应商，提现，支付
+
+-----------------------------------------------------------------
+新建数据库：
+tp_n_sign       签到表
+tp_n_explain    有问必答表
+tp_n_notice    系统消息
+tp_order_vip    用户购买身份卡记录表
+
+
+/***************计划***************/
+
+
+数据表
+//清空数据表
+//注意修改admin表关联的用户id
+    TRUNCATE tp_account_log;
+    TRUNCATE tp_admin_log;
+    TRUNCATE tp_article;
+    TRUNCATE tp_brand;
+    TRUNCATE tp_cart;
+    TRUNCATE tp_comment;
+    TRUNCATE tp_coupon;
+    TRUNCATE tp_coupon_list;
+    TRUNCATE tp_delivery_doc;
+    TRUNCATE tp_delivery_doc;
+    TRUNCATE tp_exchange;
+    TRUNCATE tp_exchange_activity;
+    TRUNCATE tp_exchange_order;
+    TRUNCATE tp_exchange_split;
+    TRUNCATE tp_expense_log;
+    TRUNCATE tp_feedback;
+    TRUNCATE tp_financial;
+    TRUNCATE tp_friend_link;
+
+    //商品部分表
+    TRUNCATE tp_goods;
+    TRUNCATE tp_goods_activity;
+    TRUNCATE tp_goods_attr;
+    TRUNCATE tp_goods_attribute;
+    TRUNCATE tp_goods_category;
+    TRUNCATE tp_goods_collect;
+    TRUNCATE tp_goods_images;
+    TRUNCATE tp_goods_type;
+    TRUNCATE tp_goods_visit;
+    //END商品部分表
+
+    TRUNCATE tp_invoice;
+    TRUNCATE tp_message;
+
+    //廖燕青自己的表
+    TRUNCATE tp_n_advice;
+    TRUNCATE tp_n_amount_log;
+    TRUNCATE tp_n_apply_identity;
+    TRUNCATE tp_n_banner;
+    TRUNCATE tp_n_gongde_month;
+    TRUNCATE tp_n_goods_ku_log;
+    TRUNCATE tp_n_hetong;
+    TRUNCATE tp_n_mobile_captcha;
+    TRUNCATE tp_n_notice;
+    TRUNCATE tp_n_question;
+    TRUNCATE tp_n_user_bank;
+    TRUNCATE tp_n_user_idcard_apply;
+    TRUNCATE tp_n_user_management;
+    TRUNCATE tp_n_user_notice;
+    TRUNCATE tp_n_yongjin_month;
+    TRUNCATE tp_n_sign;
+    TRUNCATE tp_order_vip
+
+    TRUNCATE tp_n_rec_log;
+    TRUNCATE tp_n_icon;
+    TRUNCATE tp_n_apply_exchange;
+    TRUNCATE tp_n_withdraw;
+    TRUNCATE tp_n_withdraw_type;
+    TRUNCATE tp_n_provider;
+    TRUNCATE tp_n_explain;
+
+
+    //end廖燕青自己的表
+
+    TRUNCATE tp_oauth_users;
+    TRUNCATE tp_order;
+    TRUNCATE tp_order_action;
+    TRUNCATE tp_order_goods;
+    TRUNCATE tp_payment_log;
+    TRUNCATE tp_pick_up;
+    TRUNCATE tp_rebate_log;
+    TRUNCATE tp_recharge;
+    TRUNCATE tp_return_goods;
+    TRUNCATE tp_sms_log;
+
+    //商品规格部分
+    TRUNCATE tp_spec;
+    TRUNCATE tp_spec_goods_price;
+    TRUNCATE tp_spec_image;
+    TRUNCATE tp_spec_item;
+    TRUNCATE tp_stock_log;
+    //END商品规格部分
+
+     TRUNCATE tp_user_address;
+     TRUNCATE tp_user_collection;
+     TRUNCATE tp_users;
+
+     最后
+     注意文章表，banner表，admin表的关联供应商id,goods表的销售量
+
+
+

@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,viewport-fit=cover">
+    <link rel="stylesheet" href="__STATIC__/n_assets/css/zpui.css"/>
+    <link rel="stylesheet" href="__STATIC__/n_assets/css/all.css"/>
+    <script src="__STATIC__/n_assets/js/page.js"></script>
+    <link href="__STATIC__/n_assets/js/Swiper-4.0.7/swiper.min.css">
+
+    <title>发票</title>
+    <style>
+        .canvas{
+            display: block;
+            opacity: 0;
+            pointer-events: none;
+        }
+        .canvas_show{
+            opacity: 1;
+            pointer-events: auto;
+        }
+        #canvasBox{
+            background-color: #fff;
+        }
+    </style>
+</head>
+<body>
+<div class="page">
+    <div class="page-hd">
+        <div class="header bor-1px-b">
+            <div class="header-left">
+                <a href="javascript:history.go(-1)" class="left-arrow"></a>
+            </div>
+            <div class="header-title">开具发票</div>
+            <div class="header-right">
+                <a href="#"></a>
+            </div>
+        </div>
+    </div>
+    <div class="page-bd" style="background-color: #fff;" id="capture">
+        <!-- 页面内容-->
+        <h3 class="fs28 tc mt30">佣金形式发票</h3>
+
+        <div class="fapiao">
+            <div class="fp_hd">
+                <div class="weui-flex__item"><span class="lb_text">开票编号：</span>{$number}</div>
+
+
+            </div>
+            <div class="fp_bd">
+                <div>
+                    <span class="lb_text">付款方名称：</span>中国儿童健康发展中心有限公司
+
+                </div>
+                <table>
+                    <thead>
+                    <tr>
+                        <th>月份</th>
+                        <th>分销佣金</th>
+                        <th>管理佣金</th>
+                        <th>上荐奖</th>
+                        <th>代收佣金</th>
+                        <th>合计</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>{$list.create_time|date="y年m月",###}</td>
+                        <td>￥{$list.reward_money}</td>
+                        <td>￥{$list.managent_money}</td>
+                        <td>￥{$list.top_money}</td>
+                        <td>￥{$list.agent_money}</td>
+                        <td>￥{$list.total_money}</td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <div class="weui-flex">
+                    <div id="money" class="weui-flex__item"><span class="lb_text">小写金额合计：</span>{$list.total_money}元</div>
+                    <div  class="weui-flex__item"><span class="lb_text">大写金额合计：</span><span id="money1">零</span></div>
+                </div>
+                <div class="weui-flex mt10">
+                    <div class="weui-flex__item"><span class="lb_text">收款人：</span><span id="name"></span></div>
+
+                </div>
+                <div class="weui-flex mt10">
+
+                    <div class="weui-flex__item"><span class="lb_text">收款人身份证：</span><span id="id_card"></span></div>
+                </div>
+                <div class="weui-flex mt10">
+                    <div class="weui-flex__item"><span class="lb_text">电话地址：</span><span id="phone_address"></span></div>
+                    <div class="weui-flex__item" id="mobile"></div>
+                </div>
+                <div class="weui-flex mt10">
+                    <div class="weui-flex__item"><span class="lb_text">开户行记账户：</span><span id="bank_address"></span></div>
+                    <div class="weui-flex__item" id="bank_card"></div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="sign">
+            <div>收票人签字：</div>
+            <div class="weui-flex__item">
+        <span class="sign_img">
+          <img src="/" alt="">
+        </span>
+
+            </div>
+            <div  class="weui-flex__item"><img class="icon_sign" src="__STATIC__/n_assets/images/icon_sign.png" alt=""></div>
+        </div>
+
+        <div class="tc text-muted">
+            点击上方图标签写真实姓名，完成后点击确定按钮
+        </div>
+        <div class="canvas" id="canvas">
+
+            <div class="canvas_box">
+                <div id="canvasBox"></div>
+            </div>
+            <p class="clearCanvas" id="clearCanvas">清除</p>
+            <p class="saveCanvas" id="saveCanvas">完成</p>
+        </div>
+
+
+        <div class="weui-btn-area" style="margin-top: 0.6rem;">
+            <a href="###" onclick=tijiao() class="weui-btn weui-btn_primary mt20">确认</a>
+        </div>
+    </div>
+
+
+</div>
+</div>
+
+<script src="__STATIC__/n_assets/js/lib/jquery-2.1.4.js"></script>
+<script src="__STATIC__/n_assets/js/jquery-weui.min.js"></script>
+<script src="__STATIC__/n_assets/js/lib/fastclick.js"></script>
+<script src="__STATIC__/layer/layer.js"></script>
+<script  src="__STATIC__/html2canvas/html2canvas.js"></script>
+<script  src="__STATIC__/html2canvas/html2canvas.min.js"></script>
+<script>
+    $(function() {
+        FastClick.attach(document.body);
+    });
+</script>
+
+<script>
+
+
+    $(function () {
+
+        new lineCanvas({
+            el: document.getElementById("canvasBox"),//绘制canvas的父级div
+            clearEl: document.getElementById("clearCanvas"),//清除按钮
+            saveEl: document.getElementById("saveCanvas"),//保存按钮
+        });
+
+        $(".icon_sign").on('click', function () {
+            $(".canvas").addClass('canvas_show');
+        });
+    });
+
+    var imgBase64 ="";
+    function lineCanvas(obj) {
+        this.linewidth = 1;
+        this.color = "#000000";
+        this.background = "#ffffff";
+        for (var i in obj) {
+            this[i] = obj[i];
+        };
+        this.canvas = document.createElement("canvas");
+        this.el.appendChild(this.canvas);
+        this.cxt = this.canvas.getContext("2d");
+        this.canvas.width = this.el.clientWidth;
+        this.canvas.height = this.el.clientWidth/2;
+        this.cxt.fillStyle = this.background;
+        this.cxt.fillRect(0, 0, this.canvas.width, this.canvas.width);
+        this.cxt.strokeStyle = this.color;
+        this.cxt.lineWidth = this.linewidth;
+        this.cxt.lineCap = "round";
+        //开始绘制
+        this.canvas.addEventListener("touchstart", function(e) {
+            this.cxt.beginPath();
+            this.cxt.moveTo(e.changedTouches[0].pageX, e.changedTouches[0].pageY);
+        }.bind(this), false);
+        //绘制中
+        this.canvas.addEventListener("touchmove", function(e) {
+            this.cxt.lineTo(e.changedTouches[0].pageX, e.changedTouches[0].pageY);
+            this.cxt.stroke();
+        }.bind(this), false);
+        //结束绘制
+        this.canvas.addEventListener("touchend", function() {
+            this.cxt.closePath();
+        }.bind(this), false);
+        //清除画布
+        this.clearEl.addEventListener("click", function() {
+            this.cxt.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        }.bind(this), false);
+        //保存图片，直接转base64
+        this.saveEl.addEventListener("click", function() {
+            imgBase64 = this.canvas.toDataURL();
+            console.log(imgBase64);
+            $(".canvas").removeClass('canvas_show');
+            $(".sign_img img").attr('src',imgBase64);
+        }.bind(this), false);
+
+
+    };
+</script>
+
+
+
+<script>
+    //获取用户信息
+    update();
+
+    var total_money="{$list.total_money}";
+    //转化为中文金额
+    swapper(total_money)
+    //阿拉伯数字金额转化为中文金额
+    function swapper(n) {
+        if (!/^(0|[1-9]\d*)(\.\d+)?$/.test(n))
+            return "数据非法";
+        var unit = "千百拾亿千百拾万千百拾元角分", str = "";
+        n += "00";
+        var p = n.indexOf('.');
+        if (p >= 0)
+            n = n.substring(0, p) + n.substr(p+1, 2);
+        unit = unit.substr(unit.length - n.length);
+        for (var i=0; i < n.length; i++)
+            str += '零壹贰叁肆伍陆柒捌玖'.charAt(n.charAt(i)) + unit.charAt(i);
+        var money = str.replace(/零(千|百|拾|角)/g, "零").replace(/(零)+/g, "零").replace(/零(万|亿|元)/g, "$1").replace(/(亿)万|壹(拾)/g, "$1$2").replace(/^元零?|零分/g, "").replace(/元$/g, "元");
+        $("#money1").text(money);
+    }
+    //alert(swapper(400));
+
+
+
+    var id = "{$id}"
+    //拿到用户的信息
+    function update()
+    {
+
+        $.ajax({
+            url: '/mobile/User/_fapiao',
+            type: 'POST',
+            cache: false,       //上传文件不需要缓存
+            data: {
+
+            },
+            success: function (data) {
+                console.log(data)
+                //没有信息
+                if(!data.name || !data.branch_name || !data.card_number || !data.address || !data.phone)
+                {
+
+                    layer.msg('用户信息获取失败', {
+                        icon: 6,
+                        time: 2500 //2秒关闭（如果不配置，默认是3秒）
+                    }, function(){
+                        window.location.href = "{:url('/mobile/User/index')}";
+                    });
+
+                }
+
+                $("#name").text(data.name);
+                $("#phone_address").text(data.address);
+                $("#mobile").text(data.phone);
+                $("#bank_address").text(data.branch_name);
+                $("#bank_card").text(data.card_number);
+                $("#id_card").text(data.id_card);
+
+            },
+            error: function (data) {
+                //tipTopShow("上传失败");
+            }
+        });
+    }
+
+    //提交到后台
+    function tijiao()
+    {
+        if(!imgBase64)
+        {
+            layer.alert('请签名');
+            return;
+        }
+        var img1 ="";
+        html2canvas(document.querySelector("#capture")).then(canvas => {
+            document.body.appendChild(canvas)
+            img1 = canvas.toDataURL();
+            //console.log(img1); //在console中会输出图片的路径，然后复制在浏览器一粘贴，就可以看到。
+
+            $.ajax({
+                type: "POST",
+                url: "/mobile/User/tijiao_fapiao",//+tab,
+                data: {
+                    image: img1,
+                    id: id,
+                },
+                success: function (data) {
+                    layer.msg('提交成功', {
+                        icon: 6,
+                        time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                    }, function(){
+                        window.location.href = "{:url('/mobile/User/index')}";
+                    });
+                }
+            });
+        });
+
+
+    }
+
+</script>
+
+</body>

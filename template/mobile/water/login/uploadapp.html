@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,viewport-fit=cover">
+    <link rel="stylesheet" href="__STATIC__/n_assets/css/zpui.css"/>
+    <link rel="stylesheet" href="__STATIC__/n_assets/css/all.css"/>
+    <script src="__STATIC__/n_assets/js/page.js"></script>
+    <link href="__STATIC__/n_assets/js/Swiper-4.0.7/swiper.min.css">
+
+    <title>下载APP</title>
+    <style>
+        .img-logo {
+            width: 1.3rem;
+            margin: 0 auto;
+        }
+        .img-logo img {
+            width: 1.5rem;
+            height: 1.5rem;
+        }
+        .img-logookg {
+            width: 96%;
+            height: auto;
+            margin: 0 auto;
+        }
+        .img-logookg img {
+            width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+<div class="page">
+    <div class="page-hd">
+        <div class="header bor-1px-b">
+            <div class="header-left">
+                <a href="javascript:history.go(-1)" class="left-arrow"></a>
+            </div>
+            <div class="header-title">下载APP</div>
+            <div class="header-right">
+                <a href="#"></a>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-bd pb120">
+        <!-- 页面内容-->
+        <div class="weui-cell flex-column">
+            <div class="weui-cell__hd pt50 pb50">
+                <span class="fs36 fw500">请用浏览器打开页面</span>
+            </div>
+            <div class="weui-cell__bd">
+                <div class="b_img">
+                    <div class="img-logo"><img style="width:90%;height:90%;margin-left:0.1rem" src="__STATIC__/n_assets/images/er_17.png" alt=""></div>
+                    <div class="img-logookg" style="font-size: 0.3rem; color: #333; font-weight: 700; text-align:  center; margin-top: 0.05rem">马克医生</div>
+
+
+                </div>
+                <div onclick="uploadApp()" class="fs26 tc mt10" style="color: #999999;font-size:0.25rem; margin: 0 auto">点击下载</div>
+            </div>
+
+        </div>
+    </div>
+
+
+</div>
+<div class="page-ft">
+    <img src="__STATIC__/n_assets/images/b_foot.png" alt="">
+</div>
+
+<script>
+    //下载APP
+    function uploadApp(){
+        var url='{$data[url]}';
+        window.location.href=url + '/马克医生.apk';
+
+    }
+</script>

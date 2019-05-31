@@ -1,0 +1,61 @@
+<table>
+    <tbody>
+    <volist name="list" id="item">
+        <tr data-id="{$item['id']}">
+            <td class="sign">
+                <div style="width: 24px;"><i class="ico-check"></i></div>
+            </td>
+            <!--<td class="handle">-->
+                <!--<div width="166px">-->
+                    <!--<span class="btn"><em><i class="fa fa-cog"></i>设置<i class="arrow"></i></em>-->
+                        <!--<ul>-->
+                            <!--<li><a href="javascript:"></a></li>-->
+                        <!--</ul>-->
+                    <!--</span>-->
+                <!--</div>-->
+            <!--</td>-->
+            <td>
+                <div style="width: 60px;">{$item.id}</div>
+            </td>
+            <td>
+                <div style="width: 60px;">{$item.user_id}</div>
+            </td>
+            <td>
+                <div style="width: 100px;">{$item.user_nickname}</div>
+            </td>
+            <td>
+                <div style="width: 100px;">{$item.user_level_name}</div>
+            </td>
+            <td>
+                <div style="width: 100px;">{$item.user_mobile}</div>
+            </td>
+            <td>
+                <div style="width: 100px;">{$item.amount}</div>
+            </td>
+            <td>
+                <div style="width: 100px;">{$item.regular_text}</div>
+            </td>
+            <td>
+                <div style="width: 100px;">{$item.status_text}</div>
+            </td>
+            <td>
+                <div style="width: 100px;">{$item.amount_status_text}</div>
+            </td>
+            <td>
+                <div style="width: 100px;">{$item.start_time_text}</div>
+            </td>
+            <td>
+                <div style="width: 100px;">{$item.expected_end_time_text}</div>
+            </td>
+
+            <td>
+                <div>
+                    <a class="btn blue" href="{:U('details', ['id' => $item['id']])}"><i class="fa fa-pencil-square-o"></i>详情</a>
+                </div>
+            </td>
+        </tr>
+    </volist>
+    </tbody>
+</table>
+<!--分页位置-->
+{$page}

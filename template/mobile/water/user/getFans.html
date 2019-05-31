@@ -1,0 +1,126 @@
+<layout name="common/n_layout_nav"/>
+<title> 管理粉 </title>
+<style>
+    .weui-popup__modal {
+        opacity: 1;
+    }
+    .weui-popup__overlay{
+        background-color:rgba(0, 0, 0, 0.6);
+        opacity:0;
+        -webkit-transition:opacity .3s;
+        transition:opacity .3s;
+    }
+    .border_back_over{
+        border-width: 1rem;
+        border: solid 0.01rem #888888;
+    }
+</style>
+</head>
+<body>
+<div class="page">
+    <div class="page-hd">
+        <div class="header bor-1px-b">
+            <div class="header-left">
+                <a href="javascript:history.go(-1)" class="left-arrow"></a>
+            </div>
+            <div class="header-title">管理粉</div>
+            <div class="header-right">
+                <a href="#"></a>
+            </div>
+        </div>
+    </div>
+    <div class="page-bd">
+        <!-- 页面内容-->
+        <div class="weui-cells mt0">
+            <div class="weui-cell">
+               <!-- <div class="weui-cell__hd fenlei">
+                    <img src="__STATIC__/n_assets/images/fenlei.png">
+                </div>-->
+                <div class="weui-cell__bd fs30 ">
+                    <p>全部</p>
+                </div>
+                <div class="weui-cell__ft fs30 text-default">总人数：{$count}</div>
+            </div>
+        </div>
+        <div class="weui-cells">
+            <volist name="userList" id="vo">
+            <div class="weui-cell">
+                <div class="weui-cell__hd fans">
+                    <img src="{$vo.head_pic}">
+                </div>
+                <div class="weui-cell__bd">
+                    <div class="fs24">{$vo.nickname}</div>
+                    <div class="fs22 text-muted">
+                        <if condition="$vo['user_type'] eq 0">会员</if>
+                        <if condition="$vo['user_type'] eq 1">健康大使</if>
+                        <if condition="$vo['user_type'] eq 2">总代</if>
+                        <if condition="$vo['user_type'] eq 3">大区</if>
+                        <notempty name="$vo['cityName']">（{$vo.cityName}）</notempty>
+                    </div>
+                    <div class="fs22 text-muted">
+                        <if condition="$vo['countMonth'] neq 0">{$vo.countMonth}</if>
+                        <if condition="$vo['countAll'] neq 0">({{$vo.countAll}})</if>
+                    </div>
+                </div>
+                <!--当前用户的等级大于粉丝等级显示申请分销-->
+                <if condition="$vo['user_type'] egt 1">
+                    <div class="weui-cell__ft ft_btn">
+                        <a href="{:U('Mobile/User/fanDetail?user_id='.$vo['user_id'])}">查看资料</a>
+                    </div>
+                </if>
+                <if condition="$vo['user_type'] lt 1">
+                    <div class="weui-cell__ft ft_btn">
+                        <a  onclick="getFans({$vo['user_id']})">申请分销</a>
+                        <!--<a id="get_fans" href="{:U('Mobile/User/saleType?user_id='.$vo['user_id'])}" onclick="getFance()">申请分销</a>-->
+                    </div>
+                </if>
+            </div>
+            </volist>
+        </div>
+    </div>
+    <!--提醒-->
+    <div id="tishi1" class="weui-popup__container popup-center alert_box">
+            <div class="weui-popup__overlay"></div>
+            <div class="weui-popup__modal border_back_over">
+                <div class="toolbar">
+                    <div class="toolbar-inner">
+                        <a href="javascript:;" class="picker-button close-popup"><img src="../assets/images/icon_del1.png" alt=""></a>
+                        <h1 class="title">提示</h1>
+                    </div>
+                </div>
+                <div class="modal-content">
+                    <div class="c_bd1 pb80">
+                        <p class="fs28">温馨提醒：成为总代或者健康大使的基本
+                            条件是从事医药工作的经理、医生、营养
+                            师等专业人员，为了尊重专业人员的权威
+                            性，请谨慎为非专业人士申请分销。</p>
+                    </div>
+                    <div class="btns">
+                        <a href="###" class="weui-btn weui-btn_plain-default w240 color1" onclick="back_fans()">返回</a>
+                        <a href="###" class="weui-btn weui-btn_primary w240" id="keep">继续申请</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <script src="__STATIC__/n_assets/js/lib/jquery-2.1.4.js"></script>
+    <script src="__STATIC__/n_assets/js/jquery-weui.min.js"></script>
+    <script src="__STATIC__/n_assets/js/lib/fastclick.js"></script>
+    <script src="__STATIC__/js/lib/lodash.min.js"></script>
+    <script src="__STATIC__/js/style.js" type="text/javascript" charset="utf-8"></script>
+    <script src="__STATIC__/js/swipeSlide.min.js" type="text/javascript" charset="utf-8"></script>
+
+    <script>
+        function getFans(data){
+            var user_id=data;
+            cover()
+            $('.weui-popup__overlay').show();
+            $('#tishi1').show();
+            $('#keep').click(function(){
+                location.href ="/index.php/Mobile/User/saleType?user_id="+user_id;
+            })
+        }
+        function back_fans(){
+            $('#tishi1').hide();
+        }
+
+    </script>

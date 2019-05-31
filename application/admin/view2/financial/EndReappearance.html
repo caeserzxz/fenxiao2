@@ -1,0 +1,207 @@
+<include file="public/layout" />
+<body style="background-color: rgb(255, 255, 255); overflow: auto; cursor: default; -moz-user-select: inherit;">
+<div id="append_parent"></div>
+<div id="ajaxwaitid"></div>
+<div class="page">
+  <div class="fixed-bar">
+    <div class="item-title">
+      <div class="subject">
+        <h3>本金已返</h3>
+        
+      </div>
+    </div>
+  </div>
+  
+  <div class="flexigrid">
+        
+    <div class="hDiv">
+      <div class="hDivBox">
+        <table cellspacing="0" cellpadding="0">
+          <thead>
+            <tr>
+              
+              <th align="left" abbr="article_title" axis="col3" class="">
+                <div style="text-align: center; width: 90px;" class="">ID</div>
+              </th>
+
+              <th align="left" abbr="article_title" axis="col3" class="">
+                <div style="text-align: center; width: 150px;" class="">用户</div>
+              </th>
+              <th align="left" abbr="ac_id" axis="col4" class="">
+                <div style="text-align: center; width: 100px;" class="">理财状态</div>
+              </th>
+              <th align="left" abbr="article_show" axis="col5" class="">
+                <div style="text-align: center; width: 100px;" class="">本金状态</div>
+              </th>
+              <th align="left" abbr="article_show" axis="col5" class="">
+                <div style="text-align: center; width: 100px;" class="">理财金额</div>
+              </th>
+              <th align="left" abbr="article_show" axis="col5" class="">
+                <div style="text-align: center; width: 100px;" class="">定期月数</div>
+              </th>
+              <th align="left" abbr="article_show" axis="col5" class="">
+                <div style="text-align: center; width: 100px;" class="">总共获得佣金</div>
+              </th>
+              <th align="left" abbr="article_show" axis="col5" class="">
+                <div style="text-align: center; width: 100px;" class="">总共获得积分</div>
+              </th>
+              <th align="left" abbr="article_show" axis="col5" class="">
+                <div style="text-align: center; width: 130px;" class="">开始理财时间</div>
+              </th>
+              <th align="left" abbr="article_show" axis="col5" class="">
+                <div style="text-align: center; width: 130px;" class="">结束理财时间</div>
+              </th>
+
+
+              <th align="center" abbr="article_time" axis="col6" class="">
+                <div style="text-align: center; width: 130px;" class="">创建时间</div>
+              </th>
+
+              <th align="center" axis="col1" class="handle">
+                <div style="text-align: center; width: 450px;">操作</div>
+              </th>
+
+              <th style="width:100%" axis="col7">
+                <div></div>
+              </th>
+
+            </tr>
+          </thead>
+        </table>
+      </div>
+    </div>
+    
+    <div class="bDiv" style="height: auto;">
+      <div id="flexigrid" cellpadding="0" cellspacing="0" border="0">
+        <table>
+          <tbody>
+            <foreach name="res" item="vo" key="k" >
+              <tr>
+                
+                <td align="left" class="">
+                  <div style="text-align: center; width: 90px;">{$vo.id}</div>
+                </td>
+
+                <td align="left" class="">
+                  <div style="text-align: center; width: 150px;">{$vo.user_name}</div>
+                </td>
+
+                <td align="left" class="">
+                  <div style="text-align: center; width: 100px;">
+                    <if condition="$vo.status eq 1 ">
+                      未开始
+                    <elseif  condition="$vo.status eq 2 " /> 
+                      理财中
+                    <elseif  condition="$vo.status eq 3 " /> 
+                      已取消
+                    <elseif  condition="$vo.status eq 4 " /> 
+                      已完成
+                    </if>                  
+                  </div>
+                </td>
+                <td align="left" class="">
+                  <div style="text-align: center; width: 100px;"> 
+                    <if condition="$vo.amount_status eq 1 ">
+                      未支付
+                    <elseif  condition="$vo.amount_status eq 2 " /> 
+                      已支付
+                    <elseif  condition="$vo.amount_status eq 3 " /> 
+                      申请返还
+                    <elseif  condition="$vo.amount_status eq 4 " /> 
+                      已返还
+                    </if> 
+                  </div>
+                </td>
+                <td align="left" class="">
+                  <div style="text-align: center; width: 100px;">{$vo.amount}</div>
+                </td>
+                <td align="left" class="">
+                  <div style="text-align: center; width: 100px;">{$vo.regular_month}</div>
+                </td>
+                <td align="left" class="">
+                  <div style="text-align: center; width: 100px;">{$vo.user_money}</div>
+                </td>
+                <td align="left" class="">
+                  <div style="text-align: center; width: 100px;">{$vo.pay_points}</div>
+                </td>
+                <td align="left" class="">
+                  <div style="text-align: center; width: 130px;">{$vo.start_time}</div>
+                </td>      
+                <td align="left" class="">
+                  <div style="text-align: center; width: 130px;">{$vo.end_time}</div>
+                </td>
+                <td align="left" class="">
+                  <div style="text-align: center; width: 130px;">{$vo.create_time}</div>
+                </td> 
+                
+                
+
+                <td align="center" class="handle">
+                  <div style="text-align: center; width: 350px; max-width:150px;">
+                    <!-- <a class="btn blue"  href="{:U('Article/EditEndReappearance',array('id'=>$vo['id'],'user_name'=>$vo['user_name']))}">
+                      <i class="fa fa-pencil-square-o"></i>
+                      编辑
+                    </a>  -->
+                    <a class="btn red"  href="{:U('delEndReappearance',array('id'=>$vo['id']))}">
+                      <i class="fa fa-trash-o"></i>
+                      删除
+                    </a>  
+                  </div>
+                </td>
+
+                <td align="" class="" style="width: 100%;">
+                  <div>&nbsp;</div>
+                </td>
+
+              </tr>
+            </foreach>
+          </tbody>
+        </table>
+      </div>
+      <div class="iDiv" style="display: none;"></div>
+      <div>{$page}</div>
+    </div>
+  
+  </div>
+</div>
+<script>
+    $(document).ready(function(){   
+        // 表格行点击选中切换
+        $('#flexigrid > table>tbody >tr').click(function(){
+            $(this).toggleClass('trSelected');
+        });
+        
+        // 点击刷新数据
+        $('.fa-refresh').click(function(){
+            location.href = location.href;
+        });
+        
+    });
+
+
+    function delfun(obj) {
+      // 删除按钮
+      layer.confirm('确认删除？', {
+        btn: ['确定', '取消'] //按钮
+      }, function () {
+        $.ajax({
+          type: 'post',
+          url: $(obj).attr('data-url'),
+          data: {act: 'del', article_id: $(obj).attr('data-id')},
+          dataType: 'json',
+          success: function (data) {
+            layer.closeAll();
+            if (data) {
+              $(obj).parent().parent().parent().remove();
+            } else {
+              layer.alert('删除失败', {icon: 2});  //alert('删除失败');
+            }
+          }
+        })
+      }, function () {
+        layer.closeAll();
+      });
+    }
+</script>
+</body>
+</html>

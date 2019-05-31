@@ -1,0 +1,356 @@
+<layout name="common/layout_nav" />
+    <style>
+        .grid-box .weui-grid {
+            width: 25%;
+            padding-top: 25px;
+            padding-bottom: 25px;
+        }
+
+        .grid-box .weui-grid__icon {
+            width: 1.2rem;
+            height: 1.2rem;
+            margin-bottom: 12px;
+        }
+
+        .rtbg {
+            background-image: url(__STATIC__/assets/images/wdjfbg_t.png);
+            background-size: 5rem;
+            background-position: right top;
+            background-repeat: no-repeat;
+        }
+
+        .lbbg {
+            background-image: url(__STATIC__/assets/images/wdjfbg_b.png);
+            background-size: 4rem;
+            background-position: left bottom;
+            background-repeat: no-repeat;
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+        }
+
+        .lbbg .avatar {
+            width: 2.75rem;
+            height: 2.75rem;
+            border-radius: 50%;
+        }
+
+        .lbbg .weui-badge {
+            background-color: #4f5259;
+            padding: 3px 10px;
+            font-size: 0.45rem;
+            font-weight: 400;
+        }
+
+        .setting {
+            position: absolute;
+            right: 15px;
+            top: 10px;
+        }
+        .setting img{
+            width: 0.8rem;
+        }
+        .grid-pagination .swiper-pagination-bullet{
+            background-color: #eeeeee;
+            margin-left: 5px;
+            width: 6px;
+            height: 6px;
+        }
+        .grid-pagination .swiper-pagination-bullet-active{
+            background-color: #e6e6e6;
+            width: 18px;
+            border-radius: 10px;
+        }
+        .weui-grid__label{
+            line-height: 30px;
+        }
+    </style>
+</head>
+<body>
+<div class="page">
+
+    <div class="page-bd">
+        <div class="weui-cells tc mt0 rtbg">
+            <div class="lbbg">
+                <a href="###" class="setting"><img src="__STATIC__/assets/images/icon_setting.png"></a>
+                <div><img class="avatar" src="{$user[head_pic]|default="__STATIC__/images/user68.jpg"}"></div>
+                <div class="fs12 mt5">{$user['nickname']}</div>
+                <!--<a href="###" class="weui-badge mt5">您有<b>2</b>条新通知 ></a>-->
+            </div>
+        </div>
+        <div class="weui-panel">
+            <div class="weui-panel__hd after-left__0">
+                <div class="weui-cell weui-cell_access">
+                    <div class="weui-cell__bd">我的资产</div>
+                </div>
+            </div>
+            <div class="weui-panel__bd">
+                <div class="weui-cells mt0">
+                    <div class="weui-cell" style="padding-left:0; padding-right:0;">
+                        <div class="weui-cell__bd">
+                            <div class="weui-flex cell-flex">
+                                <a href="{:U('User/account')}" class="weui-flex__item vux-1px-r">
+                                    <div><b class="fs13">{$user['user_money']}</b></div>
+                                    <div class="fs8 text-muted">余额</div>
+                                </a>
+                                <a href="###" class="weui-flex__item vux-1px-r">
+                                    <div><b class="fs13">{$user['distribut_money']}</b></div>
+                                    <div class="fs8 text-muted">佣金</div>
+                                </a>
+                                <a href="{:U('User/points_list')}" class="weui-flex__item vux-1px-r">
+                                    <div><b class="fs13">{$user['pay_points']}</b></div>
+                                    <div class="fs8 text-muted">积分</div>
+                                </a>
+                                <a href="{:U('User/coupon')}" class="weui-flex__item">
+                                    <div><b class="fs13" style="position: relative">{$user['coupon_count']}
+                                        <!--<span style="position: absolute; right: -8px; top: 0px;"
+                                            class="weui-badge weui-badge_dot"></span>-->
+                                    </b></div>
+                                    <div class="fs8 text-muted">优惠券</div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="weui-panel">
+            <div class="weui-panel__hd after-left__0">
+                <div class="weui-cell weui-cell_access">
+                    <div class="weui-cell__bd">我的订单</div>
+                    <div class="weui-cell__ft"><a href="{:U('Mobile/Order/order_list')}" class="fs9 text-muted">查看全部</a></div>
+                </div>
+            </div>
+            <div class="weui-panel__bd">
+                <div class="weui-cells mt0">
+                    <div class="weui-cell" style="padding-left: 0; padding-right:0;">
+                        <div class="weui-cell__bd">
+                            <div class="weui-flex">
+                                <div class="weui-flex__item">
+                                    <a href="{:U('/Mobile/Order/order_list',array('type'=>'WAITPAY'))}" class="nav-icon-link">
+                                        <div class="weui-grid__icon">
+                                            <img src="__STATIC__/assets/images/dd_icon_01.png" alt="">
+                                        </div>
+                                        <p class="weui-grid__label">待付款</p>
+                                    </a>
+                                </div>
+                                <div class="weui-flex__item">
+                                    <a href="{:U('/Mobile/Order/order_list',array('type'=>'WAITSEND'))}" class="nav-icon-link">
+                                        <div class="weui-grid__icon" style="position:relative;">
+                                            <img src="__STATIC__/assets/images/dd_icon_02.png" alt="">
+                                            <!--<span class="weui-badge" style="position: absolute;top: -6px;right: -14px;">1</span>-->
+                                        </div>
+                                        <p class="weui-grid__label">待发货</p>
+                                    </a>
+                                </div>
+                                <div class="weui-flex__item">
+                                    <a href="{:U('/Mobile/Order/wait_receive',array('type'=>'WAITRECEIVE'))}" class="nav-icon-link">
+                                        <div class="weui-grid__icon">
+                                            <img src="__STATIC__/assets/images/dd_icon_03.png" alt="">
+                                        </div>
+                                        <p class="weui-grid__label">待收货</p>
+                                    </a>
+                                </div>
+                                <div class="weui-flex__item">
+                                    <a href="{:U('Mobile/Order/comment',array('status'=>0))}" class="nav-icon-link">
+                                        <div class="weui-grid__icon">
+                                            <img src="__STATIC__/assets/images/dd_icon_04.png" alt="">
+                                        </div>
+                                        <p class="weui-grid__label">待评价</p>
+                                    </a>
+                                </div>
+                                <div class="weui-flex__item">
+                                    <a href="{:U('Mobile/Order/return_goods_list',array('type'=>1))}" class="nav-icon-link">
+                                        <div class="weui-grid__icon">
+                                            <img src="__STATIC__/assets/images/dd_icon_05.png" alt="">
+                                        </div>
+                                        <p class="weui-grid__label">退换货</p>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="weui-panel mb10" style="margin-bottom:2.5rem;" >
+            <div class="weui-panel__hd after-left__0">
+                <div class="weui-cell">
+                    <div class="weui-cell__bd">我的工具</div>
+                    <div class="weui-cell__ft"><div class="grid-pagination"></div></div>
+                </div>
+            </div>
+            <div class="weui-panel__bd">
+                <!-- Swiper -->
+                <div class="swiper-container">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide">
+                            <div class="grid-box">
+                                <div class="weui-grids tbornone">
+                                    <a href="{:U('Mobile/User/zpcollect_list')}" class="weui-grid">
+                                        <div class="weui-grid__icon">
+                                            <img src="__STATIC__/assets/images/grid_icon_01.png" alt="">
+                                        </div>
+                                        <p class="weui-grid__label">收藏</p>
+                                    </a>
+                                    <a href="{:U('Mobile/User/zpshare_list')}" class="weui-grid">
+                                        <div class="weui-grid__icon">
+                                            <img src="__STATIC__/assets/images/grid_icon_02.png" alt="">
+                                        </div>
+                                        <p class="weui-grid__label">分享</p>
+                                    </a>
+                                    <a href="javascript:;" class="weui-grid">
+                                        <div class="weui-grid__icon">
+                                            <img src="__STATIC__/assets/images/grid_icon_03.png" alt="">
+                                        </div>
+                                        <p class="weui-grid__label">查快递</p>
+                                    </a>
+                                    <a href="{:U('Mobile/User/zpevaluate_list')}" class="weui-grid">
+                                        <div class="weui-grid__icon">
+                                            <img src="__STATIC__/assets/images/grid_icon_04.png" alt="">
+                                        </div>
+                                        <p class="weui-grid__label">我的评价</p>
+                                    </a>
+                                    <a href="{:U('Mobile/User/zpdistribution_list')}" class="weui-grid">
+                                        <div class="weui-grid__icon">
+                                            <img src="__STATIC__/assets/images/grid_icon_05.png" alt="">
+                                        </div>
+                                        <p class="weui-grid__label">分销</p>
+                                    </a>
+                                    <a href="javascript:;" class="weui-grid">
+                                        <div class="weui-grid__icon">
+                                            <img src="__STATIC__/assets/images/grid_icon_06.png" alt="">
+                                        </div>
+                                        <p class="weui-grid__label">我的名片</p>
+                                    </a>
+                                    <a href="javascript:;" onclick="show_qrcode()" class="weui-grid">
+                                        <div class="weui-grid__icon">
+                                            <img src="__STATIC__/assets/images/grid_icon_07.png" alt="">
+                                        </div>
+                                        <p class="weui-grid__label">二维码</p>
+                                    </a>
+                                    <a href="javascript:;" class="weui-grid">
+                                        <div class="weui-grid__icon">
+                                            <img src="__STATIC__/assets/images/grid_icon_08.png" alt="">
+                                        </div>
+                                        <p class="weui-grid__label">在线客服</p>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- <div class="swiper-slide">
+                            <div class="grid-box">
+                                <div class="weui-grids tbornone">
+                                    <a href="javascript:;" class="weui-grid">
+                                        <div class="weui-grid__icon">
+                                            <img src="__STATIC__/assets/images/grid_icon_01.png" alt="">
+                                        </div>
+                                        <p class="weui-grid__label">2收藏</p>
+                                    </a>
+                                    <a href="javascript:;" class="weui-grid">
+                                        <div class="weui-grid__icon">
+                                            <img src="__STATIC__/assets/images/grid_icon_02.png" alt="">
+                                        </div>
+                                        <p class="weui-grid__label">2分享</p>
+                                    </a>
+                                    <a href="javascript:;" class="weui-grid">
+                                        <div class="weui-grid__icon">
+                                            <img src="__STATIC__/assets/images/grid_icon_03.png" alt="">
+                                        </div>
+                                        <p class="weui-grid__label">3查快递</p>
+                                    </a>
+                                    <a href="javascript:;" class="weui-grid">
+                                        <div class="weui-grid__icon">
+                                            <img src="__STATIC__/assets/images/grid_icon_04.png" alt="">
+                                        </div>
+                                        <p class="weui-grid__label">4我的评价</p>
+                                    </a>
+                                    <a href="javascript:;" class="weui-grid">
+                                        <div class="weui-grid__icon">
+                                            <img src="__STATIC__/assets/images/grid_icon_05.png" alt="">
+                                        </div>
+                                        <p class="weui-grid__label">4分销</p>
+                                    </a>
+                                    <a href="javascript:;" class="weui-grid">
+                                        <div class="weui-grid__icon">
+                                            <img src="__STATIC__/assets/images/grid_icon_06.png" alt="">
+                                        </div>
+                                        <p class="weui-grid__label">6我的名片</p>
+                                    </a>
+                                </div>
+                            </div>
+                        </div> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<style type="text/css">
+    .layermbox0 .layermchild{
+        width: auto;
+    }
+</style>
+<script src="__STATIC__/assets/js/lib/jquery.min.2.1.3.js"></script>
+<script src="__STATIC__/assets/js/lib/weui.min.js"></script>
+<script src="__STATIC__/assets/js/lib/Swiper-3.4.2/swiper.jquery.min.js"></script>
+<script src="__STATIC__/assets/js/comm.js"></script>
+<script>
+    $(function () {
+        var swiper = new Swiper('.swiper-container', {
+            pagination: '.grid-pagination'
+        });
+        $('.setting').on('click',function (e) {
+            weui.actionSheet([
+                        {
+                            label: '收货地址',
+                            onClick: function () {
+                                console.log('收货地址');
+                                window.location.href = "{:U('Mobile/User/address_list')}";
+                            }
+                        }, {
+                            label: '帐号与安全',
+                            onClick: function () {
+                                window.location.href = "{:U('User/accountSafe')}";
+                            }
+                        }, {
+                            label: '个人资料',
+                            onClick: function () {
+                                window.location.href = "{:U('User/userinfo')}";
+                            }
+                        },
+                        <if condition="empty($is_weixin_browser)">
+                            {
+                                label: '退出当前账户',
+                                onClick: function () {
+                                window.location.href = "{:U('User/logout')}";
+                            }
+                            }
+                        </if>
+                    ],
+                    [
+                        {
+                            label: '关闭',
+                            onClick: function () {
+                                console.log('取消');
+                            }
+                        }
+                    ],
+                    {
+                        className: 'custom-classname'
+                    });
+        });
+    });
+
+    function show_qrcode() {
+        //信息框
+
+        $.get('{:U("myqrcode")}',{},function(data){
+            layer.open({
+                content: '<img src="'+data+'"/>',
+            });
+        });
+
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,98 @@
+<include file="public/layout"/>
+<script src="__ROOT__/public/static/js/layer/laydate/laydate.js"></script>
+<body style="background-color: rgb(255, 255, 255); overflow: auto; cursor: default; -moz-user-select: inherit;">
+<div id="append_parent"></div>
+<div id="ajaxwaitid"></div>
+<div class="page">
+    <div class="fixed-bar">
+        <div class="item-title">
+            <div class="subject">
+                <h3>资金明细</h3>
+            </div>
+        </div>
+    </div>
+    <!-- 操作说明 -->
+    <div id="explanation" class="explanation"
+         style="color: rgb(44, 188, 163); background-color: rgb(237, 251, 248); width: 99%; height: 100%;">
+        <div id="checkZoom" class="title"><i class="fa fa-lightbulb-o"></i>
+            <h4 title="提示相关设置操作时应注意的要点">操作提示</h4>
+            <span title="收起提示" id="explanationZoom" style="display: block;"></span>
+        </div>
+        <ul>
+            <li>可以查看用户的资金明细</li>
+        </ul>
+    </div>
+    <div class="flexigrid">
+        <div class="mDiv">
+            <div class="ftitle">
+                <h3>明细列表</h3>
+                <h5>(共{$pager->totalRows}条记录)</h5>
+            </div>
+            <div title="刷新数据" class="pReload"><i class="fa fa-refresh"></i></div>
+
+        </div>
+
+        <div class="bDiv" style="height: auto;">
+            <div id="flexigrid" cellpadding="0" cellspacing="0" border="0">
+                <div class="content-container">
+                    <table cellpadding="0" cellspacing="0">
+                        <thead class="well">
+                        <tr>
+                            <th width="5%"  style="font-weight:bold;font-size:14px;">ID</th>
+                            <th width="5%"  style="font-weight:bold;font-size:14px;">获得资金用户</th>
+                            <th width="10%"  style="font-weight:bold;font-size:14px;">输出资金用户</th>
+                            <th width="10%" style="font-weight:bold;font-size:14px;">奖励类型</th>
+                            <th width="10%" style="font-weight:bold;font-size:14px;">币种类型</th>
+                            <th width="10%" style="font-weight:bold;font-size:14px;">关联订单号</th>
+                            <th width="10%" style="font-weight:bold;font-size:14px;">金额</th>
+                            <th width="10%" style="font-weight:bold;font-size:14px;">描述</th>
+                            <th width="12%" style="font-weight:bold;font-size:14px;">日期</th>
+
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        <volist name="lists" id="vo">
+                            <tr>
+                                <td style="padding-top:10px;">{$vo.id}</td>
+                                <td style="padding-top:10px;">{$vo.get_user.nickname}</td>
+                                <td style="padding-top:10px;">{$vo.obj_user.nickname}</td>
+                                <td style="padding-top:10px;">{$vo.reward_type_name}</td>
+                                <td style="padding-top:10px;">{$vo.type_name}</td>
+                                <td style="padding-top:10px;">{$vo.order_sn}</td>
+                                <td style="padding-top:10px;">{$vo.money}</td>
+                                <td style="padding-top:10px;">{$vo.desc}</td>
+                                <td style="padding-top:10px;">{$vo.create_time|date="Y-m-d H:i:s",###}</td>
+                            </tr>
+                        </volist>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="iDiv" style="display: none;"></div>
+        </div>
+        <!--分页位置-->
+        {$page}
+    </div>
+</div>
+<script>
+
+
+    $(document).ready(function () {
+        // 表格行点击选中切换
+        $('#flexigrid > table>tbody >tr').click(function () {
+            $(this).toggleClass('trSelected');
+        });
+
+        // 点击刷新数据
+        $('.fa-refresh').click(function () {
+            location.href = location.href;
+        });
+        $('#start_time').layDate();
+        $('#end_time').layDate();
+    });
+
+
+</script>
+</body>
+</html>

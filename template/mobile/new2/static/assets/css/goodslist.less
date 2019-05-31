@@ -1,0 +1,244 @@
+@bor-color: #e2e2e2;
+@red-color: #f8584f;
+@base-radius: 3px;
+.icon-list {
+  width: 45px;
+  text-align: center;
+  i {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background-size: contain;
+    background-image: url(../images/icon_list1.png);
+    vertical-align: middle;
+  }
+}
+.icon_gofl{
+  display: block;
+  width: 40px;
+  background-image:url(../images/icon_gofl.png);
+  background-size: 15px;
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+.icon-list2 {
+  i {
+    background-image: url(../images/icon_list2.png);
+  }
+}
+
+
+
+.filt-bar {
+  .vux-1px-l:before{
+    top: 12px;
+    bottom: 12px;
+  }
+  position: fixed;
+  left: 0;
+  right: 0;
+  top:44px;
+  z-index: 999;
+  display: flex;
+  background-color: #fff;
+  height: 2rem;
+  line-height: 2rem;
+  border-top: 1px solid #eee;
+  box-shadow:0 3px 5px rgba(0,0,0,0.05);
+  .input{
+    flex: 1;
+    input{
+      width: 100%;
+      border: 1px solid #eee;
+      height: 1.25rem;
+      line-height: 1.25rem;
+      outline: none;
+      border-radius: 2rem;
+      background-image: url(../images/icon_search.png);
+      background-repeat: no-repeat;
+      background-position: 10px center;
+      background-size: 14px;
+      text-indent: 30px;
+    }
+  }
+}
+
+.filt-nav {
+  flex: 1;
+  display: flex;
+  list-style: none;
+}
+
+.filt-nav > li {
+  font-size: 0.55rem;
+  flex: 1;
+  text-align: center;
+  i {
+    display: inline-block;
+    margin-left: 3px;
+    width: 8px;
+    height: 11px;
+    background-image: url(../images/arrowd1.png);
+    background-size: 100%;
+  }
+  &.active {
+    position: relative;
+    i.down {
+      transform: rotate(180deg);
+      background-image: url(../images/arrowd2.png);
+    }
+    i.up {
+      transform: rotate(180deg);
+      background-image: url(../images/arrowd3.png);
+    }
+    &:after{
+      content: "";
+      position: absolute;
+      width: 14px;
+      margin-left: -11px;
+      bottom:0;
+      height:4px;
+      left: 50%;
+      border-radius: 5px;
+      background-color: @red-color;
+    }
+    color: @red-color;
+  }
+}
+
+ul {
+  list-style: none;
+}
+
+.goods-list {
+  padding: 3px 0;
+  .goods-link {
+    float: left;
+    width: 100%;
+    position: relative;
+    display: block;
+    background-color: #fff;
+    color: #a6a6a6;
+    font-size: 12px;
+    .sale {
+      position: absolute;
+      width: 26px;
+      left: 0;
+      top: 0;
+      height: 26px;
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-image: url(../images/sale.png);
+    }
+    .goods-info {
+      margin-left: 8px;
+      margin-right: 8px;
+    }
+    .goods-price{
+      color: @red-color;
+      font-size: 15px;
+      span{
+        font-size: 10px;
+      }
+    }
+    .goods-sales{
+      font-size: 10px;
+    }
+    .goods-img {
+      width: 100%;
+      padding-bottom: 100%;
+      height: 0;
+      overflow: hidden;
+      margin: 8px auto;
+      img {
+        width: 100%
+      }
+    }
+    .goods-title {
+      font-size: 12px;
+      font-weight: 400;
+      color: #494949;
+    }
+    .goods-stitle {
+      font-size: 10px;
+      font-weight: 400;
+    }
+    .goods-num{
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+  }
+}
+
+.goods-list .list1 {
+  margin-top:5px;
+  background-color: #fff;
+  display: flex;
+  flex-wrap: wrap;
+  .goods-info {
+    padding-top: 0px;
+  }
+  .goods-title,.goods-stitle{
+    height:20px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  li {
+    box-sizing: border-box;
+    width: 50%;
+    padding: 8px;
+  }
+}
+
+.goods-list .list2 {
+  display: flex;
+  flex-direction: column;
+  .goods-info {
+    border-top: 1px dotted @bor-color;
+    padding-top: 8px;
+  }
+  .goods-link{
+    display: flex;
+    .goods-img{
+      width: 65px;
+      height: 65px;
+      padding-bottom: 0;
+      padding-left: 10px;
+      padding-right: 10px;
+    }
+    .goods-info{
+      position: relative;
+      border-top: none;
+      flex: 1;
+      margin-left: 0;
+    }
+    .goods-info:after{
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 10px;
+      bottom: 10px;
+      width: 2px;
+    }
+    .goods-num{
+      position: absolute;
+      bottom:0;
+      left:0;
+      right:0;
+      padding-bottom: 16px;
+    }
+    .goods-title{
+      padding-top:3px;
+    }
+    .goods-price{
+      line-height: 1em;
+      margin-right: 10px;
+    }
+  }
+  li {
+    box-sizing: border-box;
+    padding: 5px 0;
+  }
+}

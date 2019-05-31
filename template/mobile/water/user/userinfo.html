@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+    <link rel="stylesheet" type="text/css" href="__STATIC__/assets/weui/weui.css">
+    <link rel="stylesheet" type="text/css" href="__STATIC__/assets/css/comm.css">
+    <title>个人资料</title>
+    <style>
+        .avatar {
+            border-radius: 50%;
+            width: 2rem;
+            height: 2rem;
+        }
+    </style>
+</head>
+<body>
+
+<div class="page">
+    <div class="page-hd">
+        <div class="header">
+            <div class="header-left">
+                <a href="{:U('index')}" class="left-arrow"></a>
+            </div>
+            <div class="header-title">个人资料</div>
+            <div class="header-right"><a href="#"></a></div>
+        </div>
+    </div>
+    <div class="page-bd">
+        <div class="weui-cells  mt0 vux-1px-t ">
+            <div class="weui-cell weui-cell_access hendicon">
+                <div class="weui-cell__bd">头像</div>
+                <form id="head_pic" method="post" enctype="multipart/form-data">
+                    <label class="file" style="cursor:pointer;">
+                        <div class="around" id="fileList">
+                            <img src="{$user.head_pic|default='__STATIC__/images/user68.jpg'}" class="avatar"/>
+                            <input type="file" accept="image/*" name="head_pic" onchange="handleFiles(this)"
+                                   style="display:none">
+                        </div>
+                    </label>
+                </form>
+                <!--<form id="head_pic" method="post" enctype="multipart/form-data">
+                <div class="weui-cell__ft" id="fileList" >
+                    <div style="margin: -0.2rem 0"><img class="avatar" src="{$user.head_pic|default='__STATIC__/images/user68.jpg'}" alt=""></div>
+                    <input  type="file" accept="image/*" name="head_pic"  onchange="handleFiles(this)" style="display:none">
+
+                </div>
+                </form>-->
+            </div>
+        </div>
+        <div class="weui-cells">
+            <a href="{:U('Mobile/User/userinfo',array('action'=>'nickname'))}" class="weui-cell weui-cell_access">
+                <div class="weui-cell__bd">
+                    昵称
+                </div>
+                <div class="weui-cell__ft">{$user.nickname}</div>
+            </a>
+
+            <div class="weui-cell weui-cell_access">
+                <!--<a href="{:U('Mobile/User/userinfo',array('action'=>'nickname'))}" class="weui-cell weui-cell_access">-->
+                <div class="weui-cell__bd" onclick="javascript:void(0)">
+                    手机号码
+                </div>
+                <div class="weui-cell__ft">{$user.mobile}</div>
+                <!--	</a>-->
+            </div>
+            <div class="weui-cell weui-cell_access">
+                <div class="weui-cell__bd" onclick="paypwd()">
+                    重置支付密码
+                </div>
+            </div>
+            <!--	<a href="{:U('Mobile/User/userinfo',array('action'=>'sex'))}" class="weui-cell weui-cell_access">
+                    <div 56class="weui-cell__bd">
+                        性别
+                    </div>
+                    <div class="weui-cell__ft">{$sex[$user.sex]}</div>
+                </a>-->
+
+            <!--<a href="###" class="weui-cell weui-cell_access">-->
+            <!--<div class="weui-cell__bd">-->
+            <!--生日-->
+            <!--</div>-->
+            <!--<div class="weui-cell__ft">{$user.birthday|date='Y/m/d',###}</div>-->
+            <!--</a>-->
+            <!--	<a href="{:U('Mobile/User/userinfo',array('action'=>'email'))}" class="weui-cell weui-cell_access">
+                    <div class="weui-cell__bd">
+                        邮箱
+                    </div>
+                    <div class="weui-cell__ft">{$user.email}</div>
+                </a>-->
+            <a href="{:U('Mobile/User/address_list')}" class="weui-cell weui-cell_access">
+                <div class="weui-cell__bd">收货地址</div>
+                <div class="weui-cell__ft"></div>
+            </a>
+            <a href="{:U('Mobile/Login/loginout')}" class="weui-cell weui-cell_access">
+                <div class="weui-cell__bd">退出登录</div>
+                <div class="weui-cell__ft"></div>
+            </a>
+        </div>
+        <div class="weui-cells">
+            <!--<a href="{:U('Mobile/User/setMobile')}" class="weui-cell weui-cell_access">
+                <div class="weui-cell__bd">手机号设置</div>
+                &lt;!&ndash;<div class="weui-cell__ft">{$user.mobile}</div>&ndash;&gt;
+                <div class="weui-cell__ft"></div>
+            </a>
+            <a href="{:U('Mobile/User/idcardAuth',array('user_id'=>$user['user_id'],'user_name'=>$user['nickname']))}" class="weui-cell weui-cell_access">
+                <div class="weui-cell__bd">身份证号码输入</div>
+                &lt;!&ndash;<div class="weui-cell__ft">{$user.mobile}</div>&ndash;&gt;
+                <div class="weui-cell__ft"></div>
+            </a>
+            <a href="{:U('Mobile/User/upIdcard',array('user_id'=>$user['user_id'],'user_name'=>$user['nickname']))}" class="weui-cell weui-cell_access">
+                <div class="weui-cell__bd">上传身份证照片</div>
+                &lt;!&ndash;<div class="weui-cell__ft">{$user.mobile}</div>&ndash;&gt;
+                <div class="weui-cell__ft"></div>
+            </a>
+            <if condition="$user[user_type] eq 2||$user[user_type] eq 3">
+                <a href="{:U('Mobile/User/myContract')}" class="weui-cell weui-cell_access">
+                    <div class="weui-cell__bd">我的合同</div>
+                    &lt;!&ndash;<div class="weui-cell__ft">{$user.mobile}</div>&ndash;&gt;
+                    <div class="weui-cell__ft"></div>
+                </a>
+                <a href="{:U('Mobile/User/bankCard')}" class="weui-cell weui-cell_access">
+                    <div class="weui-cell__bd">我的银行卡</div>
+                    &lt;!&ndash;<div class="weui-cell__ft">{$user.mobile}</div>&ndash;&gt;
+                    <div class="weui-cell__ft"></div>
+                </a>
+            </if>-->
+            <!--	<a href="{:U('Mobile/User/setMobile')}" class="weui-cell weui-cell_access">
+                    <div class="weui-cell__bd">修改密码</div>
+                    &lt;!&ndash;<div class="weui-cell__ft">{$user.mobile}</div>&ndash;&gt;
+                </a>
+                <a href="{:U('Mobile/User/setMobile')}" class="weui-cell weui-cell_access">
+                    <div class="weui-cell__bd">支付密码</div>
+                    &lt;!&ndash;<div class="weui-cell__ft">{$user.mobile}</div>&ndash;&gt;
+                </a>-->
+        </div>
+    </div>
+</div>
+<script src="__STATIC__/assets/js/lib/jquery.min.2.1.3.js"></script>
+<script src="__STATIC__/assets/js/lib/weui.min.js"></script>
+<script src="__STATIC__/assets/js/comm.js"></script>
+<script>
+
+    function nickName() {
+        window.location.href = "{:U('Mobile/User/userinfo',array('action'=>'nickname'))}";
+    }
+
+    //显示上传照片
+    window.URL = window.URL || window.webkitURL;
+    function handleFiles(obj) {
+        fileList = document.getElementById("fileList");
+        var files = obj.files;
+        img = new Image();
+        if (window.URL) {
+            img.src = window.URL.createObjectURL(files[0]); //创建一个object URL，并不是你的本地路径
+            img.width = 60;
+            img.height = 60;
+            img.onload = function (e) {
+                window.URL.revokeObjectURL(this.src); //图片加载后，释放object URL
+            }
+            if (fileList.firstElementChild) {
+                fileList.removeChild(fileList.firstElementChild);
+            }
+            $('#fileList').find('img').remove();
+            fileList.appendChild(img);
+        } else if (window.FileReader) {
+            //opera不支持createObjectURL/revokeObjectURL方法。我们用FileReader对象来处理
+            var reader = new FileReader();
+            reader.readAsDataURL(files[0]);
+            reader.onload = function (e) {
+                img.src = this.result;
+                img.width = 60;
+                img.height = 60;
+                $('#fileList').find('img').remove();
+                fileList.appendChild(img);
+            }
+        } else {
+            //ie
+            obj.select();
+            obj.blur();
+            var nfile = document.selection.createRange().text;
+            document.selection.empty();
+            img.src = nfile;
+            img.width = 60;
+            img.height = 60;
+            img.onload = function () {
+
+            }
+            $('#fileList').find('img').remove();
+            fileList.appendChild(img);
+        }
+        $('#asubmit').show();
+        $('#logout').hide();
+        $('#head_pic').submit();
+    }
+
+    //重置支付密码
+    function paypwd() {
+        location.href = "{:url('mobile/user/paypwd')}";
+    }
+</script>
+</body>
+</html>

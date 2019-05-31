@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,viewport-fit=cover">
+    <link rel="stylesheet" href="__STATIC__/n_assets/css/zpui.css"/>
+    <link rel="stylesheet" href="__STATIC__/n_assets/css/all.css"/>
+    <script src="__STATIC__/n_assets/js/page.js"></script>
+    <link href="__STATIC__/n_assets/js/Swiper-4.0.7/swiper.min.css">
+    <link href="__PUBLIC__/static/css/page.css" rel="stylesheet" type="text/css">
+
+    <title>消息中心</title>
+</head>
+<body>
+<body>
+<div class="page">
+    <div class="page-hd">
+        <div class="header bor-1px-b">
+            <div class="header-left">
+                <a href="{:U('User/index')}" class="left-arrow"></a>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-bd">
+        <!-- 页面内容-->
+
+        <div class="weui-cells">
+            <div class="weui-cell">
+                <div class="weui-cell__bd hit_title hit_title1 fs28 fw600">
+                    消息中心
+                </div>
+            </div>
+            <if $lists != null>
+            <volist name="lists" id="vo">
+                <div class="weui-cell">
+                    <div class="weui-cell__bd">
+                        <div class="fs26">{$vo.create_time|date="Y-m-d
+                            H:i",###}</div>
+                        <div class="fs22 text-muted mt10">{$vo.content}</div>
+                    </div>
+                </div>
+            </volist>
+            <else />
+                <div class="no_message">
+                    <img src="__STATIC__/n_assets/images/img01.png" alt="">
+                    <p>没有更多数据了~</p>
+                </div>
+            </if>
+
+        </div>
+
+        {$page}
+    </div>
+
+</div>

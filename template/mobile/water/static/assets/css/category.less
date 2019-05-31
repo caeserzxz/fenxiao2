@@ -1,0 +1,153 @@
+@bor-color: #f1f1f1;
+@red-color: #f8584f;
+@base-radius: 5px;
+
+.category-left {
+  position: absolute;
+  width: 4rem;
+  left: 0;
+  top: 1px;
+  bottom: 0;
+  background-color: #fff;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+.category-left li {
+  position: relative;
+  height: 40px;
+  line-height: 38px;
+  border-bottom: 1px solid @bor-color;
+  &.active a {
+    color: @red-color;
+  }
+  &.active:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background-color: @red-color;
+  }
+}
+
+.category-left li a {
+  text-align: center;
+  display: block;
+  height: 40px;
+  color: #4e4d4d;
+  font-size: 0.55rem;
+}
+
+.category-right {
+  position: absolute;
+  left: 4rem;
+  right: 0;
+  top: 1px;
+  bottom: 0;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.golist-btn {
+  background-color: #fff;
+  display: block;
+  text-align: center;
+  margin: 8px 10px;
+  padding: 6px 0;
+  font-size: 0.55rem;
+  color: @red-color;
+  border-radius: 40px;
+  &:before {
+    font-size: 8px;
+    content: '';
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    line-height:16px;
+    text-align: center;
+    color: #fff;
+    vertical-align: middle;
+    border-radius: 50%;
+    margin-right: 5px;
+    background: url(../images/go.png) no-repeat;
+    background-size: 100% 100%;
+  }
+}
+
+.divder {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  font-size: 0.6rem;
+  margin: 10px 10px;
+  &:after {
+    content: '';
+    flex: 1;
+    height: 0;
+    border-top: 1px dotted #c7c7cc;
+    margin-left: 10px;
+  }
+  &:before {
+    content: '';
+    flex: 1;
+    height: 0;
+    border-top: 1px dotted #c7c7cc;
+    margin-right: 10px;
+  }
+}
+
+.goods-list {
+  padding: 0 8px;
+  overflow: hidden;
+  list-style: none;
+  .goods-list__item {
+    float: left;
+    width: 33.333%;
+    box-sizing: border-box;
+    padding: 5px;
+    a {
+      color: #504f4f;
+      border-radius: 3px;
+      overflow: hidden;
+      background-color: #fff;
+      display: block;
+    }
+  }
+  .goods-img {
+    width: 100%;
+    img {
+      width: 100%;
+    }
+  }
+;
+  .goods-name {
+    display: block;
+    text-align: center;
+    font-size: 0.55rem;
+    padding: 6px 0;
+    height: 20px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap
+  }
+}
+
+.text-ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap
+}
+
+.bottom_text {
+  position: absolute;
+  bottom: 10px;
+  left: 0;
+  text-decoration: underline;
+  width: 100%;
+  text-align: center;
+  color: #a4a4a4;
+  font-size: 12px;
+}

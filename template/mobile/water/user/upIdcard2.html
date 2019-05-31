@@ -1,0 +1,139 @@
+<layout name="common/layout_nav" title="身份证认证" />
+<body>
+<div class="page">
+    <div class="page-hd"    >
+        <div class="header">
+            <div class="header-left">
+                <a href="{:U('userinfo')}" class="left-arrow"></a>
+            </div>
+            <div class="header-title">身份证认证</div>
+            <div class="header-right"><a href="#"></a> </div>
+        </div>
+    </div>
+    <form id="add_comment" method="post" enctype="multipart/form-data">
+        <!--上传图片-s-->
+        <div class="weui-cells mt0 vux-1px-t">
+            <label>
+                <div class="shcph" id="fileList0">
+                    <img src="__STATIC__/images/camera.png">
+                </div>
+                <input  type="file" accept="image/*" name="comment_img_file[]"  onchange="handleFiles(this,0)" style="display:none">
+                <div class="fs10 text-muted mt10">请上传身份证正面照</div>
+            </label>
+        </div>
+        <div class="weui-cells mt0 vux-1px-t">
+            <label>
+                <div class="shcph" id="fileList1">
+                    <img src="__STATIC__/images/camera.png">
+                </div>
+                <input  type="file" accept="image/*" name="comment_img_file[]"  onchange="handleFiles(this,1)" style="display:none">
+                <div class="fs10 text-muted mt10">请上传身份证反面照</div>
+            </label>
+        </div>
+        <!--上传图片-e-->
+        <!--传递所需参数-->
+        <input type="hidden" name="user_id" value="{$user_id}">
+        <!--传递所需参数-->
+        <div class="weui-btn-area layermcont">
+            <a  class="weui-btn weui-btn_primary"  onclick="validate_comment(this)">下一步</a>
+        </div>
+    </form>
+</div>
+<script>
+    $(function () {
+        $('#number').on('input propertychange',function () {
+            console.log($(this).val().length);
+            if($(this).val().length>10){
+                $('.weui-btn').css('background-color','')
+            }else{
+                $('.weui-btn').css('background-color','#c7c7c7')
+            }
+
+        })
+    });
+</script>
+<script>
+
+    /**
+     * 提示弹窗
+     * @param msg
+     */
+    function showErrorMsg(msg){
+        layer.open({content:msg,time:11002});
+    }
+    //显示上传照片
+    window.URL = window.URL || window.webkitURL;
+    function handleFiles(obj,id) {
+        fileList = document.getElementById("fileList"+id);
+        var files = obj.files;
+        img = new Image();
+        if(window.URL){
+
+            img.src = window.URL.createObjectURL(files[0]); //创建一个object URL，并不是你的本地路径
+            img.width = 60;
+            img.height = 60;
+            img.onload = function(e) {
+                window.URL.revokeObjectURL(this.src); //图片加载后，释放object URL
+            }
+            if(fileList.firstElementChild){
+                fileList.removeChild(fileList.firstElementChild);
+            }
+            fileList.appendChild(img);
+        }else if(window.FileReader){
+            //opera不支持createObjectURL/revokeObjectURL方法。我们用FileReader对象来处理
+            var reader = new FileReader();
+            reader.readAsDataURL(files[0]);
+            reader.onload = function(e){
+                img.src = this.result;
+                img.width = 60;
+                img.height = 60;
+                fileList.appendChild(img);
+            }
+        }else
+        {
+            //ie
+            obj.select();
+            obj.blur();
+            var nfile = document.selection.createRange().text;
+            document.selection.empty();
+            img.src = nfile;
+            img.width = 60;
+            img.height = 60;
+            img.onload=function(){
+
+            }
+            fileList.appendChild(img);
+        }
+    }
+
+    function validate_comment(){
+        var content = $("#content_13").val();
+        var error = [];
+        var img_num = 0;
+        var AllImgExt=".jpg|.jpeg|.gif|.bmp|.png|";//全部图片格式类型
+        //var title = document.getElementById("title").value;
+        $(".file input").each(function(index){
+            FileExt = this.value.substr(this.value.lastIndexOf(".")).toLowerCase();
+            if(this.value!=''){
+                img_num++;
+                if(AllImgExt.indexOf(FileExt+"|")==-1){
+                    error.push("第"+(index+1)+"张图片格式错误");
+                }
+            }
+        });
+        if(content == ''){
+            error.push('评价内容不能为空！');
+        }
+
+        if(error.length>0){
+            showErrorMsg(error);
+            return false;
+        }else{
+            $('#add_comment').submit();
+            return true;
+        }
+    }
+
+</script>
+</body>
+</html>

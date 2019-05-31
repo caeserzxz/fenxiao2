@@ -1,0 +1,87 @@
+<extend name="common/block" />
+<block name="title">功德表</block>
+<block name="header_title">功德表</block>
+<block name="footer_js">
+    <script type="text/javascript">
+        $(function () {
+            $('.eye').on('click', function (e) {
+                $(this).toggleClass('close');
+                if ($('#password').attr('type') == 'password') {
+                    $('#password').attr('type', 'text');
+                } else {
+                    $('#password').attr('type', 'password');
+                }
+
+            });
+        });
+        function verify(){
+            $('#verify_code_img').attr('src','/index.php?m=Mobile&c=User&a=verify&r='+Math.random());
+        }
+
+        //复选框状态
+        function remember(obj){
+            var che= $(obj).attr("class");
+            if(che == 'che check_t'){
+                $("#autologin").prop('checked',false);
+            }else{
+                $("#autologin").prop('checked',true);
+            }
+        }
+        function submitverify()
+        {
+            var username = $.trim($('#username').val());
+            var password = $.trim($('#password').val());
+            var remember = $('#remember').val();
+            var referurl = $('#referurl').val();
+            var verify_code = $.trim($('#verify_code').val());
+            if(username == ''){
+                showErrorMsg('用户名不能为空!');
+                return false;
+            }
+            if(!checkMobile(username) && !checkEmail(username)){
+                showErrorMsg('账号格式不匹配!');
+                return false;
+            }
+            if(password == ''){
+                showErrorMsg('密码不能为空!');
+                return false;
+            }
+            var codeExist = $('#verify_code').length;
+            if (codeExist && verify_code == ''){
+                showErrorMsg('验证码不能为空!');
+                return false;
+            }
+
+            var data = {username:username,password:password,referurl:referurl};
+            if (codeExist) {
+                data.verify_code = verify_code;
+            }
+            $.ajax({
+                type : 'post',
+                url : '/index.php?m=Mobile&c=User&a=do_login&t='+Math.random(),
+                data : data,
+                dataType : 'json',
+                success : function(data){
+                    if(data.status == 1){
+                        var url = data.url.toLowerCase();
+                        if (url.indexOf('user') !=  false && url.indexOf('login') != false || url == '') {
+                            window.location.href = '/index.php/mobile';
+                        }else{
+                            window.location.href = data.url;
+                        }
+                    }else{
+                        showErrorMsg(data.msg);
+                        /*if (codeExist) {
+                            verify();
+                        } else {
+                            location.reload();
+                        }*/
+                    }
+                },
+                error : function(XMLHttpRequest, textStatus, errorThrown) {
+                    showErrorMsg('网络异常，请稍后重试');
+                }
+            })
+        }
+    </script>
+</block>

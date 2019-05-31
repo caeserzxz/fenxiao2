@@ -1,0 +1,77 @@
+<layout name="common/n_layout_nav"/>
+<title> 消息 </title>
+</head>
+<body>
+<div class="page">
+    <div class="page-hd">
+        <div class="header bor-1px-b">
+            <div class="header-left">
+                <a href="javascript:history.go(-1)" class="left-arrow"></a>
+            </div>
+            <div class="header-title">消息</div>
+            <div class="header-right">
+                <a href="#"></a>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-bd">
+        <!-- 页面内容-->
+        <div class="weui-tab">
+            <div class="weui-navbar">
+                <a class="weui-navbar__item weui-bar__item--on" href="#tab1">
+                    订单消息
+                </a>
+
+                <a class="weui-navbar__item" href="#tab3">
+                    系统通知
+                </a>
+            </div>
+            <div class="weui-tab__bd">
+                <div id="tab1" class="weui-tab__bd-item weui-tab__bd-item--active">
+                    <if $notice != null>
+                        <volist name="$notice" id="vo">
+                            <h2 style="margin:20px;">{$vo.content}</h2>
+                        </volist>
+                    </if>
+                    <if $notice == null>
+                        <div class="no_message">
+                            <img src="__STATIC__/n_assets/images/img01.png" alt="">
+                       <p>没有更多数据了~</p>
+                   </div>
+                    </if>
+                   <!-- <div class="no_message">
+                        <img src="__STATIC__/n_assets/images/img01.png" alt="">
+                        <p>没有更多数据了~</p>
+                    </div>-->
+                </div>
+
+                <div id="tab3" class="weui-tab__bd-item">
+                    <if $noticeOrder != null>
+                        <volist name="$noticeOrder" id="vo">
+                            <h2 style="margin:20px;">{$vo.content}</h2>
+                        </volist>
+                    </if>
+                    <if $noticeOrder == null>
+                        <div class="no_message">
+                            <img src="__STATIC__/n_assets/images/img01.png" alt="">
+                            <p>没有更多数据了~</p>
+                        </div>
+                    </if>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script src="__STATIC__/n_assets/js/lib/jquery-2.1.4.js"></script>
+<script src="__STATIC__/n_assets/js/jquery-weui.min.js"></script>
+<script src="__STATIC__/n_assets/js/lib/fastclick.js"></script>
+<script>
+    $(function() {
+        FastClick.attach(document.body);
+    });
+</script>
+</body>
+</html>

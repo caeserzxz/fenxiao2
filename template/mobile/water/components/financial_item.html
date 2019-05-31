@@ -1,0 +1,90 @@
+<script type="text/x-template" id="vue-component-financial_item-template">
+    <div class="licai_list01">
+        <div class="licai_top">
+            <div class="licai_price">{{amount_text | rmbPrefix}}</div>
+            <div class="licai_state">
+                <img :src="'__STATIC__' + status_icon" alt="">
+                <span :class="status_class" v-text="status_text"></span>
+
+                <span :class="amount_status_class" v-if="amount_status_text" v-text="amount_status_text" style="padding-left: 0.1rem"></span>
+            </div>
+        </div>
+        <div class="licai_bottom">
+            <div class="licai_time">
+                <p>存期/月利率：{{regular_text}}/{{interest_rate}}%</p>
+                <span v-if="start_date_text">计息起止日：{{start_date_text}} - {{expected_end_date_text}}</span>
+            </div>
+
+            <div class="licai_zhiqu" v-if="permit.pay" @click.prevent="pay">
+                <a href="javascript:">支付</a>
+            </div>
+            <div class="licai_zhiqu" v-if="permit.cancel" @click.prevent="cancel">
+                <a href="javascript:">支取</a>
+            </div>
+
+            <!--<div class="licai_date"></div>-->
+        </div>
+    </div>
+</script>
+
+<script type="text/javascript">
+    'use strict';
+
+    Vue.component('financial_item', {
+        template: '#vue-component-financial_item-template',
+        props: {
+            data: {
+                type: Object,
+                required: true,
+            },
+        },
+
+        data: function() {
+            var data = $.extend({
+                permit: {},
+                amount_text: null,
+                status_icon: null,
+                status_class: null,
+                status_text: null,
+                amount_status_class: null,
+                amount_status_text: null,
+                regular_text: null,
+                interest_rate: null,
+                start_date_text: null,
+                end_date_text: '?',
+                payment_log_id: null,
+            }, this.$props.data);
+
+            return data;
+        },
+
+        mounted: function () {
+        },
+
+        methods: {
+
+            pay: function () {
+                // 跳转到支付
+                var uri = new URI("{:url('payment_new/pay')}");
+                uri.search({pid: this.$data.payment_log_id});
+                location.assign(uri);
+            },
+
+            cancel: function () {
+                this.$emit('item-cancel', this.$data);
+            },
+
+            refund: function () {
+                this.$emit('item-refund', this.$data);
+
+                var self = this;
+                $.api.request("{:url('doRefund')}", {
+                    id: this.$data.id,
+                }).fail(this.failHandler).done(function () {
+                    $.toptip('支取申请成功', 'success');
+                    self.$emit('update', self.$data);
+                });
+            },
+        },
+    });
+</script>

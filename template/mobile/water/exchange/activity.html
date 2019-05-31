@@ -1,0 +1,80 @@
+<extend name="layout/common"/>
+<block name="pageBody">
+
+  <link rel="stylesheet" href="__STATIC__/Swiper-4.0.7/swiper.min.css"/>
+
+  <style>
+    .aa {
+      -webkit-flex-shrink: 0;
+    }
+  </style>
+
+    <!-- 页面内容-->
+    <!-- Swiper -->
+    <div class="swiper-box">
+      <div class="swiper-container index_swiper">
+        <div class="swiper-wrapper">
+          <adv pid="51326" limit="5" item="v">
+            <div class="swiper-slide"><a href="{$v['ad_link']}"><img src="{$v['ad_code']}"/></a></div>
+          </adv>
+        </div>
+        <!-- Add Pagination -->
+        <div class="swiper-pagination licia"></div>
+      </div>
+    </div>
+    <if condition='$user[level] eq 3'>
+    <a class="index_list01" href="{:U('Exchange/activity_detail',array('level_id'=>$member_level.level_id))}">
+      <div class="shui_list01">
+        <div class="shui_left">
+          <p>好水随您兑</p>
+          <div class="shui_card">
+            <span class="fs50">充值</span>
+            <span class="fs70 shui_num">{$member_level.amount|substr=0,-3}</span>
+          </div>
+          <p class="mts10">每月返 {$member_level.return_water_coin} 水币</p>
+        </div>
+        <div class="shui_right">
+          <img src="__STATIC__/images/shui_01.png">
+        </div>
+      </div>
+    </a>
+    </if>
+    <if condition='($user[level] == 1 OR $user[level] == 3)'>
+    <a class="index_list02" href="{:U('Exchange/activity_detail',array('level_id'=>$senior_level.level_id))}">
+      <div class="shui_list01">
+        <div class="shui_left">
+          <p>好水随您兑</p>
+          <div class="shui_card">
+            <span class="fs50">充值</span>
+            <span class="fs70 shui_num">{$senior_level.amount|substr=0,-3}</span>
+          </div>
+          <p class="mts10">每月返 {$senior_level.return_water_coin} 水币</p>
+        </div>
+        <div class="shui_right">
+          <img src="__STATIC__/images/shui_02.png">
+        </div>
+      </div>
+    </a>
+    </if>
+    <div class="licia_call">
+      <div class="aa">
+        <img src="__STATIC__/images/icon_call.png">
+      </div>
+      <div class="licai_wz">
+                   <span class="call01">如有疑问可直接在公众号会话咨询平台客服
+                    或拨打客服电话</span>
+        <span class="call02">400-888-8888</span>
+      </div>
+    </div>
+
+<script src="__STATIC__/Swiper-4.0.7/swiper.min.js"></script>
+
+<!-- Initialize Swiper -->
+<script>
+    var swiper = new Swiper('.swiper-container', {
+        pagination: {
+            el: '.swiper-pagination',
+        },
+    });
+</script>
+</block>

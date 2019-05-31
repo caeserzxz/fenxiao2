@@ -1,0 +1,87 @@
+<table>
+ 	<tbody>
+ 	<if condition="empty(lists) eq true">
+ 		<tr data-id="0">
+	        <td class="no-data" align="center" axis="col0" colspan="50">
+	        	<i class="fa fa-exclamation-circle"></i>没有符合条件的记录
+	        </td>
+	     </tr>
+	<else/>
+ 	<volist name="lists" id="list">
+  	<tr data-order-id="{$list.order_id}" id="{$list.order_id}">
+        <td class="sign" axis="col0">
+          <div style="width: 24px;"><i class="ico-check"></i></div>
+        </td>
+        <td align="left" abbr="order_sn" axis="col3" class="">
+          <div style="text-align: left; width: 60px;" class="">{$list.id}</div>
+        </td>
+        <td align="left" abbr="consignee" axis="col4" class="">
+            <div style="text-align: left; width: 100px;" class="">{$list.user_type}</div>
+        </td>
+        <td align="left" abbr="consignee" axis="col4" class="">
+          <div style="text-align: left; width: 50px;" class="">{$list.user_id}</div>
+        </td>
+        <td align="left" abbr="consignee" axis="col4" class="">
+          <div style="text-align: left; width: 100px;" class="">{$list.mobile}</div>
+        </td>
+        <td align="center" abbr="article_time" axis="col6" class="">
+          <div style="text-align: center; width: 100px;" class="">{$list.nickname}</div>
+        </td>
+        <td align="center" abbr="article_time" axis="col6" class="">
+          <div style="text-align: center; width: 100px;" class=""><if condition="$list['money'] gt '0'"><span style="color: green">收入</span><else><span style="color: red">支出</span></else></if></div>
+        </td>
+        <td align="center" abbr="article_time" axis="col6" class="">
+          <div style="text-align: center; width: 100px;" class="">{$list.money}</div>
+        </td>
+        <td align="center" abbr="article_time" axis="col6" class="">
+          <div style="text-align: center; width: 300px;" class="">{$list.desc}</div>
+        </td>
+        <td align="center" abbr="article_time" axis="col6" class="">
+          <div style="text-align: center; width: 120px;" class="">{$list.create_time|date='Y-m-d H:i',###}</div>
+        </td>
+
+		<td style="width: 100%;">
+          <div></div>
+        </td>
+      </tr>
+      </volist>
+      </if>
+    </tbody>
+</table>
+<div class="row">
+    <div class="col-sm-6 text-left"></div>
+    <div class="col-sm-6 text-right">{$page}</div>
+</div>
+<script>
+    $(".pagination  a").click(function(){
+        var page = $(this).data('p');
+        ajax_get_table('search-form2',page);
+    });
+    
+ // 删除操作
+    function del(obj) {
+        layer.confirm('确定要删除吗?', function(){
+            var id=$(obj).data('order-id');
+            $.ajax({
+                type : "POST",
+                url: "{:U('Admin/order/delete_order')}",
+                data:{order_id:id},
+                dataType:'json',
+                async:false,
+                success: function(data){
+                    if(data.status ==1){
+                        layer.alert(data.msg, {icon: 1});
+                        $('#'+id).remove();
+                    }else{
+                        layer.alert(data.msg, {icon: 2});
+                    }
+                },
+                error:function(){
+                    layer.alert('网络异常，请稍后重试',{icon: 2});
+                }
+            });
+		});
+	}
+    
+    $('.ftitle>h5').empty().html("(共{$pager->totalRows}条记录)");
+</script>

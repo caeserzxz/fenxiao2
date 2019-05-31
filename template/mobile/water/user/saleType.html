@@ -1,0 +1,121 @@
+<layout name="common/n_layout_nav"/>
+<title> 分销商 </title>
+</head>
+<body>
+<div class="page">
+    <div class="page-hd">
+        <div class="header bor-1px-b">
+            <div class="header-left">
+                <a href="javascript:history.go(-1)" class="left-arrow"></a>
+            </div>
+            <div class="header-title">分销商</div>
+            <div class="header-right">
+                <a href="#"></a>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-bd">
+        <!-- 页面内容-->
+        <div class="fxs">
+            <div class="weui-cells border-none pt30 mt0 pl30" style="background: none;">
+                <div class="weui-cell">
+                    <div class="weui-cell__hd fxs_tx">
+                        <img src="{$userInfo.head_pic}">
+                    </div>
+                    <div class="weui-cell__bd">
+                        <div class="text-white fs30 fw600">{$userInfo.nickname}（ID:{$userInfo.user_id}）</div>
+                        <div class="sf_label">
+                            <if condition="$userInfo['user_type'] eq 0">会员</if>
+                            <if condition="$userInfo['user_type'] eq 1">健康大使</if>
+                            <if condition="$userInfo['user_type'] eq 2">总代</if>
+                            <if condition="$userInfo['user_type'] eq 3">大区</if>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <if condition="$user[user_type] eq 2 || $user[user_type] eq 3 ">
+        <div class="weui-cells mt0">
+            <div class="weui-cell">
+                <div class="weui-cell__bd fs28 fw600">
+                    <p>权利申请</p>
+                </div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__hd hd_img">
+                    <img src="__STATIC__/n_assets/images/hd_img01.png">
+                </div>
+                <div class="weui-cell__bd fs26">
+                    <p>总代</p>
+                </div>
+                <if condition="$userInfo[user_type] eq 2 ">
+                    <div class="weui-cell__ft ft_btn">
+                        <a>已通过</a>
+                    </div>
+                </if>
+                <if condition="$userInfo[user_type] eq 1||$userInfo[user_type] eq 0 ">
+                        <div class="weui-cell__ft ft_btn">
+                            <a href="{:U('agent',['user_id'=>$userInfo.user_id])}">申请</a>
+                        </div>
+                </if>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__hd hd_img">
+                    <img src="__STATIC__/n_assets/images/hd_img02.png">
+                </div>
+                <div class="weui-cell__bd fs26">
+                    <p>健康大使</p>
+                </div>
+                <if condition="$userInfo[user_type] eq 0 ||$userInfo[user_type] eq 2 ||$userInfo[user_type] eq 3 ">
+                        <div class="weui-cell__ft ft_btn">
+                            <a href="{:U('healthy',['user_id'=>$userInfo.user_id])}">申请</a>
+                        </div>
+                </if>
+                <if condition="$userInfo[user_type] eq 1 ">
+                    <div class="weui-cell__ft ft_btn">
+                        <a>已通过</a>
+                    </div>
+                </if>
+            </div>
+        </div>
+        </if>
+        <if condition="$user[user_type] eq 1">
+            <div class="weui-cells mt0">
+                <div class="weui-cell">
+                    <div class="weui-cell__bd fs28 fw600">
+                        <p>权利申请</p>
+                    </div>
+                </div>
+                <div class="weui-cell">
+                    <div class="weui-cell__hd hd_img">
+                        <img src="__STATIC__/n_assets/images/hd_img02.png">
+                    </div>
+                    <div class="weui-cell__bd fs26">
+                        <p>健康大使</p>
+                    </div>
+                    <if condition="$userInfo[user_type] eq 0 ">
+                    <div class="weui-cell__ft ft_btn ft_btn1">
+                        <a href="{:U('healthy',['user_id'=>$userInfo.user_id])}">申请</a>
+                    </div>
+                    </if>
+                    <if condition="$userInfo[user_type] eq 1 ">
+                        <div class="weui-cell__ft ft_btn ft_btn1">
+                            <a href="{:U('healthy',['user_id'=>$userInfo.user_id])}">已通过</a>
+                        </div>
+                    </if>
+                </div>
+            </div>
+        </if>
+    </div>
+
+</div>
+
+<script src="__STATIC__/n_assets/js/lib/jquery-2.1.4.js"></script>
+<script src="__STATIC__/n_assets/js/jquery-weui.min.js"></script>
+<script src="__STATIC__/n_assets/js/lib/fastclick.js"></script>
+<script>
+    $(function() {
+        FastClick.attach(document.body);
+    });
+</script>

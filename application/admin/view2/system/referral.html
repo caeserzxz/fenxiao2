@@ -1,0 +1,183 @@
+<include file="public/layout" />
+<body style="background-color: rgb(255, 255, 255); overflow: auto; cursor: default; -moz-user-select: inherit;">
+<div id="append_parent"></div>
+<div id="ajaxwaitid"></div>
+<div class="page">
+    <div class="fixed-bar">
+        <div class="item-title">
+            <div class="subject">
+                <h3>身份奖励设置</h3>
+                <h5>不同身份不同等级设置不同的奖励</h5>
+            </div>
+        </div>
+    </div>
+    <!-- 操作说明 -->
+    <div id="explanation" class="explanation" style="color: rgb(44, 188, 163); background-color: rgb(237, 251, 248); width: 99%; height: 100%;">
+        <div id="checkZoom" class="title"><i class="fa fa-lightbulb-o"></i>
+            <h4 title="提示相关设置操作时应注意的要点">操作提示</h4>
+            <span title="收起提示" id="explanationZoom" style="display: block;"></span>
+        </div>
+        <ul>
+            <!-- <li>业务员列表管理, 可以给会员群发站内信、邮件等.</li> -->
+            <li>修改相关设置比率的值.</li>
+        </ul>
+    </div>
+    <div class="flexigrid">
+        <div class="mDiv">
+            <div class="ftitle">
+                <h3>身份设置奖励列表</h3>
+            </div>
+            <div title="刷新数据" class="pReload"><i class="fa fa-refresh"></i></div>
+
+        </div>
+        <div class="hDiv">
+            <div class="hDivBox">
+                <table cellspacing="0" cellpadding="0">
+                    <thead>
+                    <tr>
+                        <th align="left" abbr="user_id" axis="col3" class="">
+                            <div style="text-align: center; width: 80px;" class="">身份信息</div>
+                        </th>
+                        <th align="left" abbr="nickname" axis="col4" class="">
+                            <div style="text-align: center; width: 250px;" class="">成为该身份的条件</div>
+                        </th>
+                        <th align="center" abbr="level" axis="col5" class="">
+                            <div style="text-align: center; width: 150px;" class="">分销奖(单位：%)</div>
+                        </th>
+                        <th align="center" abbr="level" axis="col5" class="">
+                            <div style="text-align: center; width: 150px;" class="">分销奖奖励</div>
+                        </th>
+                        <th align="center" abbr="total_amount" axis="col6" class="">
+                            <div style="text-align: center; width: 150px;" class="">管理奖(佣金,单位：%)</div>
+                        </th>
+                        <th align="center" abbr="email" axis="col6" class="">
+                            <div style="text-align: center; width: 200px;" class="">上荐奖金(佣金或功德,单位：%)</div>
+                        </th>
+
+                        <th style="width:100%" axis="col7">
+                            <div></div>
+                        </th>
+                    </tr>
+                    </thead>
+
+                    <form action="{:U('System/referralSave')}" name="myForm" method="post">
+                    <volist name="referralList" id="vo" key="k">
+                    <tr>
+                        <td style="text-align: center; width: 150px;">{$vo.name}</td>
+                        <td style="text-align: center; width: 150px;">{$vo.desc}</td>
+                        <td style="text-align: center; width: 150px;"><input type="text" name="refer[{$k}][sales_reward]" value="{$vo.sales_reward}"></td>
+                        <td style="text-align: center; width: 150px;">{$vo.sales_desc}</td>
+                        <td style="text-align: center; width: 150px;">
+                            <if $vo['user_type'] == 2 || $vo['user_type'] == 3>
+                                <if $vo['level'] == 1>
+                                     <input type="text" name="refer[{$k}][management_reward]" value="{$vo.management_reward}">
+                                </if>
+                            </if>
+                        </td>
+                        <td style="text-align: center; width: 150px;">
+                            <if $vo['user_type'] == 1 || $vo['user_type'] == 2 || $vo['user_type'] == 3>
+                                <if $vo['level'] == 1>
+                                    <input type="text" name="refer[{$k}][top_reward]"value="{$vo.top_reward}">
+                                </if>
+                            </if>
+
+                        </td>
+                        <td style="text-align: center; width: 150px;"></td>
+                    </tr>
+                    </volist>
+                        <div style="clear:both"></div>
+
+                        <td style="width:100px;height:50px;">
+                            <input style="width:100px;height:30px;text-align: center" type="submit" name="submit" class="btn btn-success" value="确认修改"/>
+                        </td>
+                    </form>
+                </table>
+            </div>
+        </div>
+
+        <div class="bDiv" style="height: auto;" id="ajax_return">
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function(){
+        // 点击刷新数据
+        var ssort = 'sdesc';
+        var on_sclick = 0;
+        $('.hDivBox > table>thead>tr>th').hover(
+            function () {
+                if(typeof($(this).attr('abbr')) == "undefined"){
+                    return false;
+                }
+                $(this).addClass('thOver');
+                if($(this).hasClass('sorted')){
+                    if(ssort == 'sdesc'){
+                        $(this).find('div').removeClass('sdesc');
+                        $(this).find('div').addClass('sasc');
+                    }else{
+                        $(this).find('div').removeClass('sasc');
+                        $(this).find('div').addClass('sdesc');
+                    }
+                }else{
+                    $(this).find('div').addClass(ssort);
+                }
+            }, function () {
+                    if(typeof($(this).attr('abbr')) == "undefined"){
+                        return false;
+                    }
+                    if(on_sclick == 0){
+                        if($(this).hasClass('sorted')){
+                            if(ssort == 'sdesc'){
+                                $(this).find('div').removeClass('sasc');
+                                $(this).find('div').addClass('sdesc');
+                            }else{
+                                $(this).find('div').removeClass('sdesc');
+                                $(this).find('div').addClass('sasc');
+                            }
+                        }else{
+                            $(this).find('div').removeClass(ssort);
+                        }
+                    }
+                    $(this).removeClass("thOver");
+                    on_sclick = 0;
+            }
+        );
+        $('.hDivBox > table>thead>tr>th').click(function(){
+            if(typeof($(this).attr('abbr')) == "undefined"){
+                return false;
+            }
+            if($(this).hasClass('sorted')){
+                $(this).find('div').removeClass(ssort);
+                if(ssort == 'sdesc'){
+                    ssort = 'sasc';
+                }else{
+                    ssort = 'sdesc';
+                }
+                $(this).find('div').addClass(ssort);
+                on_sclick = 1;
+            }else{
+                $('.hDivBox > table>thead>tr>th').removeClass('sorted');
+                $('.hDivBox > table>thead>tr>th').find('div').removeClass(ssort);
+                $(this).addClass('sorted');
+                $(this).find('div').addClass(ssort);
+                var hDivBox_th_index = $(this).index();
+                var flexigrid_tr =   $('#flexigrid > table>tbody>tr')
+                flexigrid_tr.each(function(){
+                    $(this).find('td').removeClass('sorted');
+                    $(this).children('td').eq(hDivBox_th_index).addClass('sorted');
+                });
+            }
+            sort($(this).attr('abbr'));
+        });
+
+        $('.fa-refresh').click(function(){
+            location.href = location.href;
+        });
+        ajax_get_table('search-form2',1);
+
+    });
+
+
+</script>
+</body>
+</html>

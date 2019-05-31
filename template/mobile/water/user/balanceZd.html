@@ -1,0 +1,88 @@
+<layout name="common/n_layout_nav"/>
+
+<title> 钱包 </title>
+</head>
+<body>
+<div class="page">
+    <div class="page-hd">
+        <div class="header bor-1px-b">
+            <div class="header-left">
+                <a href="javascript:history.go(-1)" class="left-arrow"></a>
+            </div>
+            <div class="header-title">钱包</div>
+            <div class="header-right">
+                <a href="#"></a>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-bd">
+        <!-- 页面内容-->
+        <div class="fxs tc">
+            <div class="ff fs68 text-white pt10">
+                <if condition="$userInfo.user_type eq 2||$userInfo.user_type eq 3">
+                    {$userInfo.yongjin}
+                </if>
+                <if condition="$userInfo.user_type eq 1">
+                    {$userInfo.gongde}
+                </if>
+            </div>
+            <div class="fs30 fw600 text-white">余额</div>
+            <div class="income mt20">
+                <a href="{:U('Mobile/User/incomeDetail')}">收入明细</a>
+            </div>
+            <div class="income mt20">
+                <a href="{:U('Mobile/User/cashHistory')}">提现记录</a>
+            </div>
+        </div>
+        <table>
+            <tr>
+                <th>月份</th>
+                <th>分销佣金</th>
+                <th>管理佣金</th>
+                <th>上荐佣金</th>
+                <th>代收佣金</th>
+                <th>总金额</th>
+                <th>操作</th>
+            </tr>
+            <tr>
+                <td><span class="month">本月佣金</span></td>
+                <td>￥{$result.distributionMonth}</td>
+                <td>￥{$result.manageMonth}</td>
+                <td>￥{$result.commendMonth}</td>
+                <td>￥{$result.collectionMonth}</td>
+                <td>￥{$result.totalMonth}</td>
+                <td></td>
+            </tr>
+
+            <tr>
+                <td><span class="month">待发佣金</span></td>
+                <td>￥{$result.distribution}</td>
+                <td>￥{$result.manage}</td>
+                <td>￥{$result.commend}</td>
+                <td>￥{$result.collection}</td>
+                <td>￥{$result.total}</td>
+                <td class="text-red">
+
+                    <if condition="$result['allow_time'] eq 0"><a href="{:U('User/gongdeHistory')}">查看</a></if>
+                    <if condition="$result['allow_time'] eq 1"><a href="{:U('User/withdrawalM')}"　 class="text-red">提现</a></if>
+
+                    <!--<if condition="$result['total'] eq 0"><a href="{:U('User/gongdeHistory')}">查看</a></if>-->
+                    <!--<if condition="$result['total'] neq 0"><a href="{:U('User/withdrawalM')}"　 class="text-red">提现</a></if>-->
+
+                </td>
+            </tr>
+        </table>
+        <div style="margin-left: 0.2rem;margin-top: 0.1rem;color: red;">允许提现的时间为每月1号至8号</div>
+    </div>
+
+</div>
+
+<script src="_STATIC__/n_assets/js/lib/jquery-2.1.4.js"></script>
+<script src="_STATIC__/n_assets/js/jquery-weui.min.js"></script>
+<script src="_STATIC__/n_assets/js/lib/fastclick.js"></script>
+<script>
+    $(function() {
+        FastClick.attach(document.body);
+    });
+</script>

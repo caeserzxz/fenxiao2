@@ -1,0 +1,104 @@
+<style>
+    .popup-center .weui-popup__modal .modal_bg {
+        height: auto;
+        padding-bottom: 0.2rem;
+    }
+</style>
+
+<script type="text/x-template" id="vue-component-financial_modal-template">
+    <div class="weui-popup__container popup-bottom popup-center" ref="modal">
+        <div class="weui-popup__overlay"></div>
+        <div class="weui-popup__modal">
+            <div class="modal_bg">
+                <form ref="form" @submit.prevent="submit">
+                    <input type="submit" style="display: none;">
+                    <div class="modal_top">
+                        <div class="modal_zhiqu">理财投资</div>
+                        <div class="modal_close" @click.prevent="close">
+                            <img src="__STATIC__/images/icon_close.png" alt="">
+                        </div>
+                    </div>
+                    <div class="weui-cells_checkbox modal_checkbox modal_cell">
+                        <span class="fs28 text-default mr30">理财周期</span>
+                        <label class="weui-check__label" for="x11">
+                            <input type="radio" class="weui-check" name="regular_type" value="year" v-model="data.regular_type" id="x11" checked>
+                            <span class="weui-icon-checked"></span>
+                            <span class="fs26 text-default mr30">1年</span>
+                        </label>
+                        <label class="weui-check__label mr10" for="x12">
+                            <input type="radio" class="weui-check" name="regular_type" value="month" v-model="data.regular_type" id="x12">
+                            <span class="weui-icon-checked"></span>
+                        </label>
+                        <input type="number" class="modal_input mr10" v-model="data.regular_month" value="6" min="1" max="11" step="1" title="月份">
+                        <label class="fs26 text-default" for="x12">个月</label>
+                    </div>
+                    <div class="weui-cell modal_cell">
+                        <div class="weui-cell__hd"><label class="weui-label fs28 text-default modal_label">理财金额</label></div>
+                        <div class="weui-cell__bd">
+                            <input class="weui-input" type="number" v-model="data.amount" step="0.01" placeholder="最低1万起">
+                        </div>
+                    </div>
+                    <label class="weui-agree modal_agree">
+                        <!--<input type="checkbox" checked class="weui-agree__checkbox modal_agree_checkbox">-->
+                        <span class="weui-agree__text text-gray fs22">到期自动转存，分红自动结算</span>
+                    </label>
+                    <div class="modal_btn" style="margin-top: 0">
+                        <a href="javascript:" @click.prevent="submit">确定理财</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</script>
+
+<script type="text/javascript">
+    'use strict';
+
+    Vue.component('financial_modal', {
+        template: '#vue-component-financial_modal-template',
+        props: {
+
+        },
+
+        data: function() {
+            return {
+                $modal: null,
+
+                data: {
+                    regular_type: 'year',
+                    regular_month: 6,
+                    amount: null,
+                },
+                token: '{$Request.token}',
+            };
+        },
+        watch: {
+        },
+
+        mounted: function () {
+            this.$modal = $(this.$refs.modal);
+        },
+
+        methods: {
+
+            popup: function() {
+                this.$modal && this.$modal.popup();
+            },
+
+            close: function() {
+                $.closePopup(this.$modal);
+            },
+
+            submit: function() {
+                var data = Object.assign({}, this.$data.data, {__token__: this.token});
+
+                $.api.request("{:U('doManagement')}", data).fail(this.failHandler).done(function (res) {
+                    // 跳转到支付
+                    var url = new URI("{:U('payment_new/pay')}");
+                    url.search({pid: res.pid});
+                    location.assign(url);
+                });
+            },
+        },
+    });
+</script>

@@ -1,0 +1,307 @@
+<include file="public/layout" />
+<script type="text/javascript" src="__ROOT__/public/static/js/layer/laydate/laydate.js"></script>
+
+<body style="background-color: rgb(255, 255, 255); overflow: auto; cursor: default; -moz-user-select: inherit;">
+<div id="append_parent"></div>
+<div id="ajaxwaitid"></div>
+<div class="page">
+  <div class="fixed-bar">
+    <div class="item-title">
+      <div class="subject">
+        <h3>发货单列表</h3>
+        <h5>已发货订单列表</h5>
+      </div>
+    </div>
+  </div>
+  <!-- 操作说明 -->
+  <div id="explanation" class="explanation" style=" width: 99%; height: 100%;">
+    <div id="checkZoom" class="title"><i class="fa fa-lightbulb-o"></i>
+      <h4 title="提示相关设置操作时应注意的要点">操作提示</h4>
+      <span title="收起提示" id="explanationZoom" style="display: block;"></span>
+    </div>
+     <ul>
+      <li>点击查看操作将显示订单（包括订单物品）的详细信息</li>
+      <li>已发货订单列表</li>
+    </ul>
+  </div>
+  <div class="flexigrid">
+    <div class="mDiv">
+      <div class="ftitle">
+        <h3>发货单列表</h3>
+        <h5>(共{$page->totalRows}条记录)</h5>
+      </div>
+      <div title="刷新数据" class="pReload"><i class="fa fa-refresh"></i></div>
+	  <form class="navbar-form form-inline"  method="post" action="{:U('Admin/order/export_ship')}"  name="search-form2" id="search-form2">
+	  		<input type="hidden" name="order_by" value="order_id">
+            <input type="hidden" name="sort" value="desc">
+            <input type="hidden" name="user_id" value="{$Request.param.user_id}">
+            <input type="hidden" name="order_ids" value="">
+            <!--用于查看结算统计 包含了哪些订单-->
+            <input type="hidden" value="{$_GET['order_statis_id']}" name="order_statis_id" />
+                                    
+      <div class="sDiv">
+
+         <div class="sDiv2">
+             <div class="sDiv2">
+                 <input type="text" size="30" id="consignee"  name="consignee"  value="" class="qsbox"  placeholder="收货人">
+             </div>
+             <div class="sDiv2">
+                 <input type="text" size="30" id="order_sn" name="order_sn" value="" class="qsbox"  placeholder="订单编号">
+             </div>
+         </div>
+        <div class="sDiv2">	 
+          <input type="button" onclick="ajax_get_table('search-form2',1)"  class="btn" value="搜索">
+        </div>
+      </div>
+     </form>
+    </div>
+    <div class="tDiv">
+          <div class="tDiv2">
+              <div class="fbutton">
+                  <a href="javascript:exportReport()">
+                      <div class="add" title="选定行数据导出excel文件,如果不选中行，将导出列表所有数据">
+                          <span><i class="fa fa-plus"></i>导出数据</span>
+                      </div>
+                  </a>
+              </div>
+              <div class="fbutton">
+                  <!-- <a class="button input-file" style="text-align: center;vertical-align: middle;" href="javascript:void(0);">上传要发送的号码文件<input  size="80" type="file" name="file1" id="file1" onchange="check1()" /></a>!-->
+                  <h3>导入发货单Excel表：</h3>
+                  <form id="uploadForm" enctype="multipart/form-data">
+                      <input  type="file" name="inputExcel" />
+                      <input id="upload" type="button"  value="导入" />
+                  </form>
+              </div>
+          </div>
+          <div style="clear:both"></div>
+      </div>
+    <div class="hDiv">
+      <div class="hDivBox" id="ajax_return">
+        <table cellspacing="0" cellpadding="0">
+          <thead>
+	        	<tr>
+	              <th axis="col0">
+	                <div style="width: 24px;"><i class="ico-check"></i></div>
+	              </th>
+	              <th align="left" abbr="order_sn" axis="col3" class="">
+	                <div style="text-align: left; width: 140px;" class="">订单编号</div>
+	              </th>
+	              <th align="left" abbr="consignee" axis="col4" class="">
+	                <div style="text-align: left; width: 150px;" class="">收货人</div>
+	              </th>
+	           <!--   <th align="center" abbr="article_show" axis="col5" class="">
+	                <div style="text-align: center; width: 60px;" class="">总金额</div>
+	              </th>-->
+	              <th align="center" abbr="article_time" axis="col6" class="">
+	                <div style="text-align: center; width: 60px;" class="">订单金额</div>
+	              </th>
+	              <th align="center" abbr="article_time" axis="col6" class="">
+	                <div style="text-align: center; width: 60px;" class="">订单状态</div>
+	              </th>
+	              <th align="center" abbr="article_time" axis="col6" class="">
+	                <div style="text-align: center; width: 100px;" class="">支付状态</div>
+	              </th>
+	              <th align="center" abbr="article_time" axis="col6" class="">
+	                <div style="text-align: center; width: 60px;" class="">发货状态</div>
+	              </th>
+	              <th align="center" abbr="article_time" axis="col6" class="">
+	                <div style="text-align: center; width: 60px;" class="">支付方式</div>
+	              </th>
+	             <!-- <th align="center" abbr="article_time" axis="col6" class="">
+	                <div style="text-align: center; width: 60px;" class="">配送方式</div>
+	              </th>-->
+	              <th align="center" abbr="article_time" axis="col6" class="">
+	                <div style="text-align: center; width: 120px;" class="">下单时间</div>
+	              </th>
+	              <th align="left" axis="col1" class="handle">
+	                <div style="text-align: left; width: 150px;">操作</div>
+	              </th>
+	            </tr>
+	          </thead>
+        </table>
+      </div>
+    </div>
+    <div class="bDiv" style="height: auto;">
+      <div id="flexigrid" cellpadding="0" cellspacing="0" border="0">
+        
+      </div>
+      <div class="iDiv" style="display: none;"></div>
+    </div>
+    <!--分页位置--> 
+   	</div>
+</div>
+<script type="text/javascript">
+
+	 
+  /*  $(document).ready(function(){
+	   
+     	$('#add_time_begin').layDate(); 
+     	$('#add_time_end').layDate();
+     	
+		// 点击刷新数据
+		$('.fa-refresh').click(function(){
+			location.href = location.href;
+		});
+		
+		ajax_get_table('search-form2',1);
+		
+		$('.ico-check ' , '.hDivBox').click(function(){
+			$('tr' ,'.hDivBox').toggleClass('trSelected' , function(index,currentclass){
+	    		var hasClass = $(this).hasClass('trSelected');
+	    		$('tr' , '#flexigrid').each(function(){
+	    			if(hasClass){
+	    				$(this).addClass('trSelected');
+	    			}else{
+	    				$(this).removeClass('trSelected');
+	    			}
+	    		});  
+	    	});
+		});
+		 
+	});
+    
+    
+  	//ajax 抓取页面
+    function ajax_get_table(tab,page){
+        cur_page = page; //当前页面 保存为全局变量
+            $.ajax({
+                type : "POST",
+                url:"/index.php/Admin/order/ajaxdelivery/p/"+page,//+tab,
+                data : $('#'+tab).serialize(),// 你的formid
+                success: function(data){
+                    $("#flexigrid").html('');
+                    $("#flexigrid").append(data);
+                    
+                	// 表格行点击选中切换
+            	    $('#flexigrid > table>tbody >tr').click(function(){
+            		    $(this).toggleClass('trSelected');
+            		});
+                	 
+                }
+            });
+    }*/
+
+  $(document).ready(function(){
+
+      // 点击刷新数据
+      $('.fa-refresh').click(function(){
+          location.href = location.href;
+      });
+
+      ajax_get_table('search-form2',1);
+
+      $('.ico-check ' , '.hDivBox').click(function(){
+          $('tr' ,'.hDivBox').toggleClass('trSelected' , function(index,currentclass){
+              var hasClass = $(this).hasClass('trSelected');
+              $('tr' , '#flexigrid').each(function(){
+                  if(hasClass){
+                      $(this).addClass('trSelected');
+                  }else{
+                      $(this).removeClass('trSelected');
+                  }
+              });
+          });
+      });
+
+  });
+
+
+  // ajax 抓取页面
+  function ajax_get_table(tab,page){
+      cur_page = page; //当前页面 保存为全局变量
+      $.ajax({
+          type : "POST",
+          url:"/index.php/Admin/order/ajaxdelivery/p/"+page,//+tab,
+          data : $('#'+tab).serialize(),// 你的formid
+          success: function(data){
+              $("#flexigrid").html('');
+              $("#flexigrid").append(data);
+          }
+      });
+  }
+	
+    // 点击排序
+    function sort(field){
+        $("input[name='order_by']").val(field);
+        var v = $("input[name='sort']").val() == 'desc' ? 'asc' : 'desc';
+        $("input[name='sort']").val(v);
+        ajax_get_table('search-form2',cur_page);
+    }
+
+	//订单导出功能
+	function exportReport1(){
+        var selected_ids = '';
+        $('.trSelected' , '#flexigrid').each(function(i){
+            selected_ids += $(this).data('order-id')+',';
+        });
+        if(selected_ids != ''){
+            $('input[name="order_ids"]').val(selected_ids.substring(0,selected_ids.length-1));
+        }
+		$('#search-form2').submit();
+	}
+
+    //订单发货导入功能
+    /*$(function () {
+        $("#upload").click(function () {
+            var formData = new FormData($('#uploadForm')[0]);
+            $.ajax({
+                type: 'post',
+                /!*url: "http://192.168.1.101:8080/springbootdemo/file/upload",*!/
+                url: "/index.php/Admin/order/daoru",
+                data: formData,
+                cache: false,
+                processData: false,
+                contentType: false,
+            }).success(function (data) {
+                console.log(data);
+                alert(data.msg);
+            }).error(function () {
+                console.log(data);
+                alert("上传失败");
+
+            });
+        });
+    });*/
+
+    //发货单导出功能
+    function exportReport(){
+        var selected_ids = '';
+        $('.trSelected' , '#flexigrid').each(function(i){
+            selected_ids += $(this).data('order-id')+',';
+        });
+        if(selected_ids != ''){
+            $('input[name="order_ids"]').val(selected_ids.substring(0,selected_ids.length-1));
+        }
+        $('#search-form2').submit();
+        // alert(3333);
+    }
+
+
+
+    //批量发货 发货单导入功能
+    $(function () {
+        $("#upload").click(function () {
+            var formData = new FormData($('#uploadForm')[0]);
+            $.ajax({
+                type: 'post',
+                /*url: "http://192.168.1.101:8080/springbootdemo/file/upload",*/
+                url: "/index.php/Admin/order/daoru",
+                data: formData,
+                cache: false,
+                processData: false,
+                contentType: false,
+            }).success(function (data) {
+                console.log(data);
+                alert(data.msg);
+            }).error(function () {
+                console.log(data);
+                alert("上传失败");
+
+            });
+        });
+    });
+
+	 
+</script>
+</body>
+</html>

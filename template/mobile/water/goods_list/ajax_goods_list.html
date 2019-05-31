@@ -1,0 +1,19 @@
+<foreach name="list" item="v" key="k">
+    <li style="width: 49%; <if condition=" $k%2==0">margin-right: 2%</if>" >
+        <a href="{:U('Mobile/Goods/goodsInfo',array('id'=>$v[goods_id],'goods_type'=>$Request.param.goods_type))}">
+            <div class="similer-product" style="padding-bottom: 1rem;">
+                <div class="zjj close"><img src="{$v.goods_id|goods_thum_images=200,200}"></div>
+                <span class="similar-product-text" style="height: .64rem;">{$v[goods_name]}</span>
+                <span class="similar-product-price">
+                    <if condition="$v[sale_type] neq 2">
+                        ¥<span class="big-price">{$v[shop_price]}元</span><br>
+                    </if>
+                    <if condition="!empty($v[integral])">
+                    <span class="big-price" style="font-size: .42667rem; color: #f77a0b; <if condition="$v[sale_type] eq 2">font-size: .59733rem;</if>">{$v[integral]}积分</span>
+                    </if>
+                    <span class="fr sg_g_time last_g_time" id="jstimerBox{$v[goods_id]}"></span>
+                 </span>
+            </div>
+        </a>
+    </li>
+</foreach>

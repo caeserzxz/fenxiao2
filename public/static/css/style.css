@@ -1,0 +1,549 @@
+/* =============================================================================
+   HTML5 CSS Reset Minified - Eric Meyer
+   ========================================================================== */
+
+html,
+body,
+div,
+span,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+abbr,
+address,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+samp,
+small,
+strong,
+sub,
+sup,
+var,
+b,
+i,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section,
+summary,
+time,
+mark,
+audio,
+video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  font-size: 100%;
+  vertical-align: baseline;
+  background: transparent
+}
+
+body {
+  line-height: 1
+}
+
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+  display: block
+}
+
+nav ul {
+  list-style: none
+}
+
+blockquote,
+q {
+  quotes: none
+}
+
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+  content: none
+}
+
+a {
+  margin: 0;
+  padding: 0;
+  font-size: 100%;
+  vertical-align: baseline;
+  background: transparent;
+  text-decoration: none
+}
+
+mark {
+  background-color: #ff9;
+  color: #000;
+  font-style: italic;
+  font-weight: bold
+}
+
+del {
+  text-decoration: line-through
+}
+
+abbr[title],
+dfn[title] {
+  border-bottom: 1px dotted;
+  cursor: help
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0
+}
+
+hr {
+  display: block;
+  height: 1px;
+  border: 0;
+  border-top: 1px solid #ccc;
+  margin: 1em 0;
+  padding: 0
+}
+
+input,
+select {
+  vertical-align: middle
+}
+
+li {
+  list-style: none
+}
+
+
+/* =============================================================================
+   My CSS
+   ========================================================================== */
+
+
+/* ---- base ---- */
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  background-color: #eff4f7;
+}
+
+html {
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+body {
+  font: normal 75% 'Microsoft YaHei', Arial, Helvetica, sans-serif;
+}
+
+
+
+
+.clearfix:after,
+.clearfix:before {
+  display: table;
+  content: " "
+}
+
+.clearfix:after {
+  clear: both
+}
+
+.copy-lg {
+  position: absolute;
+  top: 60%;
+  z-index: 0;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+  color: #4f5c6d;
+  font-size: 12px;
+  background-color: #5eb0fa;
+  color: #fff;
+}
+.copy-lg p{
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  text-align: center;
+  bottom: 20px;
+}
+.right-lg {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 14px;
+  text-align: center;
+  background: #303b4a;
+  color: #8a9099;
+  cursor: pointer;
+  border-top-left-radius: 5px;
+  -webkit-border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+  -webkit-border-bottom-left-radius: 5px;
+}
+
+.right-lg p {
+  width: 14px;
+  margin: 6px auto;
+}
+
+.wei-ico {
+  display: block;
+  padding: 8px 6px 4px;
+  border-bottom: 1px solid #454f5c;
+}
+
+.wei-ico img {
+  width: 20px;
+  height: 20px;
+}
+
+.login-box {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  margin: 0 auto;
+  margin-top: -186px;
+  width: 1200px;
+  z-index: 999;
+}
+
+.left-logo {
+  float: left;
+  margin-left: 200px;
+}
+
+.left-logo img {
+  width: 380px;
+  height: 380px;
+}
+
+.right-login {
+  width: 326px;
+  height: 372px;
+  float: right;
+  background-color: #fff;
+  background: rgba(255, 255, 255, 1);
+  padding: 50px 25px 0;
+  position: relative;
+  margin-right: 220px;
+  box-sizing: border-box;
+ /* box-shadow: 1px 2px 20px 0px	rgba(0, 0, 0, 0.1);*/
+  clip-path: url(#svgPath);
+  filter: drop-shadow(2px 2px 10px rgba(0,0,0,.5));
+}
+
+.tip-box {
+  width: 185px;
+  height: 47px;
+  position: absolute;
+  right: 9px;
+  top: 9px;
+  height: 39px;
+  color: #7da8db;
+  background: url(../images/tips-bg.png) no-repeat right top;
+  font-size: 12px;
+  cursor: pointer;
+  padding-left: 40px;
+  padding-top: 7px;
+  box-sizing: border-box;
+}
+.tip-boxbg {
+  background: url(../images/tips-bg02.png) no-repeat right top;
+}
+
+.login-title {
+  font-size: 14px;
+  color: #393939;
+  line-height: 1;
+  font-family: Microsoft Yahei;
+  margin-top: 35px;
+  margin-bottom: 30px;
+}
+
+.input-box {
+  width: 100%;
+  margin-bottom: 12px;
+  position: relative;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.input-box input {
+  height: 34px;
+  line-height: 34px;
+  width: 100%;
+  text-indent: 2em;
+  background: none;
+  border: none;
+  outline: none;
+  font-family: 'Microsoft YaHei';
+  font-size: 12px;
+}
+
+.input-box span {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  left: 0;
+  top: 8px;
+}
+
+.input-box span.user-ico {
+  background: url(../images/user-ico.png);
+  background-size: 100% 100%;
+}
+
+.input-box span.pass-ico {
+  background: url(../images/pass-ico.png);
+  background-size: 100% 100%;
+}
+
+.tip-del {
+  display: none;
+  position: absolute;
+  right: -24px;
+  top: 16px;
+  width: 20px;
+  height: 20px;
+  background: url(../images/x-del.png) no-repeat;
+  background-size: 100% 100%;
+}
+
+.remember {
+  color: #d1d3d7;
+  margin-top: 34px;
+  margin-left: 4px;
+}
+
+.remember input {
+  background: #353f4d;
+  border: 1px solid #707781;
+}
+
+.remember input[type="checkbox"] {
+  margin: 0;
+}
+
+.login-btn {
+  background: #2498e1;
+  border-radius: 2px;
+  width: 100%;
+  margin-top: 14px;
+  font-size: 14px;
+  color: white;
+  text-align: center;
+  height: 40px;
+  line-height: 40px;
+  cursor: pointer;
+}
+
+.tab-con {
+  display: none;
+}
+
+.wei-img {
+  text-align: center;
+  padding-top: 50px;
+}
+
+.wei-img img {
+  border: 1px solid #eee;
+  width: 140px;
+  height: 140px;
+}
+
+.wei-text {
+  width: 124px;
+  margin: 0 auto;
+  color: #393939;
+  font-size: 12px;
+  margin-top: 20px;
+}
+
+.sao-ico {
+  display: inline-block;
+  width: 27px;
+  height: 27px;
+  background: url(../images/saoyisao.png) no-repeat;
+  background-size: 100% 100%;
+  vertical-align: middle;
+  margin-right: 5px;
+  float: left;
+  position: relative;
+  top: 3px;
+}
+
+.weixin-box {
+  position: absolute;
+  width: 150px;
+  height: auto;
+  right: 0;
+  top: 1px;
+  background: white;
+  color: black;
+  transition: all 1s;
+  -webkit-transition: all 1s;
+  -moz-transition: all 1s;
+  -ms-transition: all 1s;
+  transform: translateX(200px);
+  -webkit-transform: translateX(200px);
+  -moz-transform: translateX(200px);
+  -ms-transform: translateX(200px);
+}
+
+.in {
+  transform: translateX(0px);
+  -webkit-transform: translateX(0px);
+  -moz-transform: translateX(0px);
+  -ms-transform: translateX(0px);
+}
+
+.close {
+  text-align: right;
+  padding-right: 10px;
+  cursor: pointer;
+}
+
+.xin-title,
+.weixin-img {
+  padding: 6px 0;
+}
+
+.weixin-img img {
+  width: 120px;
+  height: 120px;
+}
+
+.xin-tips {
+  font-size: 12px;
+  padding-bottom: 10px;
+}
+
+.topbar{
+  height: 68px;
+  background-color: #fff;
+}
+.topbar .container{
+  width: 1200px;
+  margin: 0 auto;
+}
+.container::after,.container::before{
+  display: table;
+  content: "";
+}
+.container::after{
+  clear: both;
+}
+.topbar .topbar_l{
+  float: left;
+}
+.topbar .topbar_l a{
+  display: block;
+}
+.topbar .topbar_l img{
+  vertical-align: middle;
+}
+.topbar .topbar_r{
+  float: right;
+  height: 68px;
+  line-height: 68px;
+}
+.topbar .topbar_r a{
+  color: #5c5c5c;
+  display: inline-block;
+  padding: 0 15px;
+}
+.topbar .topbar_r a:hover{
+  color: #3889e8;
+}
+.topbar .topbar_r span{
+  color: #b4b4b4;
+}
+
+.left-swiper{
+  width: 340px;
+  height: 372px;
+  float: left;
+  margin-left: 200px;
+}
+
+.swiper-pagination-bullet{
+  background-color: rgba(255, 255, 255, 0.6);
+  width: 10px;
+  height: 10px;
+}
+
+.pagination {
+  position: absolute;
+  left: 0;
+  right: 0;
+  text-align: center;
+  bottom:5px;
+  z-index: 99;
+}
+.swiper-pagination-switch{
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  opacity: 0.6;
+  background-color: #fff;
+  margin: 5px;
+}
+.swiper-active-switch{
+  opacity: 1;
+}

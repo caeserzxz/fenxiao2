@@ -1,0 +1,218 @@
+<include file="public/layout" />
+<style>
+.ncm-goods-gift {
+	text-align: left;
+}
+.ncm-goods-gift ul {
+    display: inline-block;
+    font-size: 0;
+    vertical-align: middle;
+}
+.ncm-goods-gift li {
+    display: inline-block;
+    letter-spacing: normal;
+    margin-right: 4px;
+    vertical-align: top;
+    word-spacing: normal;
+}
+.ncm-goods-gift li a {
+    background-color: #fff;
+    display: table-cell;
+    height: 30px;
+    line-height: 0;
+    overflow: hidden;
+    text-align: center;
+    vertical-align: middle;
+    width: 30px;
+}
+.ncm-goods-gift li a img {
+    max-height: 30px;
+    max-width: 30px;
+}
+
+a.green{
+
+	background: #fff none repeat scroll 0 0;
+    border: 1px solid #f5f5f5;
+    border-radius: 4px;
+    color: #999;
+    cursor: pointer !important;
+    display: inline-block;
+    font-size: 12px;
+    font-weight: normal;
+    height: 20px;
+    letter-spacing: normal;
+    line-height: 20px;
+    margin: 0 5px 0 0;
+    padding: 1px 6px;
+    vertical-align: top;
+}
+
+a.green:hover { color: #FFF; background-color: #1BBC9D; border-color: #16A086; }
+
+.ncap-order-style .ncap-order-details{
+	margin:20px auto;
+}
+.contact-info h3,.contact-info .form_class{
+  display: inline-block;
+  vertical-align: middle;
+}
+.form_class i.fa{
+  vertical-align: text-bottom;
+}
+</style>
+<div class="page">
+  <div class="fixed-bar">
+    <div class="item-title"><a class="back" href="javascript:history.go(-1)" title="返回列表"><i class="fa fa-arrow-circle-o-left"></i></a>
+      <div class="subject">
+        <h3>订单发货</h3>
+        <h5>订单发货编辑</h5>
+      </div>
+     <!-- <div class="subject" style="width:62%">
+      		<a href="{:U('Order/order_print',array('order_id'=>$orderGoods['order_id'],'template'=>'picking'))}" style="float:right;margin-right:10px" class="ncap-btn-big ncap-btn-green" ><i class="fa fa-print"></i>打印配货单</a>
+      	 </a>
+      </div>-->
+    </div>
+
+  </div>
+  <div class="ncap-order-style">
+    <div class="titile">
+      <h3></h3>
+    </div>
+ <form id="delivery-form" action="{:U('Admin/goods/goods_deliveryHandle')}" method="post">
+     <input type="hidden" name="shipping" value="{$orderGoods.shipping_status}">
+     <input type="hidden" id="shipping_name" name="shipping_name" value="{$orderGoods.shipping_name}">
+    <div class="ncap-order-details">
+      <div class="tabs-panels">
+        <div class="misc-info">
+           <h3>基本信息</h3>
+           		<dl>
+                    <dt>订单号：</dt>
+                    <dd>{$orderInfo.order_sn}</dd>
+		            <dt>下单时间：</dt>
+		            <dd>{$orderInfo.add_time|date='Y-m-d H:i',###}</dd>
+		          </dl>
+
+        	</div>
+
+        <div class="addr-note">
+                <h4>商品订单收货信息</h4>
+                <dl>
+                    <dt>配送费用：</dt>
+                    <dd>包邮</dd>
+                    <!--<dt>快递单号：</dt>-->
+                    <!--<dd>{$infoList.order_goods_sn}</dd>-->
+                    <dt>物流公司：</dt>
+                    <dd>
+                        <select name="express_id">
+                            <option value="0">请选择</option>
+                            <volist name="expressList" id="list">
+                                <option value="{$list['id']}" <if condition="$orderGoodsAll.shipping_code eq $list.code">selected</if> >{$list['name']}</option>
+                            </volist>
+                        </select>
+                        <span style="color:red">没有选择项则先配置物流公司</span>
+                    </dd>
+                </dl>
+
+                <dl>
+                    <dt>收货人：</dt>
+                    <dd>{$orderGoodsAll.consignee}</dd>
+                </dl>
+                <dl>
+                    <dt>收货地址：</dt>
+                    <dd>{$orderGoodsAll.address}</dd>
+                </dl>
+                <dl>
+                    <dt>电话：</dt>
+                    <dd>{$orderGoodsAll.mobile}</dd>
+                </dl>
+                <dl>
+                    <dt>用户备注：</dt>
+                    <dd>{$orderGoodsAll.user_note}</dd>
+                </dl>
+                <hr>
+
+        </div>
+
+
+        <div class="goods-info">
+          <h4>商品信息</h4>
+          <table>
+            <thead>
+              <tr>
+                <th colspan="2">商品</th>
+                <th>规格属性</th>
+                <th>购买数量</th>
+                <!--<th>商品单价</th>-->
+                <th>选择发货</th>
+              </tr>
+            </thead>
+            <tbody>
+
+            <volist name="orderGoods" id="good">
+                <tr>
+                    <td class="w30"><div class="goods-thumb"><a href="{:U('Goods/addEditGoods',array('id'=>$good[goods_id]))}" target="_blank"><img alt="" src="{$good['goods_id']|goods_thum_images=200,200}" /> </a></div></td>
+                    <td style="text-align: left;"><a href="{:U('Goods/addEditGoods',array('id'=>$good[goods_id]))}" target="_blank">{$good.goods_name}</a><br/></td>
+                    <td class="w80">{$good.spec_key_name}</td>
+                    <td class="w60">{$good.goods_num}</td>
+                    <td class="w100">{$good.goods_price}</td>
+                    <td class="w60">
+                        <if condition="$good['is_send'] eq 1">
+                            已发货
+                            <else />
+                            <input type="checkbox" name="goods[]" value="{$good.rec_id}" checked="checked">
+                        </if>
+                    </td>
+                </tr>
+            </volist>
+
+          </table>
+        </div>
+        <div class="contact-info"  style="margin-top:10px;">
+          <h3>发货单备注</h3>
+          <dl class="row">
+	        <dt class="tit">
+	          <label for="note">发货单备注</label>
+	        </dt>
+	        <dd class="opt" style="margin-left:10px">
+	        <input type="hidden" name="rec_id" value="{$orderGoodsInfo.rec_id}">
+	         <textarea id="note" name="note" style="width:600px" rows="6"  placeholder="请输入操作备注" class="tarea" id="note">{$keyword.text}</textarea>
+	        </dd>
+	      </dl>
+        </div>
+      </div>
+  	</div>
+  	</form>
+  </div>
+
+</div>
+<script type="text/javascript">
+function dosubmit(){
+    var shipping = $('input[name="shipping"]').val();
+    if ($('#invoice_no').val() == '') {
+        layer.alert('请输入配送单号', {icon: 2});  // alert('请输入配送单号');
+        return;
+    }
+    if(shipping != 1) {
+        var a = [];
+        $('input[name*=goods]').each(function (i, o) {
+            if ($(o).is(':checked')) {
+                a.push($(o).val());
+            }
+        });
+
+	if(a.length == 0){
+		layer.alert('请选择发货商品', {icon: 2});  //alert('请选择发货商品');
+		return;
+	}
+    }
+	$('#delivery-form').submit();
+}
+
+function set_shipping_name(){
+	var shipping_name = $("#shipping_code").find("option:selected").text();
+	$('#shipping_name').val(shipping_name);
+}
+</script>
+</body>
+</html>

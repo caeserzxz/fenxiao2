@@ -1,0 +1,89 @@
+<layout name="common/n_layout_nav"/>
+
+<title> 钱包 </title>
+</head>
+<style>
+    .jindou-font{
+        font-size: 20px;
+        margin-left: 10px;
+    }
+</style>
+<body>
+<div class="page">
+    <div class="page-hd">
+        <div class="header bor-1px-b">
+            <div class="header-left">
+                <a href="javascript:history.go(-1)" class="left-arrow"></a>
+            </div>
+            <div class="header-title">钱包</div>
+            <div class="header-right">
+                <a href="#"></a>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-bd">
+        <!-- 页面内容-->
+        <div class="fxs tc">
+            <div class="ff fs68 text-white pt10">
+                <span class="jindou-font">金豆:</span>{$userInfo.jindou}<span class="jindou-font">云豆:</span>{$userInfo.yundou}
+            </div>
+            <div class="fs30 fw600 text-white">余额</div>
+            <div class="income mt20">
+                <a href="{:U('Mobile/User/cashWithdrawal')}">提现</a>
+            </div>
+            <!--<div class="income mt20">-->
+                <!--<a href="{:U('Mobile/User/cashHistory')}">提现记录</a>-->
+            <!--</div>-->
+        </div>
+        <div style="margin-left: 0.2rem;margin-top: 0.1rem;color: red;"></div>
+        <!--<table>-->
+            <!--<tr>-->
+                <!--<th>月份</th>-->
+                <!--<th>分销佣金</th>-->
+                <!--<th>管理佣金</th>-->
+                <!--<th>上荐佣金</th>-->
+                <!--<th>代收佣金</th>-->
+                <!--<th>总金额</th>-->
+                <!--<th>操作</th>-->
+            <!--</tr>-->
+            <!--<tr>-->
+                <!--<td><span class="month">本月佣金</span></td>-->
+                <!--<td>￥{$result.distributionMonth}</td>-->
+                <!--<td>￥{$result.manageMonth}</td>-->
+                <!--<td>￥{$result.commendMonth}</td>-->
+                <!--<td>￥{$result.collectionMonth}</td>-->
+                <!--<td>￥{$result.totalMonth}</td>-->
+                <!--<td></td>-->
+            <!--</tr>-->
+
+            <!--<tr>-->
+                <!--<td><span class="month">待发佣金</span></td>-->
+                <!--<td>￥{$result.distribution}</td>-->
+                <!--<td>￥{$result.manage}</td>-->
+                <!--<td>￥{$result.commend}</td>-->
+                <!--<td>￥{$result.collection}</td>-->
+                <!--<td>￥{$result.total}</td>-->
+                <!--<td class="text-red">-->
+
+                    <!--<if condition="$result['allow_time'] eq 0"><a href="{:U('User/gongdeHistory')}">查看</a></if>-->
+                    <!--<if condition="$result['allow_time'] eq 1"><a href="{:U('User/withdrawalM')}"　 class="text-red">提现</a></if>-->
+
+                    <!--&lt;!&ndash;<if condition="$result['total'] eq 0"><a href="{:U('User/gongdeHistory')}">查看</a></if>&ndash;&gt;-->
+                    <!--&lt;!&ndash;<if condition="$result['total'] neq 0"><a href="{:U('User/withdrawalM')}"　 class="text-red">提现</a></if>&ndash;&gt;-->
+
+                <!--</td>-->
+            <!--</tr>-->
+        <!--</table>-->
+    </div>
+
+</div>
+
+<script src="_STATIC__/n_assets/js/lib/jquery-2.1.4.js"></script>
+<script src="_STATIC__/n_assets/js/jquery-weui.min.js"></script>
+<script src="_STATIC__/n_assets/js/lib/fastclick.js"></script>
+<script>
+    $(function() {
+        FastClick.attach(document.body);
+    });
+</script>

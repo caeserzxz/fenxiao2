@@ -1,0 +1,113 @@
+<layout name="common/layout_nav" />
+<style type="text/css">
+    .storenav ul {
+
+    }
+
+    .storenav ul li {
+
+    }
+
+    .page-hd {
+        border-bottom: solid 1px #cccccc;
+    }
+    .red-sidebar{
+        border-bottom: solid 1px red;
+    }
+</style>
+<div class="page-hd">
+    <div class="header">
+        <div class="header-left">
+            <a href="{:U('index/index')}" class="left-arrow"></a>
+        </div>
+        <div class="header-title">狂销热卖</div>
+        <div class="header-right"><a href="#"></a> </div>
+    </div>
+</div>
+
+<nav class="storenav grst p">
+    <ul>
+        <li <if condition="$Request.param.type eq ''">class='red red-sidebar'</if>>
+        <a href="{:U('Mobile/Hot/goods_list')}">
+            <span >默认</span>
+            <i></i>
+        </a>
+        </li>
+        <li <if condition="$Request.param.type eq 'shop_price'">class='red red-sidebar'</if>>
+        <a href="{:U('Mobile/Hot/goods_list',array('type'=>'shop_price'))}">
+            <span >价格</span>
+            <i></i>
+        </a>
+        </li>
+        <li <if condition="$Request.param.type eq 'sales_sum'">class='red red-sidebar'</if>>
+        <a href="{:U('Mobile/Hot/goods_list',array('type'=>'sales_sum'))}">
+            <span >销量</span>
+            <i></i>
+        </a>
+        </li>
+    </ul>
+</nav>
+
+<!--底部商品列表-s-->
+<div class="floor guesslike groupquess dic">
+    <if condition="$list">
+        <div class="likeshop">
+            <ul>
+                <foreach name="list" item="v" key="k" >
+                    <li style="width: 49%; <if condition="$k%2==0">margin-right: 2%</if>" >
+                        <a href="{:U('Mobile/Goods/goodsInfo',array('id'=>$v[goods_id]))}">
+                            <div class="similer-product">
+                                <div class="zjj close">
+                                    <img src="{$v.goods_id|goods_thum_images=200,200}">
+                                </div>
+                                <span class="similar-product-text">{$v[goods_name]}</span>
+                                <span class="similar-product-price">
+                                    ¥<span class="big-price">{$v[shop_price]}元</span>
+                                    <span class="fr sg_g_time last_g_time" id="jstimerBox{$v[goods_id]}"></span>
+                                </span>
+                            </div>
+                        </a>
+                    </li>
+                </foreach>
+            </ul>
+        </div>
+    <else>
+        <div style="text-align: center; line-height: 40px; color: #cccccc; font-size: 14px; margin-top: 50px;">暂无商品</div>
+    </if>
+</div>
+<!--底部商品列表-e-->
+
+<script type="text/javascript" src="__STATIC__/js/sourch_submit.js"></script>
+<script type="text/javascript">
+    //加载更多商品
+    var page = 1;
+    function ajax_sourch_submit() {
+        ++page;
+        $.ajax({
+            type: 'GET',
+            url: "/index.php?m=Mobile&c=Hot&is_ajax=1&a=goods_list&p=" + page,
+            success: function (data) {
+                if (data) {
+                    $(".likeshop>ul").append(data);
+                    $('.get_more').hide();
+                } else {
+                    $('.get_more').hide();
+                    $('#getmore').remove();
+                }
+            }
+        })
+    }
+    //滚动加载更多
+    $(window).scroll(
+            function () {
+                var scrollTop = $(this).scrollTop();
+                var scrollHeight = $(document).height();
+                var windowHeight = $(this).height();
+                if (scrollTop + windowHeight == scrollHeight) {
+                    ajax_sourch_submit();//调用加载更多
+                }
+            }
+    );
+</script>
+</body>
+</html>

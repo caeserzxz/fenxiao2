@@ -1,0 +1,53 @@
+<layout name="common/n_layout_nav"/>
+<script src="__STATIC__/js/sourch_submit.js"></script>
+<script src="__STATIC__/Swiper-4.0.7/swiper.min.js"></script>
+<link rel="stylesheet" href="__STATIC__/Swiper-4.0.7/swiper.min.css"/>
+<style>
+    /*分页样式*/
+    .pagination{text-align:center;margin-top:20px;margin-bottom: 1rem;}
+    .pagination li{margin:0px 10px; border:1px solid #e6e6e6;padding: 3px 8px;display: inline-block;}
+    .pagination .active{background-color: #46A3FF;color: #fff;}
+    .pagination .disabled{color:#aaa;}
+</style>
+<div class="page">
+    <div class="page-hd">
+        <div class="header">
+            <div class="header-left">
+                <a href="javascript:history.go(-1)" class="left-arrow"></a>
+            </div>
+            <div class="header-title">详细记录</div>
+            <div class="header-right"><a href="#"></a> </div>
+        </div>
+    </div>
+    <div style="overflow-y:auto">
+        <table>
+            <tr>
+                <th>金额</th>
+                <th>币种</th>
+                <th>来源</th>
+                <th>来源用户ID</th>
+                <th>状态</th>
+            </tr>
+            <volist name="result" id="vo">
+                <tr>
+                    <td>￥{$vo.money}</td>
+                    <td>
+                        <if condition="$vo.type eq 0">人民币</if>
+                        <if condition="$vo.type eq 1">马克币</if>
+                        <if condition="$vo.type eq 2">功德</if>
+                        <if condition="$vo.type eq 3">佣金</if>
+                    </td>
+                    <td>{$vo.desc}</td>
+                    <td>{$vo.obj_user_id}</td>
+                    <td>
+                        <if condition="$vo.status eq 0">未提出</if>
+                        <if condition="$vo.status eq 1">提出中</if>
+                        <if condition="$vo.status eq 2">已提出</if>
+                    </td>
+                </tr>
+            </volist>
+        </table>
+        {$result->render()}
+    </div>
+</div>
+

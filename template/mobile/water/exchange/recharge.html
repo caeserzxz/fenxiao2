@@ -1,0 +1,84 @@
+<extend name="layout/page"/>
+<block name="pageBody">
+
+  <link rel="stylesheet" href="__STATIC__/Swiper-4.0.7/swiper.min.css"/>
+
+    <!-- 页面内容-->
+    <div class="detail_content chongz_content">
+      <div class="detail_panel">
+        <h3 class="h3_tit">确认收货信息：</h3>
+        <div class="weui-cells mt0">
+          <div class="weui-cell">
+            <div class="weui-cell__bd">
+              <div class="text-gray ">参与活动：<span class="num_span"><b>{$titles}</b></span></div>
+              <!--<div class="text-gray ">参与活动：<span class="num_span">充值 <b>{$user_level.amount|substr=0,-3}</b> 送水活动</span></div>-->
+            </div>
+          </div>
+          <div class="weui-cell">
+            <div class="weui-cell__bd">
+              <div class="text-gray">充值押金：<span class="num_span">￥<b>{$user_level.amount}</b></span></div>
+            </div>
+          </div>
+          <div class="weui-cell">
+            <div class="weui-cell__bd">
+
+                <input id="checkbox" type="checkbox" class="weui-agree__checkbox modal_agree_checkbox">
+
+                <span class="weui-agree__text text-gray fs23">我已阅读并同意：<a href="{:U('mobile/Article/detail',array('article_id'=>27))}" style="color: #3399ff;">《绿源送水充值协议》</a></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="weui-flex bottom_btn">
+      <div class="weui-flex__item"><span>应付款：</span><span class="price">￥<b>{$user_level.amount}</b></span></div>
+      <div class="weui-flex__item">
+        <a id="recharge_pay" class="weui-btn weui-btn_primary">确认支付</a>
+      </div>
+    </div>
+<script>
+    $("#recharge_pay").on('click', function () {
+        $.modal({
+            title: "充值",
+            text: "确定充值？<p class='modal_p'>充值后将获得会员身份</p>",
+            buttons: [
+                { text: "取消", onClick: function(){ console.log(1)} },
+                { text: "确定", className: "okbtn", onClick: function(){
+                    var token = "{$Request.token}";
+                    var level_id = "{$user_level['level_id']}";
+                    var amount = "{$user_level['amount']}";
+                    var checked = 0;
+                    if($("#checkbox").is(":checked") === true){
+                        var checked = 1;
+                    }
+                    $.ajax({
+                        type:'POST',
+                        url:"{:U('Exchange/doPay')}",
+                        data:{amount:amount,level_id:level_id,checked:checked,__token__:token},
+                        dataType:'json',
+                        success: function (res) {
+                            if(res.status == 1){
+                                var data = res.data;
+                                window.location.href = data.url;
+                            }else{
+                                $.modal({
+                                    title: "",
+                                    text: res.message,
+                                    buttons: [
+                                        { text: "OK，知道了", className: "okbtn", onClick: function(){
+
+                                        } },
+                                    ]
+                                });
+                            }
+                        }
+                    });
+
+                } },
+            ]
+        });
+
+    });
+</script>
+</block>

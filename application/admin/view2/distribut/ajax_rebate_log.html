@@ -1,0 +1,93 @@
+<div id="flexigrid" cellpadding="0" cellspacing="0" border="0">
+    <table>
+        <tbody>
+        <foreach name="lists" item="list" key="k">
+            <tr data-id="{$list['user_id']}">
+                <td class="sign">
+                    <div style="width: 24px;"><i class="ico-check"></i></div>
+                </td>
+                <td align="left" class="">
+                    <div style="text-align: center; width: 40px;">{$list['id']}</div>
+                </td>
+                <td align="left" class="">
+                    <div style="text-align: center; width: 150px;">{$list['user_name']}</div>
+                </td>
+                <td align="left" class="">
+                    <div style="text-align: center; width: 150px;">{$list['nickname']}</div>
+                </td>
+                <td align="left" class="">
+                    <div style="text-align: center; width: 150px;">{$list['order_sn']}</div>
+                </td>
+                <td align="left" class="">
+                    <div style="text-align: center; width: 150px;">{$list['goods_price']}</div>
+                </td>
+                <td align="left" class="">
+                    <div style="text-align: center; width: 150px;">{$list['money']}</div>
+                </td>
+                <td align="left" class="">
+                    <div style="text-align: center; width: 100px;">{$list['level']}</div>
+                </td>
+                <td align="left" class="">
+                    <div style="text-align: center; width: 100px;">{$list['statuss']}</div>
+                </td>
+
+                <td align="left" class="">
+                    <div style="text-align: center; width: 120px;">{$list['confirm_time']|date='Y-m-d H:i',###}</div>
+                </td>
+                <td align="center" class="handle">
+                    <div style="text-align: center; width: 170px; max-width:250px;">
+                        <a class="btn green" href="{:U('Admin/order/detail',array('order_id'=>$list['order_id']))}"><i class="fa fa-list-alt"></i>查看</a>
+                    <if condition="$list['status'] eq '2' ">
+                        <a class="btn green" href="{:U('Admin/distribut/yesurl',array('id'=>$list['id']))}"><i class="fa fa-send-o"></i><font color="#00CD00">确认分成</font></a>
+
+                        <else />
+                        <a class="btn green" href="#">-------------</a>
+                    </if>
+
+                    </div>
+                </td>
+                <td align="" class="" style="width: 100%;">
+                    <div>&nbsp;</div>
+                </td>
+            </tr>
+        </foreach>
+        </tbody>
+    </table>
+</div>
+<!--分页位置-->
+{$page}
+<script>
+    $(".pagination  a").click(function(){
+        var page = $(this).data('p');
+        ajax_get_table('search-form2',page);
+    });
+    $(document).ready(function(){
+        // 表格行点击选中切换
+        $('#flexigrid >table>tbody>tr').click(function(){
+            $(this).toggleClass('trSelected');
+        });
+        $('#user_count').empty().html("{$pager->totalRows}");
+    });
+    function delfun(obj) {
+        // 删除按钮
+        layer.confirm('确认删除？', {
+            btn: ['确定', '取消'] //按钮
+        }, function () {
+            $.ajax({
+                type: 'post',
+                url: $(obj).attr('data-url'),
+                data: {id : $(obj).attr('data-id')},
+                dataType: 'json',
+                success: function (data) {
+                    layer.closeAll();
+                    if (data.status == 1) {
+                        $(obj).parent().parent().parent().remove();
+                    } else {
+                        layer.alert(data.msg, {icon: 2});
+                    }
+                }
+            })
+        }, function () {
+        });
+    }
+</script>
